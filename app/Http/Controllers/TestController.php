@@ -4,14 +4,14 @@ namespace App\Http\Controllers;
 
 use QL\QueryList;
 
-class TestController extends Controller
-{
-    public function index()
-    {
-        $config = config('book.wx999');
+class TestController extends Controller {
+  public function index() {
+    $config = config('book.zhengheng');
 
-        $book = QueryList::Query($config[''], $config['detail'], '', 'UTF-8', 'GBK', true);
+    $homeUrl = $config['baseUrl'] . '/book/912604.html';
 
-        //
-    }
+    $book = QueryList::Query($homeUrl, $config['home'], '', 'UTF-8', 'GBK', true);
+
+    dd($book);
+  }
 }

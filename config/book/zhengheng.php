@@ -1,6 +1,6 @@
 <?php
 return [
-    'baseUrl' => 'http://www.999wx.com/',
+    'baseUrl' => 'http://book.zongheng.com',
     'charset' => 'gb2312',
     //列表页
     'lists' => [
