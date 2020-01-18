@@ -21,7 +21,6 @@ class TestController extends Controller
 
     public function ranking()
     {
-
         $url = 'http://www.zongheng.com/rank/details.html?rt=1&d=1&i=2&p={$page}';
         $url = $this->config['baseUrl'] . '/store/c3/c1031/b0/u0/p{$page}/v0/s9/t0/u0/i0/ALL.html';
 //        file_put_contents('ranking.html', QueryList::get($url)->getHtml());
