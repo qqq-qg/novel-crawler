@@ -113,30 +113,21 @@ class TestController extends Controller
 
     public function test()
     {
-        $rule = new QlRule();
-        $rule->range = 'div.name';
-        $rule->rules = ['ddd' => '1231'];
-
-        $br = new BookRule('123123');
-        $br->home = $rule;
-        print_r($br);
-
-        die;
-        $model = new CollectionRuleModel();
-        $model->id = 1;
-        $model->title = '纵横中文网';
-        $model->rule_json = json_encode(config('book.zhengheng'));
-        $model->save();
-
-        $model = new CollectionTaskModel();
-        $model->id = 1;
-        $model->title = '纵横月票榜';
-        $model->from_url = 'http://www.zongheng.com/rank/details.html?rt=1&d=1&i=2&p={$page}';
-        $model->from_hash = md5($model->from_url);
-        $model->rule_id = 1;
-        $model->page_limit = 2;
-        $model->task_code = 1;
-        $model->save();
+//        $model = new CollectionRuleModel();
+//        $model->id = 1;
+//        $model->title = '纵横中文网';
+//        $model->rule_json = json_encode(config('book.zhengheng'));
+//        $model->save();
+//
+//        $model = new CollectionTaskModel();
+//        $model->id = 1;
+//        $model->title = '纵横月票榜';
+//        $model->from_url = 'http://www.zongheng.com/rank/details.html?rt=1&d=1&i=2&p={$page}';
+//        $model->from_hash = md5($model->from_url);
+//        $model->rule_id = 1;
+//        $model->page_limit = 2;
+//        $model->task_code = 1;
+//        $model->save();
 
         die;
         $url = $this->config['baseUrl'] . '/book/912604.html';
