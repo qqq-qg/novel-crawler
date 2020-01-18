@@ -4,8 +4,57 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4dfc803d61cdfb6a1a8d107ad12d5a43",
+    "content-hash": "2ef144561768b232969dbd8e23e92bf9",
     "packages": [
+        {
+            "name": "ares333/php-curl",
+            "version": "v4.6.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ares333/php-curl.git",
+                "reference": "580025300c3cbf7cafe825bd454018ffc62233cf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ares333/php-curl/zipball/580025300c3cbf7cafe825bd454018ffc62233cf",
+                "reference": "580025300c3cbf7cafe825bd454018ffc62233cf",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "ext-curl": "*",
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Ares333\\Curl\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Ares",
+                    "homepage": "http://phpdr.net"
+                }
+            ],
+            "description": "The best php curl library.",
+            "keywords": [
+                "PHP cURL",
+                "aysnc http",
+                "curl",
+                "curlmulti"
+            ],
+            "time": "2018-12-13T03:47:27+00:00"
+        },
         {
             "name": "cache/adapter-common",
             "version": "1.1.0",
@@ -779,49 +828,6 @@
             "time": "2019-07-01T23:21:34+00:00"
         },
         {
-            "name": "jaeger/curlmulti",
-            "version": "1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/jae-jae/CurlMulti.git",
-                "reference": "059f13241e15ddfe6155c032ef765e58233a5aab"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/jae-jae/CurlMulti/zipball/059f13241e15ddfe6155c032ef765e58233a5aab",
-                "reference": "059f13241e15ddfe6155c032ef765e58233a5aab",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
-            },
-            "require": {
-                "ext-curl": "*",
-                "php": ">=5.1.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "QL\\Ext\\Lib\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache-2.0"
-            ],
-            "authors": [
-                {
-                    "name": "Ares",
-                    "email": "admin@phpdr.net"
-                }
-            ],
-            "description": "CurlMulti是PHP多线程类库,修改用于QueryList(http://querylist.cc ),CurlMulti项目地址:https://github.com/ares333/php-curlmulti",
-            "time": "2015-12-23T16:28:22+00:00"
-        },
-        {
             "name": "jaeger/g-http",
             "version": "V1.6.0",
             "source": {
@@ -863,43 +869,6 @@
             ],
             "description": "Simple Http client base on GuzzleHttp",
             "time": "2018-12-12T04:21:15+00:00"
-        },
-        {
-            "name": "jaeger/http",
-            "version": "1.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/jae-jae/Http.git",
-                "reference": "2fb9e6bde8c42e3851c7968bd00046c299e45b5e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/jae-jae/Http/zipball/2fb9e6bde8c42e3851c7968bd00046c299e45b5e",
-                "reference": "2fb9e6bde8c42e3851c7968bd00046c299e45b5e",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
-            },
-            "require": {
-                "ext-curl": "*",
-                "php": ">=5.1.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "QL\\Ext\\Lib\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "HTTP 请求类,修改用于QueryList(http://querylist.cc )",
-            "time": "2017-07-25T07:15:08+00:00"
         },
         {
             "name": "jaeger/phpquery-single",
@@ -1006,56 +975,17 @@
             "time": "2019-02-22T07:33:54+00:00"
         },
         {
-            "name": "jaeger/querylist-ext-aquery",
-            "version": "1.0.1",
+            "name": "jaeger/querylist-absolute-url",
+            "version": "4.0.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/jae-jae/QueryList-Ext-AQuery.git",
-                "reference": "bfbf417363bb8f0caec2573f02d24ba2e921aeef"
+                "url": "https://github.com/jae-jae/QueryList-AbsoluteUrl.git",
+                "reference": "0c7a5677ccfca959ee353cbc3b19472dc9e9739f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jae-jae/QueryList-Ext-AQuery/zipball/bfbf417363bb8f0caec2573f02d24ba2e921aeef",
-                "reference": "bfbf417363bb8f0caec2573f02d24ba2e921aeef",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "QL\\Ext\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jaeger",
-                    "email": "hj.q@qq.com"
-                }
-            ],
-            "description": "QueryList扩展，AQuery扩展基类",
-            "time": "2016-01-06T07:51:20+00:00"
-        },
-        {
-            "name": "jaeger/querylist-ext-login",
-            "version": "1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/jae-jae/QueryList-Ext-Login.git",
-                "reference": "4e1279ead32eea96b45f5cec64a9646573f646ce"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/jae-jae/QueryList-Ext-Login/zipball/4e1279ead32eea96b45f5cec64a9646573f646ce",
-                "reference": "4e1279ead32eea96b45f5cec64a9646573f646ce",
+                "url": "https://api.github.com/repos/jae-jae/QueryList-AbsoluteUrl/zipball/0c7a5677ccfca959ee353cbc3b19472dc9e9739f",
+                "reference": "0c7a5677ccfca959ee353cbc3b19472dc9e9739f",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -1065,7 +995,11 @@
                 ]
             },
             "require": {
-                "jaeger/querylist-ext-request": "^1.0"
+                "pguardiario/phpuri": "^1.0",
+                "php": ">=7.0"
+            },
+            "require-dev": {
+                "jaeger/querylist": "dev-master"
             },
             "type": "library",
             "autoload": {
@@ -1080,24 +1014,24 @@
             "authors": [
                 {
                     "name": "Jaeger",
-                    "email": "hj.q@qq.com"
+                    "email": "JaegerCode@gmail.com"
                 }
             ],
-            "description": "QueryList扩展，Login模拟登陆扩展",
-            "time": "2015-12-28T06:42:48+00:00"
+            "description": "QueryList Plugin: Converting relative urls to absolute.QueryList插件:转换URL相对路径到绝对路径.",
+            "time": "2017-12-22T07:36:53+00:00"
         },
         {
-            "name": "jaeger/querylist-ext-multi",
-            "version": "1.0",
+            "name": "jaeger/querylist-curl-multi",
+            "version": "4.0.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/jae-jae/QueryList-Ext-Multi.git",
-                "reference": "2c633480411b1cea31d93b2c1b754eb0bc79fea8"
+                "url": "https://github.com/jae-jae/QueryList-CurlMulti.git",
+                "reference": "6f9bec5198cdafc56ffcc2e047374c76a08b153a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jae-jae/QueryList-Ext-Multi/zipball/2c633480411b1cea31d93b2c1b754eb0bc79fea8",
-                "reference": "2c633480411b1cea31d93b2c1b754eb0bc79fea8",
+                "url": "https://api.github.com/repos/jae-jae/QueryList-CurlMulti/zipball/6f9bec5198cdafc56ffcc2e047374c76a08b153a",
+                "reference": "6f9bec5198cdafc56ffcc2e047374c76a08b153a",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -1107,8 +1041,11 @@
                 ]
             },
             "require": {
-                "jaeger/curlmulti": "^1.0",
-                "jaeger/querylist-ext-aquery": "^1.0"
+                "ares333/php-curl": "^4.2",
+                "php": ">=7.0"
+            },
+            "require-dev": {
+                "jaeger/querylist": "dev-master"
             },
             "type": "library",
             "autoload": {
@@ -1123,24 +1060,24 @@
             "authors": [
                 {
                     "name": "Jaeger",
-                    "email": "hj.q@qq.com"
+                    "email": "JaegerCode@gmail.com"
                 }
             ],
-            "description": "QueryList扩展，Multi多线程扩展",
-            "time": "2015-12-28T06:09:36+00:00"
+            "description": "QueryList Plugin: Curl multi threading. QueryList Curl多线程插件",
+            "time": "2018-10-16T07:13:30+00:00"
         },
         {
-            "name": "jaeger/querylist-ext-request",
-            "version": "1.0",
+            "name": "jaeger/querylist-rule-baidu",
+            "version": "4.0.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/jae-jae/QueryList-Ext-Request.git",
-                "reference": "27d06b35fb810b919d242a3dbbdac0e1cb838bc4"
+                "url": "https://github.com/jae-jae/QueryList-Rule-Baidu.git",
+                "reference": "b79ede9342eea0af817181c2d45c5bdda7c3c511"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jae-jae/QueryList-Ext-Request/zipball/27d06b35fb810b919d242a3dbbdac0e1cb838bc4",
-                "reference": "27d06b35fb810b919d242a3dbbdac0e1cb838bc4",
+                "url": "https://api.github.com/repos/jae-jae/QueryList-Rule-Baidu/zipball/b79ede9342eea0af817181c2d45c5bdda7c3c511",
+                "reference": "b79ede9342eea0af817181c2d45c5bdda7c3c511",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -1150,8 +1087,10 @@
                 ]
             },
             "require": {
-                "jaeger/http": "^1.0",
-                "jaeger/querylist-ext-aquery": "^1.0"
+                "php": ">=7.0"
+            },
+            "require-dev": {
+                "jaeger/querylist": "dev-master"
             },
             "type": "library",
             "autoload": {
@@ -1166,11 +1105,56 @@
             "authors": [
                 {
                     "name": "Jaeger",
-                    "email": "hj.q@qq.com"
+                    "email": "JaegerCode@gmail.com"
                 }
             ],
-            "description": "QueryList扩展，Request网络操作扩展",
-            "time": "2015-12-28T06:24:02+00:00"
+            "description": "QueryList Plugin: Baidu searcher. QueryList百度搜索插件",
+            "time": "2017-10-01T15:05:17+00:00"
+        },
+        {
+            "name": "jaeger/querylist-rule-google",
+            "version": "4.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jae-jae/QueryList-Rule-Google.git",
+                "reference": "8fa181b5a9f118799b43a494f4683be4cee66cec"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jae-jae/QueryList-Rule-Google/zipball/8fa181b5a9f118799b43a494f4683be4cee66cec",
+                "reference": "8fa181b5a9f118799b43a494f4683be4cee66cec",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": ">=7.0"
+            },
+            "require-dev": {
+                "jaeger/querylist": "dev-master"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "QL\\Ext\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jaeger",
+                    "email": "JaegerCode@gmail.com"
+                }
+            ],
+            "description": "QueryList Plugin: Google searcher. QueryList谷歌搜索插件",
+            "time": "2017-10-01T15:27:33+00:00"
         },
         {
             "name": "jakub-onderka/php-console-color",
@@ -1733,6 +1717,79 @@
             "time": "2020-01-04T16:30:31+00:00"
         },
         {
+            "name": "liesauer/ql-plugin-bingsearcher",
+            "version": "v4.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/liesauer/QLPlugin-BingSearcher.git",
+                "reference": "d39f801616abe533a7fe52e158727d35f9f0fd3e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/liesauer/QLPlugin-BingSearcher/zipball/d39f801616abe533a7fe52e158727d35f9f0fd3e",
+                "reference": "d39f801616abe533a7fe52e158727d35f9f0fd3e",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "jaeger/querylist": "^4.0.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "liesauer\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "QueryList Plugin - BingSearcher",
+            "time": "2017-10-12T14:36:01+00:00"
+        },
+        {
+            "name": "liesauer/ql-plugin-simpleform",
+            "version": "v4.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/liesauer/QLPlugin-SimpleForm.git",
+                "reference": "725babcf53b623262f443fc200492d4c4212a965"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/liesauer/QLPlugin-SimpleForm/zipball/725babcf53b623262f443fc200492d4c4212a965",
+                "reference": "725babcf53b623262f443fc200492d4c4212a965",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "jaeger/querylist": "^4.0.0",
+                "jaeger/querylist-absolute-url": "^4.0.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "liesauer\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "QueryList Plugin - SimpleForm",
+            "time": "2017-10-03T04:33:47+00:00"
+        },
+        {
             "name": "monolog/monolog",
             "version": "2.0.2",
             "source": {
@@ -2070,6 +2127,36 @@
                 "random"
             ],
             "time": "2018-07-02T15:55:56+00:00"
+        },
+        {
+            "name": "pguardiario/phpuri",
+            "version": "1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/monkeysuffrage/phpuri.git",
+                "reference": "ad0a5ec033fe616cfef55578b9c7f2458be8fbfc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/monkeysuffrage/phpuri/zipball/ad0a5ec033fe616cfef55578b9c7f2458be8fbfc",
+                "reference": "ad0a5ec033fe616cfef55578b9c7f2458be8fbfc",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "type": "project",
+            "autoload": {
+                "files": [
+                    "phpuri.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "description": "A php library for converting relative urls to absolute.",
+            "time": "2015-05-24T09:13:17+00:00"
         },
         {
             "name": "phpoption/phpoption",
@@ -5667,16 +5754,16 @@
         },
         {
             "name": "myclabs/deep-copy",
-            "version": "1.9.4",
+            "version": "1.9.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/myclabs/DeepCopy.git",
-                "reference": "579bb7356d91f9456ccd505f24ca8b667966a0a7"
+                "reference": "b2c28789e80a97badd14145fda39b545d83ca3ef"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/579bb7356d91f9456ccd505f24ca8b667966a0a7",
-                "reference": "579bb7356d91f9456ccd505f24ca8b667966a0a7",
+                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/b2c28789e80a97badd14145fda39b545d83ca3ef",
+                "reference": "b2c28789e80a97badd14145fda39b545d83ca3ef",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -5717,7 +5804,7 @@
                 "object",
                 "object graph"
             ],
-            "time": "2019-12-15T19:12:40+00:00"
+            "time": "2020-01-17T21:11:47+00:00"
         },
         {
             "name": "nunomaduro/collision",
