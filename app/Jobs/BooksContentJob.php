@@ -2,7 +2,6 @@
 
 namespace App\Jobs;
 
-use App\Models\Books\BooksChapterModel;
 use App\Models\Books\BooksContentModel;
 use App\Repositories\CollectionRule\BookRule;
 use QL\QueryList;
@@ -13,10 +12,10 @@ class BooksContentJob extends BaseJob
 
     /**
      * BooksJob constructor.
-     * @param BooksContentModel $chapterModel
+     * @param $chapterModel
      * @param BookRule $bookRule
      */
-    public function __construct(BooksChapterModel $chapterModel, BookRule $bookRule)
+    public function __construct($chapterModel, BookRule $bookRule)
     {
         parent::__construct();
         $this->chapterModel = $chapterModel;
