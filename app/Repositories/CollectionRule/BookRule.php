@@ -8,18 +8,32 @@ namespace App\Repositories\CollectionRule;
  * @Date: 2020/01/18
  * @Time: 16:07
  * @package App\Repositories\CollectionRule
- * @property string $baseUrl URL路径
+ * @property string $host 域名
  * @property string $charset 编码
- * @property QlRule $category 分类规则
+ * @property QlRule[] $bookList 分类规则
  * @property QlRule $home 简介规则
  * @property QlRule $chapterList 章节列表规则
  * @property QlRule $content 内容规则
  */
 Class BookRule
 {
-    public function __construct($url, $charset = '')
+    public function __construct($host = '', $charset = '')
     {
-        $this->baseUrl = $url;
+        $this->host = $host;
         $this->charset = $charset;
+    }
+
+    public function toArray()
+    {
+        return [
+            'host' => $this->host,
+            'charset' => $this->charset,
+            'bookList' => array_map(function (QlRule $rule) {
+                return $rule->toArray();
+            }, $this->bookList),
+            'home' => $this->home->toArray(),
+            'chapterList' => $this->chapterList->toArray(),
+            'content' => $this->content->toArray(),
+        ];
     }
 }

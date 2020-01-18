@@ -21,6 +21,6 @@ class CollectionTaskModel extends BaseModel
 
     public function rule()
     {
-        return $this->hasOne(CollectionRuleModel::class, 'id', 'rule_id')->select('id', 'rule_json');
+        return $this->hasOne(CollectionRuleModel::class, 'id', 'rule_id');
     }
 }

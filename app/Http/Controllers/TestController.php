@@ -19,6 +19,34 @@ class TestController extends Controller
         $this->config = config('book.zhengheng');
     }
 
+    public function ranking()
+    {
+
+        $url = 'http://www.zongheng.com/rank/details.html?rt=1&d=1&i=2&p={$page}';
+        $url = $this->config['baseUrl'] . '/store/c3/c1031/b0/u0/p{$page}/v0/s9/t0/u0/i0/ALL.html';
+//        file_put_contents('ranking.html', QueryList::get($url)->getHtml());
+//        die;
+//        $url = 'http://www.ql.com/ranking.html';
+
+//        $data = QueryList::get($url)
+//            ->range($this->config['ranking']['range'])
+//            ->rules($this->config['ranking']['rules'])
+//            ->query()->getData();
+//        print_r($data->pluck('url')->all());
+
+//        die;
+        for ($i = 1; $i <= 3; $i++) {
+            $findUrl = str_replace('{$page}', $i, $url);
+            //      var_dump($findUrl);
+            //      continue;
+            $data = QueryList::get($findUrl)
+                ->range($this->config['ranking']['range'])
+                ->rules($this->config['ranking']['rules'])
+                ->query()->getData();
+            var_dump($data->all());
+        }
+    }
+
     public function category()
     {
         $url = $this->config['baseUrl'] . '/rank/details.html?rt=8&d=1&p={$page}';
@@ -88,7 +116,7 @@ class TestController extends Controller
     {
         $rule = new QlRule();
         $rule->range = 'div.name';
-        $rule->rules = ['ddd'=>'1231'];
+        $rule->rules = ['ddd' => '1231'];
 
         $br = new BookRule('123123');
         $br->home = $rule;
