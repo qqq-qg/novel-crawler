@@ -29,6 +29,7 @@ class BookTask extends Command {
       echo "开始执行 ==> {$task['from_url']} --page_limit={$task['page_limit']}" . PHP_EOL;
       for ($i = 1; $i <= $task['page_limit']; $i++) {
         $url = str_replace('{$page}', $i, $task['from_url']);
+        echo "\tGET {$url}" . PHP_EOL;
         $this->queryData($url, $ruleConfig);
       }
     }
