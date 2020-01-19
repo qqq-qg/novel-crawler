@@ -82,7 +82,7 @@ class BooksJob extends BaseJob
         if (empty($urls)) {
             return false;
         }
-        dispatch(new BooksContentMultiJob($urls, $this->bookRule));
+        dispatch(new BooksContentMultiJob($urls, $this->bookRule))->onQueue('Content');
         return true;
     }
 }
