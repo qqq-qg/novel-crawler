@@ -4,14 +4,16 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBooksTable extends Migration {
-  /**
-   * Run the migrations.
-   *
-   * @return void
-   */
-  public function up() {
-    DB::statement("
+class CreateBooksTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        DB::statement("
       CREATE TABLE `books` (
         `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
         `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '标题',
@@ -27,16 +29,15 @@ class CreateBooksTable extends Migration {
         `source` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '来源',
         `from_url` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '来源网址',
         `from_hash` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '来源网址hash,用来判断是否插入过',
-        `created_at` timestamp NOT NULL,
-        `updated_at` timestamp NOT NULL,
+        `created_at` timestamp NULL default null,
+        `updated_at` timestamp NULL default null,
         PRIMARY KEY (`id`),
-        UNIQUE KEY `books_fromhash_unique` (`from_hash`),
-        KEY `books_status_index` (`status`)
+        UNIQUE KEY `books_fromhash_unique` (`from_hash`)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
       ");
 
 
-    DB::statement("
+        DB::statement("
      CREATE TABLE `books_chapter` (
         `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
         `books_id` int(11) unsigned NOT NULL DEFAULT 0 COMMENT 'ID',
@@ -46,14 +47,14 @@ class CreateBooksTable extends Migration {
         `status` tinyint(1) unsigned NOT NULL DEFAULT 1 COMMENT '状态',
         `from_url` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '来源链接',
         `from_hash` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '来源链接hash值',
-        `created_at` timestamp NULL DEFAULT NULL,
-        `updated_at` timestamp NULL DEFAULT NULL,
+        `created_at` timestamp NULL default null,
+        `updated_at` timestamp NULL default null,
         PRIMARY KEY (`id`),
         UNIQUE KEY `books_detail_fromhash_unique` (`from_hash`)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
       ");
 
-    DB::statement("
+        DB::statement("
       CREATE TABLE `books_content` (
           `id` int(10) unsigned NOT NULL,
           `content` text COLLATE utf8_unicode_ci NOT NULL COMMENT '小说内容',
@@ -61,16 +62,17 @@ class CreateBooksTable extends Migration {
           `updated_at` timestamp NULL DEFAULT NULL
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
       ");
-  }
+    }
 
-  /**
-   * Reverse the migrations.
-   *
-   * @return void
-   */
-  public function down() {
-    Schema::dropIfExists('books');
-    Schema::dropIfExists('books_chapter');
-    Schema::dropIfExists('books_content');
-  }
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('books');
+        Schema::dropIfExists('books_chapter');
+        Schema::dropIfExists('books_content');
+    }
 }
