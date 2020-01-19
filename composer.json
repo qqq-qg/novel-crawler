@@ -19,7 +19,8 @@
         "laravel/framework": "^6.2",
         "laravel/tinker": "^2.0",
         "liesauer/ql-plugin-bingsearcher": "^4.0",
-        "liesauer/ql-plugin-simpleform": "^4.0"
+        "liesauer/ql-plugin-simpleform": "^4.0",
+        "mews/captcha": "^3.0"
     },
     "require-dev": {
         "facade/ignition": "^1.4",
@@ -48,7 +49,7 @@
             "database/factories"
         ],
         "files": [
-            "app/helpers.php"
+            "app/functions.php"
         ]
     },
     "autoload-dev": {

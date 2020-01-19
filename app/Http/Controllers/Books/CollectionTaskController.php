@@ -81,4 +81,12 @@ class CollectionTaskController extends Controller
         ]);
     }
 
+    public function test()
+    {
+        $v = [
+            'prefix' => 'Admin',
+            'route' => 'getIndex',
+        ];
+        echo route2url($v['prefix'] . '.' . $v['route']);;
+    }
 }
