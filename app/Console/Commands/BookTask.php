@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use App\Jobs\BooksJob;
-use App\Models\Books\CollectionRuleModel;
 use App\Models\Books\CollectionTaskModel;
 use App\Repositories\CollectionRule\BookRule;
 use Illuminate\Console\Command;

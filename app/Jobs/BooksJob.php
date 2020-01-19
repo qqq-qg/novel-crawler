@@ -6,6 +6,7 @@ use App\Models\Books\BooksChapterModel;
 use App\Models\Books\BooksContentModel;
 use App\Models\Books\BooksModel;
 use App\Repositories\CollectionRule\BookRule;
+use QL\Ext\CurlMulti;
 use QL\QueryList;
 
 class BooksJob extends BaseJob
@@ -54,28 +55,70 @@ class BooksJob extends BaseJob
             ->range($this->bookRule->chapterList->range)
             ->rules($this->bookRule->chapterList->rules)
             ->query()->getData()->all();
-        if (!empty($data)) {
-            foreach ($data as $k => $item) {
-                $_chapter = [
-                    'books_id' => $bookModel->id,
-                    'chapter_index' => $k + 1,
-                    'title' => trim($item['title']),
-                    'from_url' => trim($item['from_url'])
-                ];
-                $_chapter['from_hash'] = md5($_chapter['from_url']);
-                $chapterModel = BooksChapterModel::query()->where('from_hash', $_chapter['from_hash'])->first();
-                if (empty($chapterModel)) {
-                    $chapterModel = BooksChapterModel::query()->create($_chapter);
-                    //获取正文
-                    dispatch(new BooksContentJob($chapterModel, $this->bookRule));
-                    continue;
-                }
-                $contentModel = BooksContentModel::query()->where('id', $chapterModel->id)->first();
-                if (empty($contentModel) || empty($contentModel->content)) {
-                    //再次获取正文
-                    dispatch(new BooksContentJob($chapterModel, $this->bookRule));
-                }
+        if (empty($data)) {
+            return false;
+        }
+        $urls = [];
+        foreach ($data as $k => $item) {
+            $_chapter = [
+                'books_id' => $bookModel->id,
+                'chapter_index' => $k + 1,
+                'title' => trim($item['title']),
+                'from_url' => trim($item['from_url'])
+            ];
+            $_chapter['from_hash'] = md5($_chapter['from_url']);
+            $chapterModel = BooksChapterModel::query()->where('from_hash', $_chapter['from_hash'])->first();
+            if (empty($chapterModel)) {
+                BooksChapterModel::query()->create($_chapter);
+                //获取正文
+                $urls[] = $_chapter['from_url'];
+                continue;
+            }
+            $contentModel = BooksContentModel::query()->where('id', $chapterModel->id)->first();
+            if (empty($contentModel) || empty($contentModel->content)) {
+                //再次获取正文
+                $urls[] = $_chapter['from_url'];
             }
         }
+        if (empty($urls)) {
+            return false;
+        }
+        dispatch(new BooksContentMultiJob($urls, $this->bookRule));
+        return true;
+    }
+
+    private function multiChapter($urls)
+    {
+        $ql = QueryList::use(CurlMulti::class);
+        $ql->curlMulti($urls)
+            ->success(function (QueryList $ql, CurlMulti $curl, $r) {
+                echo "success return url:{$r['info']['url']}" . PHP_EOL;
+                $urlHash = md5($r['info']['url']);
+                $chapterModel = BooksChapterModel::query()->where('from_hash', $urlHash)->first();
+                $_data = $ql
+                    ->range($this->bookRule->content->range)
+                    ->rules($this->bookRule->content->rules)
+                    ->query()->getData()->first();
+                $content = trim($_data['content'] ?? '');
+                if (!empty($data) && !empty($content)) {
+                    $contentModel = BooksContentModel::query()->where('id', $chapterModel->id)->first();
+                    if (!empty($contentModel)) {
+                        $contentModel->update(['content' => $content,]);
+                    } else {
+                        BooksContentModel::query()->create(['id' => $chapterModel->id, 'content' => $content,]);
+                    }
+                }
+            })
+            ->error(function ($errorInfo, CurlMulti $curl) {
+                echo "Current url:{$errorInfo['info']['url']} \r\n";
+                print_r($errorInfo['error']);
+            })
+            ->start([
+                // Maximum number of threads
+                'maxThread' => 10,
+                // Number of error retries
+                'maxTry' => 3,
+            ]);
+        return true;
     }
 }

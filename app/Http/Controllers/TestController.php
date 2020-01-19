@@ -3,16 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\BooksJob;
+use App\Models\Books\BooksChapterModel;
+use App\Models\Books\BooksContentModel;
 use App\Models\Books\CollectionRuleModel;
 use App\Models\Books\CollectionTaskModel;
 use App\Repositories\CollectionRule\BookRule;
 use App\Repositories\CollectionRule\QlRule;
+use QL\Ext\CurlMulti;
 use QL\QueryList;
 
 class TestController extends Controller
 {
 
     private $config;
+    private $bookRule;
 
     public function __construct()
     {
@@ -21,29 +25,46 @@ class TestController extends Controller
 
     public function ranking()
     {
-        $url = 'http://www.zongheng.com/rank/details.html?rt=1&d=1&i=2&p={$page}';
-        $url = $this->config['baseUrl'] . '/store/c3/c1031/b0/u0/p{$page}/v0/s9/t0/u0/i0/ALL.html';
-//        file_put_contents('ranking.html', QueryList::get($url)->getHtml());
-//        die;
-//        $url = 'http://www.ql.com/ranking.html';
+        $tasks = (new CollectionTaskModel())->getTasks(1);
+        $this->bookRule = unserialize($tasks[0]->rule['rule_json']);
 
-//        $data = QueryList::get($url)
-//            ->range($this->config['ranking']['range'])
-//            ->rules($this->config['ranking']['rules'])
-//            ->query()->getData();
-//        print_r($data->pluck('url')->all());
-
-//        die;
-        for ($i = 1; $i <= 3; $i++) {
-            $findUrl = str_replace('{$page}', $i, $url);
-            //      var_dump($findUrl);
-            //      continue;
-            $data = QueryList::get($findUrl)
-                ->range($this->config['ranking']['range'])
-                ->rules($this->config['ranking']['rules'])
-                ->query()->getData();
-            var_dump($data->all());
-        }
+        $ql = QueryList::use(CurlMulti::class);
+        $ql->curlMulti([
+            'http://book.zongheng.com/chapter/912604/59026792.html',
+            'http://book.zongheng.com/chapter/912604/59047790.html',
+            'http://book.zongheng.com/chapter/912604/59047804.html',
+            'http://book.zongheng.com/chapter/912604/59098949.html',
+        ])
+            // Called if task is success
+            ->success(function (QueryList $ql, CurlMulti $curl, $r) {
+                echo "success return url:{$r['info']['url']}" . PHP_EOL;
+                $data = $ql
+                    ->range($this->bookRule->content->range)
+                    ->rules($this->bookRule->content->rules)
+                    ->query()->getData()->first();
+                $content = trim($data['content'] ?? '');
+                $urlHash = md5(trim($r['info']['url']));
+                $chapterModel = BooksChapterModel::query()->where('from_hash', $urlHash)->first();
+                if (!empty($data) && !empty($content)) {
+                    $contentModel = BooksContentModel::query()->where('id', $chapterModel->id)->first();
+                    if (!empty($contentModel)) {
+                        $contentModel->update(['content' => $content,]);
+                    } else {
+                        BooksContentModel::query()->create(['id' => $chapterModel->id, 'content' => $content]);
+                    }
+                }
+            })
+            // Task fail callback
+            ->error(function ($errorInfo, CurlMulti $curl) {
+                echo "Current url:{$errorInfo['info']['url']} \r\n";
+                print_r($errorInfo['error']);
+            })
+            ->start([
+                // Maximum number of threads
+                'maxThread' => 10,
+                // Number of error retries
+                'maxTry' => 3,
+            ]);
     }
 
     public function category()
