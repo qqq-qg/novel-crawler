@@ -22,6 +22,7 @@ class BooksContentMultiJob extends BaseJob
         parent::__construct();
         $this->urls = $urls;
         $this->bookRule = $bookRule;
+        $this->queue = 'Content';
     }
 
     public function handle()

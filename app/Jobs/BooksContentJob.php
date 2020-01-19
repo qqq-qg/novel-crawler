@@ -20,6 +20,7 @@ class BooksContentJob extends BaseJob
         parent::__construct();
         $this->chapterModel = $chapterModel;
         $this->bookRule = $bookRule;
+        $this->queue = 'Content';
     }
 
     public function handle()

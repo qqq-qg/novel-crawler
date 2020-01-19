@@ -6,7 +6,6 @@ use App\Models\Books\BooksChapterModel;
 use App\Models\Books\BooksContentModel;
 use App\Models\Books\BooksModel;
 use App\Repositories\CollectionRule\BookRule;
-use QL\Ext\CurlMulti;
 use QL\QueryList;
 
 class BooksJob extends BaseJob
@@ -84,41 +83,6 @@ class BooksJob extends BaseJob
             return false;
         }
         dispatch(new BooksContentMultiJob($urls, $this->bookRule));
-        return true;
-    }
-
-    private function multiChapter($urls)
-    {
-        $ql = QueryList::use(CurlMulti::class);
-        $ql->curlMulti($urls)
-            ->success(function (QueryList $ql, CurlMulti $curl, $r) {
-                echo "success return url:{$r['info']['url']}" . PHP_EOL;
-                $urlHash = md5($r['info']['url']);
-                $chapterModel = BooksChapterModel::query()->where('from_hash', $urlHash)->first();
-                $_data = $ql
-                    ->range($this->bookRule->content->range)
-                    ->rules($this->bookRule->content->rules)
-                    ->query()->getData()->first();
-                $content = trim($_data['content'] ?? '');
-                if (!empty($data) && !empty($content)) {
-                    $contentModel = BooksContentModel::query()->where('id', $chapterModel->id)->first();
-                    if (!empty($contentModel)) {
-                        $contentModel->update(['content' => $content,]);
-                    } else {
-                        BooksContentModel::query()->create(['id' => $chapterModel->id, 'content' => $content,]);
-                    }
-                }
-            })
-            ->error(function ($errorInfo, CurlMulti $curl) {
-                echo "Current url:{$errorInfo['info']['url']} \r\n";
-                print_r($errorInfo['error']);
-            })
-            ->start([
-                // Maximum number of threads
-                'maxThread' => 10,
-                // Number of error retries
-                'maxTry' => 3,
-            ]);
         return true;
     }
 }
