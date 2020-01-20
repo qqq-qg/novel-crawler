@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Repositories\MenuRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class MenuController extends BaseController
 {
@@ -49,13 +50,14 @@ class MenuController extends BaseController
      * @param Request $request
      * @param MenuRepository $repository
      * @return $this|\Illuminate\Http\RedirectResponse
+     * @throws ValidationException
      */
     public function postCreate(Request $request, MenuRepository $repository)
     {
         $data = $request->all();
         $validator = $this->validator_create($data);
         if ($validator->fails()) {
-            $this->throwValidationException($request, $validator);
+            throw new ValidationException($validator);
         }
         $result = $repository->create_menu($data);
         if ($result) {
@@ -70,6 +72,7 @@ class MenuController extends BaseController
      * @param Request $request
      * @param MenuRepository $repository
      * @return $this|\Illuminate\Http\RedirectResponse
+     * @throws ValidationException
      */
     public function postUpdate(Request $request, MenuRepository $repository)
     {
@@ -80,7 +83,7 @@ class MenuController extends BaseController
         }
         $validator = $this->validator_create($data);
         if ($validator->fails()) {
-            $this->throwValidationException($request, $validator);
+            throw new ValidationException($validator);
         }
 
         $result = $repository->update_menu($item, $data);

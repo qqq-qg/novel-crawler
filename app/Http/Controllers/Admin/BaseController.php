@@ -27,7 +27,7 @@ class BaseController extends Controller
     {
         $userinfo = session('userinfo');
         if ($userinfo) {
-            $user = $this->Manager->where(['username' => $userinfo['username']])->first();
+            $user = $this->Manager->query()->where(['username' => $userinfo['username']])->first();
             if ($user) {
                 //确认密码
                 if ($userinfo['password'] == substr(md5($user->password), 0, 8)) {

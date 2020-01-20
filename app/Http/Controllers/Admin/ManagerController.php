@@ -57,7 +57,7 @@ class ManagerController extends BaseController
 
         $validator = $this->validate_create($data);
         if ($validator->fails()) {
-            $this->throwValidationException($request, $validator);
+            throw new ValidationException($validator);
         }
 
         $result = $repository->create($data);
@@ -117,7 +117,7 @@ class ManagerController extends BaseController
         $validator = $this->validate_update($data, $repassword);
 
         if ($validator->fails()) {
-            $this->throwValidationException($request, $validator);
+            throw new ValidationException($validator);
         }
 
         $result = $repository->update($data);

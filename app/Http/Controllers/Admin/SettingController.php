@@ -6,6 +6,7 @@ use App\Repositories\LinkRepository;
 use App\Repositories\SettingRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class SettingController extends BaseController
 {
@@ -45,6 +46,7 @@ class SettingController extends BaseController
      * @param Request $request
      * @param SettingRepository $repository
      * @return $this|\Illuminate\Http\RedirectResponse
+     * @throws ValidationException
      */
     public function postCreate(Request $request, SettingRepository $repository)
     {
@@ -55,7 +57,7 @@ class SettingController extends BaseController
             'value' => 'required'
         ]);
         if ($validator->fails()) {
-            $this->throwValidationException($request, $validator);
+            throw new ValidationException($validator);
         }
         $result = $repository->create($data);
         if ($result) {

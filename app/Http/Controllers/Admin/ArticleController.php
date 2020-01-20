@@ -1,7 +1,4 @@
 <?php
-/*
- * 简单的文章模块
- * */
 
 namespace App\Http\Controllers\Admin;
 
@@ -9,6 +6,7 @@ use App\Models\Admin\Article;
 use App\Models\Admin\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class ArticleController extends BaseController
 {
@@ -71,6 +69,7 @@ class ArticleController extends BaseController
      * @param Request $request
      * @param AuthController $auth
      * @return \Illuminate\Http\RedirectResponse
+     * @throws ValidationException
      */
     public function postCreate(Request $request)
     {
@@ -78,7 +77,7 @@ class ArticleController extends BaseController
 
         $validator = $this->validate_create($data);
         if ($validator->fails()) {
-            $this->throwValidationException($request, $validator);
+            throw new ValidationException($validator);
         }
         $data['thumb'] = upload_base64_thumb($data['thumb']);
 
@@ -100,7 +99,7 @@ class ArticleController extends BaseController
      */
     public function getUpdate($id)
     {
-        $data = $this->Article->find($id);
+        $data = $this->Article::query()->find($id);
         if (!$data) {
             abort(404, '文章不存在');
         }
@@ -118,6 +117,7 @@ class ArticleController extends BaseController
      * 更新用户
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
+     * @throws ValidationException
      */
     public function postUpdate(Request $request)
     {
@@ -125,9 +125,7 @@ class ArticleController extends BaseController
         $validator = $this->validate_create($data);
 
         if ($validator->fails()) {
-            $this->throwValidationException(
-                $request, $validator
-            );
+            throw new ValidationException($validator);
         }
         $data['thumb'] = upload_base64_thumb($data['thumb']);
 
@@ -147,10 +145,11 @@ class ArticleController extends BaseController
      * 删除文章
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
+     * @throws \Exception
      */
     public function getDelete(Request $request)
     {
-        $article = $this->Article->find($request->id);
+        $article = $this->Article::query()->find($request->id);
         if ($article) {
             $result = $article->delete();
             if ($result) {
@@ -175,7 +174,7 @@ class ArticleController extends BaseController
      */
     public function getRecycle(Request $request)
     {
-        $article = $this->Article->find($request->id);
+        $article = $this->Article::query()->find($request->id);
         if ($article) {
             $result = $article->recycle();
             if ($result) {

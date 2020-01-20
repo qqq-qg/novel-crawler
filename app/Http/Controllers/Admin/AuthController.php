@@ -1,16 +1,11 @@
 <?php
-/**
- * 登录相关
- * User: admin
- * Date: 2017/1/9
- * Time: 16:36
- */
 
 namespace App\Http\Controllers\Admin;
 
 use App\Repositories\ManagerRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class AuthController extends BaseController
 {
@@ -68,13 +63,14 @@ class AuthController extends BaseController
      * @param Request $request
      * @param ManagerRepository $managerRepository
      * @return $this|\Illuminate\Http\RedirectResponse
+     * @throws ValidationException
      */
     public function postLogin(Request $request, ManagerRepository $managerRepository)
     {
         $data = $request->all();
         $validator = $this->validate_login($data);
         if ($validator->fails()) {
-            $this->throwValidationException($request, $validator);
+            throw new ValidationException($validator);
         }
         $user = $managerRepository->findBy('username', $data['username']);
         if ($user) {
@@ -90,7 +86,13 @@ class AuthController extends BaseController
         }
     }
 
-
+    /**
+     * @param $user
+     * @param ManagerRepository $managerRepository
+     * @author Nacrane
+     * @Date: 2020/01/20
+     * @Time: 16:28
+     */
     protected function make_login_session($user, ManagerRepository $managerRepository)
     {
         $userinfo = [
@@ -116,13 +118,14 @@ class AuthController extends BaseController
      * @param Request $request
      * @param ManagerRepository $managerRepository
      * @return $this|\Illuminate\Http\RedirectResponse
+     * @throws ValidationException
      */
     public function postRegister(Request $request, ManagerRepository $managerRepository)
     {
         $data = $request->all();
         $validator = $this->validate_register($data);
         if ($validator->fails()) {
-            $this->throwValidationException($request, $validator);
+            throw new ValidationException($validator);
         }
         $result = $managerRepository->create($data);
         if ($result) {
@@ -131,7 +134,6 @@ class AuthController extends BaseController
             return back()->withErrors('创建失败')->withInput();
         }
     }
-
 
     /**
      * 退出登录
@@ -152,12 +154,10 @@ class AuthController extends BaseController
     {
         if ($request->isMethod('POST')) {
             $password = $request->password;
-
             if ($managerRepository->compare_password($password, self::$user->password)) {
                 $this->make_login_session(self::$user, $managerRepository);
                 return redirect()->route('Admin.getIndex');
             }
-
             return back()->withErrors('请输入正确的密码')->withInput();
         } else {
             return admin_view('auth.enterpassword');
