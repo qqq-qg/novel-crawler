@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\BooksJob;
 use App\Models\Books\BooksChapterModel;
 use App\Models\Books\BooksContentModel;
 use App\Models\Books\CollectionTaskModel;
@@ -16,7 +17,7 @@ class TestController extends Controller
 
     public function __construct()
     {
-        $this->config = config('book.zhengheng');
+        $this->config = config('book.2wxs');
     }
 
     public function ranking()
@@ -65,7 +66,7 @@ class TestController extends Controller
 
     public function category()
     {
-        $url = $this->config['baseUrl'] . '/rank/details.html?rt=8&d=1&p={$page}';
+        $url = $this->config['host'] . '/rank/details.html?rt=8&d=1&p={$page}';
         //    file_put_contents('category.html', QueryList::get($url)->getHtml());
         //    die;
         $url = 'http://www.ql.com/category.html';
@@ -91,61 +92,160 @@ class TestController extends Controller
 
     public function home()
     {
-        $url = $this->config['baseUrl'] . '/book/912604.html';
-        //    file_put_contents('home.html', QueryList::get($url)->getHtml());
+        $url = 'https://' . $this->config['host'] . '/xstxt/279882/';
+//        file_put_contents('home.html', QueryList::get($url)->getHtml());
+//        die;
         $url = 'http://www.ql.com/home.html';
 
-        $data = QueryList::get($url)
+
+        $urlArr = parse_url($url);
+        dd($urlArr);
+
+//        $title = QueryList::get($url)
+////            ->encoding('gbk','utf-8')
+////            ->encoding('utf-8','gbk')
+//            ->encoding('gbk')
+//            ->find('div.btitle>h1')->texts();
+//        dd($title);
+
+        $ql = QueryList::get($url);
+        $data = $ql
             ->range($this->config['home']['range'])
             ->rules($this->config['home']['rules'])
-            ->query()->getData();
-        dd($data->all());
+            ->query()->getData()->first();
+        dd($data);
+
+
+
+        if (empty($this->config['charset']) || $this->config['charset'] == 'utf-8') {
+            $data = $ql
+                ->range($this->config['home']['range'])
+                ->rules($this->config['home']['rules'])
+                ->query()->getData()->first();
+            dd($data);
+        }
+        $ql->encoding($this->config['charset']);
+        $title = $this->findSingleValue($ql, $this->config['home']['rules']['title']);
+        $wordsCount = $this->findSingleValue($ql, $this->config['home']['rules']['words_count']);
+        $chapterListUrl = $this->findSingleValue($ql, $this->config['home']['rules']['chapter_list_url']);
+
+        echo 'title=' . $title . "<br/>";
+        echo '$wordsCount=' . $wordsCount . "<br/>";
+        echo '$chapterListUrl=' . $chapterListUrl . "<br/>";
+        dd();
+    }
+
+    private function findSingleValue(QueryList $ql, $ruleValue)
+    {
+        if ($ruleValue[0] == 'self') {
+            return 'self';
+        }
+        if ($ruleValue[0] == 'none') {
+            return '';
+        }
+        switch ($ruleValue[1]) {
+            case 'text':
+                return $ql->find($ruleValue[0])->texts()[0] ?? '';
+                break;
+            case 'html':
+                return $ql->find($ruleValue[0])->htmls()[0] ?? '';
+                break;
+            default:
+                return $ql->find($ruleValue[0])->attrs($ruleValue[1])[0] ?? '';
+        }
+    }
+
+    private function findMultiValue(QueryList $ql, $ruleValue)
+    {
+        if ($ruleValue[0] == 'none') {
+            return [];
+        }
+        switch ($ruleValue[1]) {
+            case 'text':
+                return $ql->find($ruleValue[0])->texts() ?? [];
+                break;
+            case 'html':
+                return $ql->find($ruleValue[0])->htmls() ?? [];
+                break;
+            default:
+                return $ql->find($ruleValue[0])->attrs($ruleValue[1]) ?? [];
+        }
     }
 
     public function getChapter()
     {
-        $url = $this->config['baseUrl'] . '/showchapter/912604.html';
-        //    file_put_contents('getChapter.html', QueryList::get($url)->getHtml());
-        $homeUrl = 'http://www.ql.com/getChapter.html';
+        $url = 'https://' . $this->config['host'] . '/xstxt/289368/';
+//        $url = 'https://www.2wxs.com/xstxt/289368/';
+//        file_put_contents('home.html', QueryList::get($url)->removeHead()->getHtml());
+//        dd('ok!');
+        $url = 'http://www.ql.com/home.html';
 
-        $data = QueryList::get($homeUrl)
-            ->range($this->config['chapter_list']['range'])
+//        $html = QueryList::get($url)
+//            ->encoding('utf-8', $this->config['charset'])
+//            ->removeHead()->getHtml();
+//        file_put_contents('home.html', $html);
+//        dd('ok!');
+        $data = QueryList::get($url)
+//            ->encoding($this->config['charset'])
             ->rules($this->config['chapter_list']['rules'])
             ->query()->getData();
         dd($data->all());
+
+        $ql = QueryList::get($url)->encoding($this->config['charset']);
+        $titleArr = $this->findMultiValue($ql, $this->config['chapter_list']['rules']['title']);
+        $fromUrlArr = $this->findMultiValue($ql, $this->config['chapter_list']['rules']['from_url']);
+
+        dd($titleArr, $fromUrlArr);
+
+
+        $data = QueryList::get($url)
+            ->encoding($this->config['charset'])
+//            ->range($this->config['chapter_list']['range'])
+            ->rules($this->config['chapter_list']['rules'])
+            ->query()->getData();
+        print_r($data->all());
+        die;
     }
 
     public function content()
     {
-        $url = $this->config['baseUrl'] . '/chapter/912604/59047804.html';
-        //    file_put_contents('content.html', QueryList::get($url)->getHtml());
-        $homeUrl = 'http://www.ql.com/content.html';
+        $url = $this->config['host'] . '/xstxt/279882/32328251.html';
+//        file_put_contents('content.html', QueryList::get($url)->getHtml());
+//        die;
+        $url = 'http://www.ql.com/content.html';
 
-        $data = QueryList::get($homeUrl)
-            ->range($this->config['chapter_list']['range'])
+//        $html = iconv('gbk', 'utf-8', QueryList::get($url)->getHtml());
+
+//        $html = mb_convert_encoding(QueryList::get($url)->removeHead()->getHtml(), "UTF-8", "GBK");
+//        file_put_contents('content1.html', QueryList::get($url)->removeHead()->getHtml());
+//        die;
+        $html = file_get_contents('content1.html');
+
+        $data = QueryList::getInstance()->setHtml(QueryList::get($url)->removeHead()->getHtml())
+//            ->encoding('utf-8')
             ->rules($this->config['content']['rules'])
-            ->query()->getData();
-        dd($data->all());
-    }
+            ->query()->getData()->first();
+        dd($data);
 
-    public function test()
-    {
+        $ql = QueryList::get($url);
+//        if (empty($this->config['charset']) || $this->config['charset'] == 'utf-8') {
+        $data = $ql->encoding('utf-8', $this->config['charset'])->removeHead()
+            ->range($this->config['content']['range'])
+            ->rules($this->config['content']['rules'])
+            ->query()->getData()->first();
+        dd($data);
+//        }
+        $ql->removeHead();
+        $content = $ql->find('#BookText')->html();
 
+//        $content = $this->findSingleValue($ql, $this->config['content']['rules']['content']);
+        dd($content);
 
-//        $model = new CollectionRuleModel();
-//        $model->id = 1;
-//        $model->title = '纵横中文网';
-//        $model->rule_json = json_encode(config('book.zhengheng'));
-//        $model->save();
-//
-//        $model = new CollectionTaskModel();
-//        $model->id = 1;
-//        $model->title = '纵横月票榜';
-//        $model->from_url = 'http://www.zongheng.com/rank/details.html?rt=1&d=1&i=2&p={$page}';
-//        $model->from_hash = md5($model->from_url);
-//        $model->rule_id = 1;
-//        $model->page_limit = 2;
-//        $model->task_code = 1;
-//        $model->save();
+//        $data = QueryList::get($url)
+//            ->encoding($this->config['charset'])
+//            ->range($this->config['chapter_list']['range'])
+//            ->rules($this->config['content']['rules'])
+//            ->query()->getData();
+//        dd($data->all());
     }
 }

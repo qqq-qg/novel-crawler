@@ -17,6 +17,9 @@ namespace App\Repositories\CollectionRule;
  */
 Class BookRule
 {
+    const CHARSET_UTF8 = 'utf-8';
+    const CHARSET_GBK = 'gbk';
+
     public function __construct($host = '', $charset = '')
     {
         $this->host = $host;
@@ -35,5 +38,13 @@ Class BookRule
             'chapterList' => $this->chapterList->toArray(),
             'content' => $this->content->toArray(),
         ];
+    }
+
+    public function needEncoding()
+    {
+        if (empty($this->charset) || $this->charset == 'utf-8') {
+            return false;
+        }
+        return true;
     }
 }

@@ -508,7 +508,7 @@ function get_random_user_agent()
 
 function is_time_out($message)
 {
-    $isTimeOut = strpos($message, 'timed out') > -1;
+    $isTimeOut = strpos($message, 'Connection timed out') > -1;
     if ($isTimeOut) {
         return true;
     }
@@ -519,4 +519,19 @@ function is_time_out($message)
     return false;
 }
 
+function get_real_url($url)
+{
+    //得到百度跳转的真正地址
+    $header = get_headers($url, 1);
+    if (strpos($header[0], '301') || strpos($header[0], '302')) {
+        if (is_array($header['Location'])) {
+            //return $header['Location'][count($header['Location'])-1];
+            return $header['Location'][0];
+        } else {
+            return $header['Location'];
+        }
+    } else {
+        return $url;
+    }
+}
 

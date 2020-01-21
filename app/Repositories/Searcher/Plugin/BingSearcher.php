@@ -35,20 +35,17 @@ class BingSearcher implements PluginContract
     public function setHttpOption(array $httpOpt = [])
     {
         $this->httpOpt = $httpOpt;
-
         return $this;
     }
 
     public function search(string $keyword)
     {
         $this->keyword = $keyword;
-
         return $this;
     }
 
     public function page($page = 1)
     {
-        // Collection to Array
         return $this->query($page)->query()->getData()->toArray();
     }
 
@@ -59,19 +56,12 @@ class BingSearcher implements PluginContract
             $res = $this->page($i);
             $results = array_merge($results, $res);
         }
-
         return $results;
     }
 
     public function getCount()
     {
-        $count = 0;
-        // $text  = getMiddleText($this->query(1)->find('.sb_count')->text(), '共 ', ' 条');
-        // if ($text !== false) {
-        //     $count = (int) str_replace(',', '', $text);
-        // }
         $count = intval(str_replace(',', '', $this->query(1)->find('.sb_count')->text()));
-
         return $count;
     }
 

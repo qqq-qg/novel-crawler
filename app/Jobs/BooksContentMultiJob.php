@@ -39,10 +39,20 @@ class BooksContentMultiJob extends BaseJob
                 echo "success return url:{$r['info']['url']}" . PHP_EOL;
                 $urlHash = md5(trim($r['info']['url']));
                 $chapterModel = BooksChapterModel::query()->where('from_hash', $urlHash)->first();
-                $data = $ql
-                    ->range($this->bookRule->content->range)
-                    ->rules($this->bookRule->content->rules)
-                    ->query()->getData()->first();
+                
+                if ($this->bookRule->needEncoding()) {
+                    $data = $ql
+                        ->setHtml($ql->removeHead()->getHtml())
+                        ->range($this->bookRule->content->range)
+                        ->rules($this->bookRule->content->rules)
+                        ->query()->getData()->first();
+                } else {
+                    $data = $ql
+                        ->range($this->bookRule->content->range)
+                        ->rules($this->bookRule->content->rules)
+                        ->query()->getData()->first();
+                }
+
                 $content = trim($data['content'] ?? '');
                 if (!empty($content)) {
                     $contentModel = BooksContentModel::query()->where('id', $chapterModel->id)->first();

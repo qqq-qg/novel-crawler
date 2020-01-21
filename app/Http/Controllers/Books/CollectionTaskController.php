@@ -7,17 +7,15 @@ use App\Models\Books\CollectionRuleModel;
 use App\Models\Books\CollectionTaskModel;
 use App\Repositories\CollectionRule\BookRule;
 use App\Repositories\CollectionRule\QlRule;
-use App\Repositories\Searcher\BindSearcherRepository;
-use liesauer\QLPlugin\BingSearcher;
-use QL\Ext\Baidu;
-use QL\QueryList;
 
 class CollectionTaskController extends Controller
 {
 
     public function initRule()
     {
+        /*
         $bookRule = new BookRule();
+        $bookRule->host = 'www.zongheng.com';
         $bookRule->bookList = [
             'category' => new QlRule('',
                 [
@@ -83,62 +81,43 @@ class CollectionTaskController extends Controller
             'rule_id' => $model->id,
             'page_limit' => 2,
         ]);
-    }
 
-    public function addCollectionTask()
-    {
-        $ruleId = 1;
-        $pageLimit = 2;
-        $title = '纵横中文网古典仙侠';
-        $url = 'http://www.zongheng.com/store/c3/c1031/b0/u0/p{$page}/v0/s9/t0/u0/i0/ALL.html';
-        CollectionTaskModel::query()->create([
-            'title' => $title,
-            'from_url' => $url,
-            'from_hash' => md5($url),
-            'rule_id' => $ruleId,
-            'page_limit' => $pageLimit,
+        $bookRule = new BookRule();
+        $bookRule->host = 'www.2wxs.com';
+        $bookRule->charset = BookRule::CHARSET_GBK;
+        $bookRule->bookList = [
+            'category' => new QlRule('',
+                [
+                    'url' => ['ul.main_con>li span.bookname>a', 'href']
+                ], true, 2),
+
+            'ranking' => new QlRule('',
+                [
+                    'url' => ['div.rank_d_list>div.rank_d_book_img>a', 'href']
+                ], true, 2)
+        ];
+        $bookRule->home = new QlRule('',
+            [
+                'title' => ['div.btitle>h1', 'text'],
+                'words_count' => ['none', ''],
+                'chapter_list_url' => ['self', ''],
+            ]);
+        $bookRule->chapterList = new QlRule('',
+            [
+                'title' => ['dl.chapterlist dd>a', 'text'],
+                'from_url' => ['dl.chapterlist dd>a', 'href']
+            ]);
+        $bookRule->content = new QlRule('div.reader_box', [
+            'content' => ['div#BookText', 'html']
         ]);
 
-    }
+        $model = CollectionRuleModel::query()->create(
+            [
+                'title' => '顶点小说网-2wxs',
+                'rule_json' => serialize($bookRule),
+            ]
+        );
 
-    public function addSearchTask()
-    {
-        $bookName = '哈利波特之万界店主';
-        $optionPools = ['zongheng', 'biqukan', '2wxs'];
-
-//        $url = 'https://cn.bing.com/search?q='.$bookName;
-//        $ql = QueryList::get($url)->getHtml();
-//        dd($ql);
-//        echo $ql;
-//        die;
-
-
-
-        $proxyRepository = new BindSearcherRepository();
-        $data = $proxyRepository->search($bookName);
-        dd($data);
-
-
-        $ql = QueryList::getInstance();
-        $ql->use(BingSearcher::class);
-        $bingSearcher = $ql->BingSearcher();
-        $result = $bingSearcher->search($bookName)
-            ->setHttpOption([
-                'proxy' => 'http://119.23.110.100:8000',
-                'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36',
-                'timeout' => 10,
-            ])->pages(1);
-        var_dump($result);
-        die;
-        //baidu
-        $ql = QueryList::getInstance()->use(Baidu::class);
-        $searcher = $ql->baidu(2)->search($bookName);
-        $data = $searcher->setHttpOpt([
-            'proxy' => 'http://123.169.163.227:9999',
-            'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36',
-            'timeout' => 10,
-        ])->page(1, true);
-
-        dd($data);
+        */
     }
 }

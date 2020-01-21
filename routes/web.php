@@ -2,12 +2,17 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/init', 'Books\CollectionTaskController@init')->name('collection-task-init');
-Route::get('/test', 'Books\CollectionTaskController@addSearchTask')->name('collection-task-test');
 
-Route::group(['prefix' => 'test'], function () {
-    Route::get('t1', 'TestController@t1')->name('Test.t1');
-    Route::get('t2', 'TestController@t2')->name('Test.t2');
+Route::group([], function () {
+    Route::get('ranking', 'TestController@ranking')->name('Test.ranking');
+    Route::get('category', 'TestController@category')->name('Test.category');
+    Route::get('home', 'TestController@home')->name('Test.home');
+    Route::get('getChapter', 'TestController@getChapter')->name('Test.getChapter');
+    Route::get('content', 'TestController@content')->name('Test.content');
+
+
+
+    Route::get('/task-init', 'Books\CollectionTaskController@initRule')->name('collection-task-init');
 });
 
 // 后台路由

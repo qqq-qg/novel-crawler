@@ -8,11 +8,11 @@ use App\Repositories\CollectionRule\BookRule;
 use Illuminate\Console\Command;
 use QL\QueryList;
 
-class BookTask extends Command
+class CollectionBookTask extends Command
 {
     protected $signature = 'task:run {--id=}';
 
-    protected $description = '测试';
+    protected $description = '采集任务，启动队列';
 
     /**
      * @var BookRule $bookRule

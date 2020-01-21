@@ -34,7 +34,7 @@ class BindSearcherRepository implements SearcherRepositoryInterface
             return $this->handle($keyword);
         } catch (\Exception $e) {
             echo '$e->getMessage()=' . $e->getMessage() . "<br/>";
-            if (!$this->is_time_out($e->getMessage())) {
+            if (!is_time_out($e->getMessage())) {
                 return false;
             }
             if ($this->tries-- > 0) {
@@ -60,20 +60,7 @@ class BindSearcherRepository implements SearcherRepositoryInterface
                 'User-Agent' => get_random_user_agent(),
                 'timeout' => 10,
             ])
-            ->pages(1);
+            ->page(1);
         return $result;
-    }
-
-    public function is_time_out($message)
-    {
-        $isTimeOut = strpos($message, 'Connection timed out') > -1;
-        if ($isTimeOut) {
-            return true;
-        }
-        $isServerBusy = strpos($message, '500 Internal Server Error') > -1;
-        if ($isServerBusy) {
-            return true;
-        }
-        return false;
     }
 }
