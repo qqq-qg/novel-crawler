@@ -43,6 +43,7 @@ class BooksJob extends BaseJob
             'title' => trim($data['title'] ?? ''),
             'words_count' => trim($data['words_count'] ?? ''),
         ];
+        echo "title => {$_bookData['title']} \r\n";
         $chapterListUrl = trim($data['chapter_list_url'] ?? $this->url);
         $chapterListUrl = $this->get_full_url($chapterListUrl);
         $bookModel = BooksModel::query()->where('from_hash', $fromHash)->first();
