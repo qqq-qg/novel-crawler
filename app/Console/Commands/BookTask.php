@@ -46,8 +46,9 @@ class BookTask extends Command
                 continue;
             }
             $homeUrlArr = $data->pluck('url')->all();
+            //遍历每一本书
             foreach ($homeUrlArr as $homeUrl) {
-                dispatch(new BooksJob($homeUrl, $bookRule));
+                dispatch(new BooksJob($bookRule, $homeUrl));
             }
         }
 

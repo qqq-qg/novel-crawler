@@ -18,8 +18,6 @@
         "jaeger/querylist-rule-google": "^4.0",
         "laravel/framework": "^6.2",
         "laravel/tinker": "^2.0",
-        "liesauer/ql-plugin-bingsearcher": "^4.0",
-        "liesauer/ql-plugin-simpleform": "^4.0",
         "mews/captcha": "^3.0"
     },
     "require-dev": {

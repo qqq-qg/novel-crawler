@@ -3,7 +3,12 @@
 use Illuminate\Support\Facades\Route;
 
 Route::get('/init', 'Books\CollectionTaskController@init')->name('collection-task-init');
-Route::get('/test', 'Books\CollectionTaskController@test')->name('collection-task-test');
+Route::get('/test', 'Books\CollectionTaskController@addSearchTask')->name('collection-task-test');
+
+Route::group(['prefix' => 'test'], function () {
+    Route::get('t1', 'TestController@t1')->name('Test.t1');
+    Route::get('t2', 'TestController@t2')->name('Test.t2');
+});
 
 // 后台路由
 $admin = [

@@ -2,13 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Jobs\BooksJob;
 use App\Models\Books\BooksChapterModel;
 use App\Models\Books\BooksContentModel;
-use App\Models\Books\CollectionRuleModel;
 use App\Models\Books\CollectionTaskModel;
-use App\Repositories\CollectionRule\BookRule;
-use App\Repositories\CollectionRule\QlRule;
 use QL\Ext\CurlMulti;
 use QL\QueryList;
 
@@ -134,6 +130,8 @@ class TestController extends Controller
 
     public function test()
     {
+
+
 //        $model = new CollectionRuleModel();
 //        $model->id = 1;
 //        $model->title = '纵横中文网';
@@ -149,11 +147,5 @@ class TestController extends Controller
 //        $model->page_limit = 2;
 //        $model->task_code = 1;
 //        $model->save();
-
-        die;
-        $url = $this->config['baseUrl'] . '/book/912604.html';
-
-        $config = config('book.zhengheng');
-        dispatch(new BooksJob($url, $config));
     }
 }

@@ -17,7 +17,7 @@ class BooksJob extends BaseJob
      * @param $url
      * @param BookRule $bookRule
      */
-    public function __construct($url, BookRule $bookRule)
+    public function __construct(BookRule $bookRule, $url)
     {
         parent::__construct();
         $this->url = $url;
@@ -82,7 +82,7 @@ class BooksJob extends BaseJob
         if (empty($urls)) {
             return false;
         }
-        dispatch(new BooksContentMultiJob($urls, $this->bookRule))->onQueue('Content');
+        dispatch(new BooksContentMultiJob($this->bookRule, $urls))->onQueue('Content');
         return true;
     }
 }

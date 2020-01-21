@@ -8,6 +8,12 @@ use App\Repositories\CollectionRule\BookRule;
 use QL\Ext\CurlMulti;
 use QL\QueryList;
 
+/**
+ * 批量采集章节正文
+ * Class BooksContentMultiJob
+ * @Date: 2020/01/20 16:54
+ * @package App\Jobs
+ */
 class BooksContentMultiJob extends BaseJob
 {
     private $urls, $bookRule;
@@ -17,7 +23,7 @@ class BooksContentMultiJob extends BaseJob
      * @param array $urls
      * @param BookRule $bookRule
      */
-    public function __construct(array $urls, BookRule $bookRule)
+    public function __construct(BookRule $bookRule, array $urls)
     {
         parent::__construct();
         $this->urls = $urls;
@@ -45,6 +51,7 @@ class BooksContentMultiJob extends BaseJob
                     } else {
                         BooksContentModel::query()->create(['id' => $chapterModel->id, 'content' => $content]);
                     }
+                    $chapterModel->saveProcessed();
                 }
             })
             ->error(function ($errorInfo, CurlMulti $curl) {

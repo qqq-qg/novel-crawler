@@ -232,7 +232,6 @@ function route2url($route = '')
     }
 }
 
-
 /**
  * 调用编辑器
  * @param $id
@@ -438,7 +437,6 @@ function staticPath($file)
     return url('skin' . $file);
 }
 
-
 /**
  * 主动推送给百度
  * @param $url
@@ -476,3 +474,49 @@ function wap_domain()
 {
     return str_replace(['http://', 'https://'], '', env('WAP_URL'));
 }
+
+//ping一个IP地址，能不能通
+function ping($ip)
+{
+    $ip_port = explode(':', $ip);
+    if (filter_var($ip_port[0], FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {        //IPv6
+        $socket = socket_create(AF_INET6, SOCK_STREAM, SOL_TCP);
+    } elseif (filter_var($ip_port[0], FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {    //IPv4
+        $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+    } else {
+        return FALSE;
+    }
+    if (!isset($ip_port[1])) {        //没有写端口则指定为80
+        $ip_port[1] = '80';
+    }
+    $ok = socket_connect($socket, $ip_port[0], $ip_port[1]);
+//        var_dump( socket_strerror( socket_last_error($socket) ) );
+    socket_close($socket);
+//        var_dump($ok);
+    return $ok;
+}
+
+//随机返回一个 User-Agent
+function get_random_user_agent()
+{
+    $agentArr = [
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36'
+    ];
+    $i = array_rand($agentArr);
+    return $agentArr[$i];
+}
+
+function is_time_out($message)
+{
+    $isTimeOut = strpos($message, 'timed out') > -1;
+    if ($isTimeOut) {
+        return true;
+    }
+    $isServerBusy = strpos($message, '500 Internal Server Error') > -1;
+    if ($isServerBusy) {
+        return true;
+    }
+    return false;
+}
+
+

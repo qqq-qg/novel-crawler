@@ -33,7 +33,7 @@ class CreateBooksTable extends Migration
         `updated_at` timestamp NULL default null,
         PRIMARY KEY (`id`),
         UNIQUE KEY `books_fromhash_unique` (`from_hash`)
-      ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
       ");
 
 
@@ -51,7 +51,7 @@ class CreateBooksTable extends Migration
         `updated_at` timestamp NULL default null,
         PRIMARY KEY (`id`),
         UNIQUE KEY `books_detail_fromhash_unique` (`from_hash`)
-      ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
       ");
 
         DB::statement("
@@ -60,7 +60,7 @@ class CreateBooksTable extends Migration
           `content` text COLLATE utf8_unicode_ci NOT NULL COMMENT '小说内容',
           `created_at` timestamp NULL DEFAULT NULL,
           `updated_at` timestamp NULL DEFAULT NULL
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
       ");
     }
 
