@@ -1,4 +1,8 @@
 {
+    "name": "vue",
+    "version": "1.0.0",
+    "description": "a novel website",
+    "author": "nacrane <hellonacrane@gmail.com>",
     "private": true,
     "scripts": {
         "dev": "npm run development",

@@ -2,6 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 
+Route::group([
+    'prefix' => '/s',
+    'namespace' => 'Wap'
+], function () {
+    Route::get('/', 'IndexController@index')->name('Index.index');
+});
 
 Route::group([], function () {
     Route::get('test', 'TestController@index')->name('Test.index');
@@ -133,25 +139,6 @@ Route::group($admin, function () {
     });
 
 });
-
-//移动端模块路由
-/*$wap = [
-    'namespace' => 'Wap',
-    'domain' => wap_domain()
-];
-Route::group($wap, function () {
-    Route::get('xiaoshuo/{catid}.html', 'BooksController@getIndex')->where('catid', '\d+')->name('BookCat');
-    Route::get('xiaoshuo/{catid}/{id}.html', 'BooksController@getLists')->where(['catid' => '\d+', 'id' => '\d+'])->name('BookLists');
-    Route::get('xiaoshuo/{catid}/{id}/{aid}.html', 'BooksController@getContent')
-        ->where(['catid' => '\d+', 'id' => '\d+', 'aid' => '\d+'])->name('BookContent');
-    Route::get('xiaoshuo/{catid}/{id}/chapter.html', 'BooksController@getChapter')
-        ->where(['catid' => '\d+', 'id' => '\d+'])->name('BookChapter');
-    Route::get('xiaoshuo/{catid}/{id}/lastest.html', 'BooksController@getLastContent')
-        ->where(['catid' => '\d+', 'id' => '\d+'])->name('BookLastContent');
-    Route::get('/', 'IndexController@getIndex')->name('getHomeIndex');
-    Route::get('/test', 'IndexController@getTest');
-});*/
-
 
 //前台模块路由
 /*$home = [
