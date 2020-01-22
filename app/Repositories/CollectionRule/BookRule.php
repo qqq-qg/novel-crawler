@@ -14,11 +14,18 @@ namespace App\Repositories\CollectionRule;
  * @property QlRule $home 简介规则
  * @property QlRule $chapterList 章节列表规则
  * @property QlRule $content 内容规则
+ * @property string $splitTag
+ * @property array $replaceTags
  */
 Class BookRule
 {
     const CHARSET_UTF8 = 'utf-8';
     const CHARSET_GBK = 'gbk';
+
+    public $host = '';
+    public $charset = '';
+    public $splitTag = '';
+    public $replaceTags = [];
 
     public function __construct($host = '', $charset = '')
     {
@@ -37,6 +44,8 @@ Class BookRule
             'home' => $this->home->toArray(),
             'chapterList' => $this->chapterList->toArray(),
             'content' => $this->content->toArray(),
+            'splitTag' => $this->splitTag,
+            'replaceTags' => $this->replaceTags,
         ];
     }
 

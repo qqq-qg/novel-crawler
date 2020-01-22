@@ -36,7 +36,7 @@ class BooksContentMultiJob extends BaseJob
         $ql = QueryList::use(CurlMulti::class);
         $ql->curlMulti($this->urls, ['verify' => false])
             ->success(function (QueryList $ql, CurlMulti $curl, $r) {
-                echo "success return url:{$r['info']['url']}" . PHP_EOL;
+//                echo "success return url:{$r['info']['url']}" . PHP_EOL;
                 $urlHash = md5(trim($r['info']['url']));
                 $chapterModel = BooksChapterModel::query()->where('from_hash', $urlHash)->first();
 
@@ -56,6 +56,12 @@ class BooksContentMultiJob extends BaseJob
                 }
 
                 $content = trim($data['content'] ?? '');
+                if (!empty($this->bookRule->splitTag) && strpos($content, $this->bookRule->splitTag) > -1) {
+                    $content = explode($this->bookRule->splitTag, $content)[0];
+                }
+                foreach ($this->bookRule->replaceTags ?? [] as $tag) {
+                    $content = str_replace($tag[0], $tag[1] ?? '', $content);
+                }
                 if (!empty($content)) {
                     $contentModel = BooksContentModel::query()->where('id', $chapterModel->id)->first();
                     if (!empty($contentModel)) {

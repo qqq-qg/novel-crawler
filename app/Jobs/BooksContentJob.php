@@ -33,7 +33,6 @@ class BooksContentJob extends BaseJob
 
     public function handle()
     {
-
         if ($this->bookRule->needEncoding()) {
             $html = QueryList::get($this->chapterUrl)->removeHead()
                 ->encoding('utf-8', $this->bookRule->charset)->getHtml();
@@ -49,6 +48,12 @@ class BooksContentJob extends BaseJob
                 ->query()->getData()->first();
         }
         $content = trim($data['content'] ?? '');
+        if (!empty($this->bookRule->splitTag) && strpos($content, $this->bookRule->splitTag) > -1) {
+            $content = explode($this->bookRule->splitTag, $content)[0];
+        }
+        foreach ($this->bookRule->replaceTags as $tag) {
+            $content = str_replace($tag[0], $tag[1] ?? '', $content);
+        }
         if (!empty($data) && !empty($content)) {
             $contentModel = BooksContentModel::query()->where('id', $this->chapterId)->first();
             if (!empty($contentModel)) {

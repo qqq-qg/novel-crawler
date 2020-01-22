@@ -27,7 +27,6 @@ class InitRule extends Command
         $model3 = $this->rule3();
     }
 
-
     private function rule1()
     {
         $bookRule = new BookRule();
@@ -148,8 +147,9 @@ class InitRule extends Command
                 'from_url' => ['.listmain dd>a', 'href']
             ]);
         $bookRule->content = new QlRule('', [
-            'content' => ['div#content', 'html', 'script']
+            'content' => ['div#content', 'html', '-script']
         ]);
+        $bookRule->splitTag = '(https';
 
         $model = CollectionRuleModel::query()->create(
             [

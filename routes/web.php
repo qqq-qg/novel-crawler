@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::group([], function () {
-    Route::get('test', 'TestController@ranking')->name('Test.index');
+    Route::get('test', 'TestController@index')->name('Test.index');
 
     Route::get('bqg', 'TryBookRuleController@bqg')->name('TryBookRule.bqg');
 
