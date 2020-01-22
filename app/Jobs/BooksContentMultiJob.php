@@ -5,7 +5,7 @@ namespace App\Jobs;
 use App\Models\Books\BooksChapterModel;
 use App\Models\Books\BooksContentModel;
 use App\Repositories\CollectionRule\BookRule;
-use QL\Ext\CurlMulti;
+use App\Repositories\Searcher\Plugin\CurlMulti;
 use QL\QueryList;
 
 /**
@@ -34,15 +34,17 @@ class BooksContentMultiJob extends BaseJob
     public function handle()
     {
         $ql = QueryList::use(CurlMulti::class);
-        $ql->curlMulti($this->urls)
+        $ql->curlMulti($this->urls, ['verify' => false])
             ->success(function (QueryList $ql, CurlMulti $curl, $r) {
                 echo "success return url:{$r['info']['url']}" . PHP_EOL;
                 $urlHash = md5(trim($r['info']['url']));
                 $chapterModel = BooksChapterModel::query()->where('from_hash', $urlHash)->first();
-                
+
                 if ($this->bookRule->needEncoding()) {
+                    $html = $ql->removeHead()
+                        ->encoding('utf-8', $this->bookRule->charset)->getHtml();
                     $data = $ql
-                        ->setHtml($ql->removeHead()->getHtml())
+                        ->setHtml($html)
                         ->range($this->bookRule->content->range)
                         ->rules($this->bookRule->content->rules)
                         ->query()->getData()->first();

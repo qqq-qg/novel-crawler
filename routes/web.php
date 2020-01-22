@@ -4,15 +4,12 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::group([], function () {
-    Route::get('ranking', 'TestController@ranking')->name('Test.ranking');
-    Route::get('category', 'TestController@category')->name('Test.category');
-    Route::get('home', 'TestController@home')->name('Test.home');
-    Route::get('getChapter', 'TestController@getChapter')->name('Test.getChapter');
-    Route::get('content', 'TestController@content')->name('Test.content');
+    Route::get('test', 'TestController@ranking')->name('Test.index');
+
+    Route::get('bqg', 'TryBookRuleController@bqg')->name('TryBookRule.bqg');
 
 
-
-    Route::get('/task-init', 'Books\CollectionTaskController@initRule')->name('collection-task-init');
+    Route::get('/task-init', 'Books\CollectionTaskController@init')->name('collection-task-init');
 });
 
 // 后台路由

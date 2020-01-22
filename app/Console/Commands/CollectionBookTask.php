@@ -38,16 +38,28 @@ class CollectionBookTask extends Command
     private function queryData($url, BookRule $bookRule)
     {
         foreach ($bookRule->bookList as $listRlRule) {
-            $data = QueryList::get($url)
-                ->range($listRlRule->range)
-                ->rules($listRlRule->rules)
-                ->query()->getData();
+
+            if ($bookRule->needEncoding()) {
+                $html = QueryList::get($url)->removeHead()
+                    ->encoding('utf-8', $bookRule->charset)->getHtml();
+                $data = QueryList::getInstance()
+                    ->setHtml($html)
+                    ->range($listRlRule->range)
+                    ->rules($listRlRule->rules)
+                    ->query()->getData();
+            } else {
+                $data = QueryList::get($url)
+                    ->range($listRlRule->range)
+                    ->rules($listRlRule->rules)
+                    ->query()->getData();
+            }
             if (empty($data)) {
                 continue;
             }
             $homeUrlArr = $data->pluck('url')->all();
             //遍历每一本书
             foreach ($homeUrlArr as $homeUrl) {
+                $homeUrl = get_full_url($homeUrl, $url);
                 dispatch(new BooksJob($bookRule, $homeUrl));
             }
         }

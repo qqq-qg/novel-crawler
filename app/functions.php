@@ -535,3 +535,14 @@ function get_real_url($url)
     }
 }
 
+function get_full_url($path, $url)
+{
+    $urlArr = parse_url($url);
+    if (strpos($path, $urlArr['host']) === false) {
+        if (strpos($path, '/') !== 0) {
+            $path = '/' . $path;
+        }
+        return "{$urlArr['scheme']}://{$urlArr['host']}{$path}";
+    }
+    return $path;
+}

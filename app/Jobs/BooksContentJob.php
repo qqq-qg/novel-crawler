@@ -33,10 +33,21 @@ class BooksContentJob extends BaseJob
 
     public function handle()
     {
-        $data = QueryList::get($this->chapterUrl)
-            ->range($this->bookRule->content->range)
-            ->rules($this->bookRule->content->rules)
-            ->query()->getData()->first();
+
+        if ($this->bookRule->needEncoding()) {
+            $html = QueryList::get($this->chapterUrl)->removeHead()
+                ->encoding('utf-8', $this->bookRule->charset)->getHtml();
+            $data = QueryList::getInstance()
+                ->setHtml($html)
+                ->range($this->bookRule->content->range)
+                ->rules($this->bookRule->content->rules)
+                ->query()->getData()->first();
+        } else {
+            $data = QueryList::get($this->chapterUrl)
+                ->range($this->bookRule->content->range)
+                ->rules($this->bookRule->content->rules)
+                ->query()->getData()->first();
+        }
         $content = trim($data['content'] ?? '');
         if (!empty($data) && !empty($content)) {
             $contentModel = BooksContentModel::query()->where('id', $this->chapterId)->first();

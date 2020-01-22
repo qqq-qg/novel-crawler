@@ -28,8 +28,10 @@ class BooksJob extends BaseJob
     {
         $fromHash = md5($this->url);
         if ($this->bookRule->needEncoding()) {
+            $html = QueryList::get($this->url)->removeHead()
+                ->encoding('utf-8', $this->bookRule->charset)->getHtml();
             $data = QueryList::getInstance()
-                ->setHtml(QueryList::get($this->url)->removeHead()->getHtml())
+                ->setHtml($html)
                 ->range($this->bookRule->home->range)
                 ->rules($this->bookRule->home->rules)
                 ->query()->getData()->first();
@@ -60,8 +62,10 @@ class BooksJob extends BaseJob
     private function chapter($bookModel, $chapterListUrl)
     {
         if ($this->bookRule->needEncoding()) {
+            $html = QueryList::get($chapterListUrl)->removeHead()
+                ->encoding('utf-8', $this->bookRule->charset)->getHtml();
             $data = QueryList::getInstance()
-                ->setHtml(QueryList::get($chapterListUrl)->removeHead()->getHtml())
+                ->setHtml($html)
                 ->range($this->bookRule->chapterList->range)
                 ->rules($this->bookRule->chapterList->rules)
                 ->query()->getData()->all();
@@ -108,12 +112,12 @@ class BooksJob extends BaseJob
 
     private function get_full_url($path)
     {
-        if (strpos($path, $this->bookRule->host) === -1) {
+        if (strpos($path, $this->bookRule->host) === false) {
             $urlArr = parse_url($this->url);
             if (strpos($path, '/') !== 0) {
                 $path = '/' . $path;
             }
-            return "{$urlArr['scheme']}//{$urlArr['host']}{$path}";
+            return "{$urlArr['scheme']}://{$urlArr['host']}{$path}";
         }
         return $path;
     }
