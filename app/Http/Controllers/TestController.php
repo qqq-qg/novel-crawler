@@ -25,7 +25,6 @@ class TestController extends Controller
             ->where('books_id',1)
             ->orderBy('chapter_index','asc')
             ->get()->pluck('from_url')->toArray();
-        
         die();
 
         $this->chapterUrl = 'https://www.biquge.lu/book/58046/497205808.html';
