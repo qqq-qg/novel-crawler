@@ -57,11 +57,15 @@ class BookRepository extends BaseRepository
         return [$chapter];
     }
 
-    public function getChapterGroup($bookId)
+    public function getChapterGroup($bookId, $chapterIndex)
     {
+        $start = $chapterIndex - 149;
+        $start = $start > 0 ? $start : 0;
+        $end = $chapterIndex + 150;
         $data = BooksChapterModel::query()
             ->select(['chapter_index', 'title'])
             ->where('books_id', $bookId)
+            ->whereBetween('chapter_index', [$start, $end])
             ->orderBy('chapter_index', 'asc')
             ->get()->toArray();
         return array_chunk($data, 100);

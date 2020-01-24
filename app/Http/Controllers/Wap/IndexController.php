@@ -46,7 +46,8 @@ class IndexController extends Controller
     {
         try {
             $id = $request->get('id', 0);
-            $data = $bookRepository->getChapterGroup($id);
+            $chapterIndex = $request->get('chapter_index', 1);
+            $data = $bookRepository->getChapterGroup($id, $chapterIndex);
             return Response::json(['code' => 0, 'data' => $data]);
         } catch (\Exception $e) {
             return Response::json(['code' => 500, 'message' => $e->getMessage()]);

@@ -359,16 +359,11 @@
             showList() {
                 this.popupVisibleOperation = false;
                 this.popupVisibleChapterList = true;
-                if (this.chapterGroup.length > 0) {
-                    let scrollPx = this.calcChapterScrollPx(this.chapterGroup);
-                    $('.mint-indexlist-content').scrollTop(scrollPx);
-                    return true;
-                }
                 $.ajax({
                     url: this.chapterListUrl,
                     type: 'get',
                     dataType: 'json',
-                    data: {id: this.book.id},
+                    data: {id: this.book.id, chapter_index: this.chapterIndex},
                     success: (res) => {
                         if (res.code === 0) {
                             this.chapterGroup = res.data;
@@ -394,6 +389,7 @@
             },
             chooseChapter(chapterId) {
                 this.popupVisibleChapterList = false;
+                this.loading = false;
                 this.list = [];
                 this.nextChapter(chapterId);
             },
