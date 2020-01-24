@@ -13,11 +13,14 @@ class CollectionTaskController extends Controller
 
     public function init()
     {
-//        $model1 = $this->rule1();
-//        $this->task($model1);
-//        $model2 = $this->rule2();
-//        $model3 = $this->rule3();
-//        $model4 = $this->rule4();
+        CollectionRuleModel::query()->truncate();
+        CollectionTaskModel::query()->truncate();
+
+        $model1 = $this->rule1();
+        $this->task($model1);
+        $model2 = $this->rule2();
+        $model3 = $this->rule3();
+        $model4 = $this->rule4();
     }
 
     private function rule1()
@@ -184,7 +187,11 @@ class CollectionTaskController extends Controller
             'content' => ['div#book_text', 'html']
         ]);
         $bookRule->splitTag = '';
-        $bookRule->replaceTags = [];
+        $bookRule->replaceTags = [
+            ['/<p>.+?(天才一秒记住本站地址).+?<\/p>/is', ''],
+            ['/<p class="content_detail">/', '<p>  '],
+            ['/<br>/', ''],
+        ];
 
         $model = CollectionRuleModel::query()->create(
             [

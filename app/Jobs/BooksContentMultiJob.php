@@ -52,7 +52,7 @@ class BooksContentMultiJob extends BaseJob
                     $content = explode($this->bookRule->splitTag, $content)[0];
                 }
                 foreach ($this->bookRule->replaceTags ?? [] as $tag) {
-                    $content = str_replace($tag[0], $tag[1] ?? '', $content);
+                    $content = preg_replace($tag[0], $tag[1] ?? '', $content);
                 }
                 if (!empty($content)) {
                     $contentModel = BooksContentModel::query()->where('id', $chapterModel->id)->first();

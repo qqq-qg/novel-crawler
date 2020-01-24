@@ -29,7 +29,7 @@ class SearcherBookTask extends Command
 
         $repo = new ChromeSearcherRepository($this->searchPage);
         $data = $repo->search($keyword);
-        $ruleIdArr = [4, 3, 1, 2,];
+        $ruleIdArr = [3, 1, 2,];
         $rules = CollectionRuleModel::getRuleById($ruleIdArr)->keyBy('id');
         foreach ($ruleIdArr as $ruleId) {
             $rule = $rules[$ruleId] ?? [];
