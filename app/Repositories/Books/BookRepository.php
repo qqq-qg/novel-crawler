@@ -14,9 +14,11 @@ class BookRepository extends BaseRepository
         parent::__construct(new BooksModel());
     }
 
-    public function lists($condition = [], $order = 'id DESC', $pagesize = 10, $page = true)
+    public function lists($condition = [], $order = 'id DESC', $pageSize = 10, $page = false)
     {
-        $lists = $this->model->query()->where(array_merge(['status' => 1], $condition));
+        $lists = $this->model->query()
+            ->select(['id', 'title'])
+            ->where(array_merge(['status' => 1], $condition));
         if (strpos($order, ',') !== false) {
             foreach (explode(',', $order) as $v) {
                 $tmp = explode(' ', $order);
@@ -27,9 +29,9 @@ class BookRepository extends BaseRepository
             $lists->orderBy($order[0], $order[1]);
         }
         if ($page) {
-            return $lists->paginate($pagesize);
+            return $lists->paginate($pageSize);
         } else {
-            return $lists->take($pagesize)->get();
+            return $lists->take($pageSize)->get();
         }
     }
 

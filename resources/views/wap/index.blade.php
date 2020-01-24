@@ -9,14 +9,17 @@
     <style>
         ul li {
             padding: 0;
-            margin: 0;
+            margin: 5px;
             list-style: none;
+            width: 30%;
+            float: left;
         }
 
         img {
-            width: 110px;
-            height: 150px;
+            width: 100%;
+            /*height: 150px;*/
             margin: auto;
+            /*float: left;*/
         }
     </style>
 </head>
@@ -27,19 +30,17 @@
         <mt-tab-container-item id="bookshelf">
             <div style="margin-top:50px;">
                 <ul>
-                    <li v-for="item in bookshelf" style="float:left;margin:10px;">
-                        <a href="/s/r?id=1">
-                            <img v-lazy="item">
-                        </a>
+                    <li v-for="item in books" style="" :key="item.key">
+                        <div @click="reedBook(item.id)">
+                            <img v-lazy="'/mint-ui/image/100x100.jpg'">
+                            <span v-text="item.title"></span>
+                        </div>
                     </li>
                 </ul>
             </div>
         </mt-tab-container-item>
-        <mt-tab-container-item id="category">
-            <mt-cell v-for="n in 5" title="tab-container 2"></mt-cell>
-        </mt-tab-container-item>
         <mt-tab-container-item id="myHome">
-            <mt-cell v-for="n in 7" title="tab-container 3"></mt-cell>
+            myHome
         </mt-tab-container-item>
     </mt-tab-container>
 
@@ -47,10 +48,6 @@
         <mt-tab-item id="bookshelf">
             <img slot="icon" src="/mint-ui/image/100x100.jpg">
             书架
-        </mt-tab-item>
-        <mt-tab-item id="category">
-            <img slot="icon" src="/mint-ui/image/100x100.jpg">
-            分类
         </mt-tab-item>
         <mt-tab-item id="myHome">
             <img slot="icon" src="/mint-ui/image/100x100.jpg">
@@ -67,26 +64,12 @@
         data: () => {
             return {
                 active: 'bookshelf',
-                bookshelf: [
-                    '/mint-ui/image/100x100.jpg',
-                    '/mint-ui/image/100x100.jpg',
-                    '/mint-ui/image/100x100.jpg',
-                    '/mint-ui/image/100x100.jpg',
-                    '/mint-ui/image/100x100.jpg',
-                    '/mint-ui/image/100x100.jpg',
-                    '/mint-ui/image/100x100.jpg',
-                    '/mint-ui/image/100x100.jpg',
-                    '/mint-ui/image/100x100.jpg',
-                    '/mint-ui/image/100x100.jpg',
-                    '/mint-ui/image/100x100.jpg',
-                    '/mint-ui/image/100x100.jpg',
-                    '/mint-ui/image/100x100.jpg',
-                ],
+                books: @json($data),
             }
         },
         methods: {
-            handleClick: function () {
-                this.$toast('Hello world!')
+            reedBook(id) {
+                window.location.href = '/s/r?id=' + id;
             }
         }
     })

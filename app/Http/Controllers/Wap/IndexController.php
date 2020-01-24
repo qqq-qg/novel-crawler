@@ -9,9 +9,14 @@ use Illuminate\Support\Facades\Response;
 
 class IndexController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request, BookRepository $bookRepository)
     {
-        return view('wap/index');
+        try {
+            $data = $bookRepository->lists();
+            return view('wap/index', ['data' => $data]);
+        } catch (\Exception $e) {
+            return view('wap/index', ['data' => []]);
+        }
     }
 
     public function readBook(Request $request, BookRepository $bookRepository)

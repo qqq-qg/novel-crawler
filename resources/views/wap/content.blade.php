@@ -13,18 +13,27 @@
             list-style: none;
         }
 
-        .chapter-split-line {
-            height: 1px;
-            border-top: 1px solid #ddd;
-            text-align: center;
-            color: #8c8c8c;
-            padding: 10px;
+        .chapter-title {
+            font-size: 26px;
         }
 
-        .chapter-split-line span {
-            position: relative;
-            top: -12px;
-            padding: 0 20px;
+        .chapter-split-line {
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            padding-bottom: 30px;
+        }
+
+        .chapter-split-line .line {
+            display: inline-block;
+            width: 35%;
+            border-top: 1px dotted #DBDBDB;
+        }
+
+        .chapter-split-line .txt {
+            color: #DBDBDB;
+            vertical-align: middle;
+            font-size: 14px;
         }
 
         .page-infinite-wrapper {
@@ -66,11 +75,11 @@
             backface-visibility: hidden;
         }
 
-        .mt-range {
+        .mint-popup-bottom .mt-range {
             width: 100%;
         }
 
-        .mint-cell-value {
+        .mint-popup-bottom .mint-cell-value {
             flex: 2.5;
             position: relative;
         }
@@ -80,6 +89,7 @@
             margin-block-end: 0;
             padding-inline-start: 10px;
             padding-inline-end: 10px;
+            margin-top: 30px;
         }
 
         .color-setting div {
@@ -97,6 +107,14 @@
             background-color: rgb(219, 219, 219);
             opacity: 0.5;
         }
+
+        .listSelected {
+            background-color: #dbdbdb;
+        }
+
+        .mint-header {
+            background-color: #000000;
+        }
     </style>
 </head>
 <body style="margin:0;padding:0;">
@@ -111,15 +129,21 @@
             :style="{ 'font-size': settingConfig.fontSize.value + 'px' }"
         >
             <li v-for="chapter in list">
-                {{--分割线--}}
-                <div class="chapter-split-line"><span v-text="chapter.title"></span></div>
+                {{--标题--}}
+                <div class="chapter-title"><span v-text="chapter.title"></span></div>
                 {{--正文--}}
                 <div v-html="chapter.content"></div>
+                {{--分割线--}}
+                <div class="chapter-split-line">
+                    <span class="line"></span>
+                    <span class="txt">本章完</span>
+                    <span class="line"></span>
+                </div>
             </li>
         </ul>
         <p v-show="loading && getNext" class="page-infinite-loading">
             <mt-spinner type="fading-circle"></mt-spinner>
-            加载中...
+            正在获取下一章...
         </p>
         {{--<div class="click-area"--}}
         {{--:style="{--}}
@@ -177,6 +201,7 @@
         <mt-index-list>
             <mt-index-section v-for="(cl, index) in chapterGroup" :index="cl[0].chapter_index+''" :key="index">
                 <mt-cell v-for="chapter in cl" :title="chapter.title" :key="chapter.chapter_index"
+                         :class="chapter.chapter_index == chapterIndex ? 'listSelected':''"
                          @click.native="chooseChapter(chapter.chapter_index)"></mt-cell>
             </mt-index-section>
         </mt-index-list>
@@ -250,6 +275,7 @@
                 if (e.clientX >= this.ePoint.left.x && e.clientX <= this.ePoint.right.x
                     && e.clientY >= this.ePoint.left.y && e.clientY <= this.ePoint.right.y) {
                     if (this.popupVisibleOperation) {
+                        this.popupVisibleSetting = false;
                         this.hideOperate();
                     } else {
                         this.moreOperate();
