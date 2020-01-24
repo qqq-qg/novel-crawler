@@ -15,4 +15,16 @@ class BooksChapterModel extends BaseModel
             $this->update(['is_success' => self::ENABLE_STATUS]);
         }
     }
+
+    public static function getChapterByIndex($booksId, $index = null)
+    {
+        $query = self::query()
+            ->where('books_id', $booksId)
+            ->where('status', BooksChapterModel::ENABLE_STATUS)
+            ->orderBy('chapter_index', 'asc');
+        if (!empty($index)) {
+            $query->where('chapter_index', '>=', $index);
+        }
+        return $query->first();
+    }
 }

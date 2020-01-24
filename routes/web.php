@@ -7,6 +7,9 @@ Route::group([
     'namespace' => 'Wap'
 ], function () {
     Route::get('/', 'IndexController@index')->name('Index.index');
+    Route::get('/r', 'IndexController@readBook')->name('Index.readBook');
+    Route::get('/c', 'IndexController@getBookContent')->name('Index.getBookContent');
+    Route::get('/l', 'IndexController@getChapterGroup')->name('Index.getChapterGroup');
 });
 
 Route::group([], function () {
