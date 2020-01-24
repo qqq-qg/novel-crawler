@@ -6,6 +6,7 @@ use App\Models\Books\BooksChapterModel;
 use App\Models\Books\BooksContentModel;
 use App\Repositories\CollectionRule\BookRule;
 use App\Repositories\Searcher\Plugin\CurlMulti;
+use App\Repositories\Searcher\Plugin\FilterHeader;
 use QL\QueryList;
 
 /**
@@ -36,24 +37,15 @@ class BooksContentMultiJob extends BaseJob
         $ql = QueryList::use(CurlMulti::class);
         $ql->curlMulti($this->urls, ['verify' => false])
             ->success(function (QueryList $ql, CurlMulti $curl, $r) {
-//                echo "success return url:{$r['info']['url']}" . PHP_EOL;
                 $urlHash = md5(trim($r['info']['url']));
                 $chapterModel = BooksChapterModel::query()->where('from_hash', $urlHash)->first();
-
                 if ($this->bookRule->needEncoding()) {
-                    $html = $ql->removeHead()
-                        ->encoding('utf-8', $this->bookRule->charset)->getHtml();
-                    $data = $ql
-                        ->setHtml($html)
-                        ->range($this->bookRule->content->range)
-                        ->rules($this->bookRule->content->rules)
-                        ->query()->getData()->first();
-                } else {
-                    $data = $ql
-                        ->range($this->bookRule->content->range)
-                        ->rules($this->bookRule->content->rules)
-                        ->query()->getData()->first();
+                    $ql->use(FilterHeader::class)->filterHeader();
                 }
+                $data = $ql
+                    ->range($this->bookRule->content->range)
+                    ->rules($this->bookRule->content->rules)
+                    ->query()->getData()->first();
 
                 $content = trim($data['content'] ?? '');
                 if (!empty($this->bookRule->splitTag) && strpos($content, $this->bookRule->splitTag) > -1) {
@@ -73,12 +65,12 @@ class BooksContentMultiJob extends BaseJob
                 }
             })
             ->error(function ($errorInfo, CurlMulti $curl) {
-                echo "Current url:{$errorInfo['info']['url']} \r\n";
+                echo "Error url:{$errorInfo['info']['url']} \r\n";
                 print_r($errorInfo['error']);
             })
             ->start([
                 'maxThread' => 10,
-                'maxTry' => 3,
+                'maxTry' => 1,
             ]);
     }
 }

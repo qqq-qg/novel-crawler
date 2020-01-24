@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Models\Books\BooksContentModel;
 use App\Repositories\CollectionRule\BookRule;
+use App\Repositories\Searcher\Plugin\FilterHeader;
 use QL\QueryList;
 
 /**
@@ -33,20 +34,14 @@ class BooksContentJob extends BaseJob
 
     public function handle()
     {
+        $ql = QueryList::get($this->chapterUrl);
         if ($this->bookRule->needEncoding()) {
-            $html = QueryList::get($this->chapterUrl)->removeHead()
-                ->encoding('utf-8', $this->bookRule->charset)->getHtml();
-            $data = QueryList::getInstance()
-                ->setHtml($html)
-                ->range($this->bookRule->content->range)
-                ->rules($this->bookRule->content->rules)
-                ->query()->getData()->first();
-        } else {
-            $data = QueryList::get($this->chapterUrl)
-                ->range($this->bookRule->content->range)
-                ->rules($this->bookRule->content->rules)
-                ->query()->getData()->first();
+            $ql->use(FilterHeader::class)->filterHeader();
         }
+        $data = $ql
+            ->range($this->bookRule->content->range)
+            ->rules($this->bookRule->content->rules)
+            ->query()->getData()->first();
         $content = trim($data['content'] ?? '');
         if (!empty($this->bookRule->splitTag) && strpos($content, $this->bookRule->splitTag) > -1) {
             $content = explode($this->bookRule->splitTag, $content)[0];

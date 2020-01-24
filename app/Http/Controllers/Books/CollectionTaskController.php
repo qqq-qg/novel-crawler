@@ -15,10 +15,9 @@ class CollectionTaskController extends Controller
     {
 //        $model1 = $this->rule1();
 //        $this->task($model1);
-//
 //        $model2 = $this->rule2();
-//
 //        $model3 = $this->rule3();
+//        $model4 = $this->rule4();
     }
 
     private function rule1()
@@ -147,6 +146,49 @@ class CollectionTaskController extends Controller
         $model = CollectionRuleModel::query()->create(
             [
                 'title' => '笔趣阁-biquge',
+                'rule_json' => serialize($bookRule),
+            ]
+        );
+        return $model;
+    }
+
+    private function rule4()
+    {
+
+        $bookRule = new BookRule();
+        $bookRule->host = 'www.xbequge.com';
+        $bookRule->charset = BookRule::CHARSET_GBK;
+        $bookRule->bookList = [
+            'category' => new QlRule('',
+                [
+                    'url' => ['ul.item-con li span.s2>a', 'href']
+                ], true, 1),
+
+            'ranking' => new QlRule('',
+                [
+                    'url' => ['ul.item-con li span.s2>a', 'href']
+                ], true, 2)
+        ];
+        $bookRule->home = new QlRule('',
+            [
+                'title' => ['div.info h1', 'text'],
+                'words_count' => ['none', ''],
+                'chapter_list_url' => ['self', ''],
+            ]);
+        $bookRule->chapterList = new QlRule('',
+            [
+                'title' => ['#chapterlist li>a', 'text'],
+                'from_url' => ['#chapterlist li>a', 'href']
+            ]);
+        $bookRule->content = new QlRule('', [
+            'content' => ['div#book_text', 'html']
+        ]);
+        $bookRule->splitTag = '';
+        $bookRule->replaceTags = [];
+
+        $model = CollectionRuleModel::query()->create(
+            [
+                'title' => '笔趣阁-www.xbequge.com',
                 'rule_json' => serialize($bookRule),
             ]
         );

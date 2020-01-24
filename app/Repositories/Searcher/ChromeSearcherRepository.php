@@ -11,6 +11,11 @@ class ChromeSearcherRepository implements SearcherRepositoryInterface
     private static $tries = 1;
     private static $currentPage = 1;
 
+    public function __construct($currentPage = 1)
+    {
+        self::$currentPage = $currentPage;
+    }
+
     public function search($keyword)
     {
         try {

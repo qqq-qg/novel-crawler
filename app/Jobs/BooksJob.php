@@ -6,6 +6,7 @@ use App\Models\Books\BooksChapterModel;
 use App\Models\Books\BooksContentModel;
 use App\Models\Books\BooksModel;
 use App\Repositories\CollectionRule\BookRule;
+use App\Repositories\Searcher\Plugin\FilterHeader;
 use QL\QueryList;
 
 class BooksJob extends BaseJob
@@ -27,25 +28,18 @@ class BooksJob extends BaseJob
     public function handle()
     {
         $fromHash = md5($this->url);
+        $ql = QueryList::get($this->url);
         if ($this->bookRule->needEncoding()) {
-            $html = QueryList::get($this->url)->removeHead()
-                ->encoding('utf-8', $this->bookRule->charset)->getHtml();
-            $data = QueryList::getInstance()
-                ->setHtml($html)
-                ->range($this->bookRule->home->range)
-                ->rules($this->bookRule->home->rules)
-                ->query()->getData()->first();
-        } else {
-            $data = QueryList::get($this->url)
-                ->range($this->bookRule->home->range)
-                ->rules($this->bookRule->home->rules)
-                ->query()->getData()->first();
+            $ql->use(FilterHeader::class)->filterHeader();
         }
+        $data = $ql
+            ->range($this->bookRule->home->range)
+            ->rules($this->bookRule->home->rules)
+            ->query()->getData()->first();
         $_bookData = [
             'title' => trim($data['title'] ?? ''),
             'words_count' => trim($data['words_count'] ?? ''),
         ];
-        echo "title => {$_bookData['title']} \r\n";
         $chapterListUrl = trim($data['chapter_list_url'] ?? $this->url);
         $chapterListUrl = $this->get_full_url($chapterListUrl);
         $bookModel = BooksModel::query()->where('from_hash', $fromHash)->first();
@@ -61,20 +55,15 @@ class BooksJob extends BaseJob
 
     private function chapter($bookModel, $chapterListUrl)
     {
+
+        $ql = QueryList::get($chapterListUrl);
         if ($this->bookRule->needEncoding()) {
-            $html = QueryList::get($chapterListUrl)->removeHead()
-                ->encoding('utf-8', $this->bookRule->charset)->getHtml();
-            $data = QueryList::getInstance()
-                ->setHtml($html)
-                ->range($this->bookRule->chapterList->range)
-                ->rules($this->bookRule->chapterList->rules)
-                ->query()->getData()->all();
-        } else {
-            $data = QueryList::get($chapterListUrl)
-                ->range($this->bookRule->chapterList->range)
-                ->rules($this->bookRule->chapterList->rules)
-                ->query()->getData()->all();
+            $ql->use(FilterHeader::class)->filterHeader();
         }
+        $data = $ql
+            ->range($this->bookRule->chapterList->range)
+            ->rules($this->bookRule->chapterList->rules)
+            ->query()->getData()->all();
 
         if (empty($data)) {
             return false;
@@ -106,7 +95,10 @@ class BooksJob extends BaseJob
         if (empty($urls)) {
             return false;
         }
-        dispatch(new BooksContentMultiJob($this->bookRule, $urls))->onQueue('Content');
+        $group = array_chunk($urls, 200);
+        foreach ($group as $_urls) {
+            dispatch(new BooksContentMultiJob($this->bookRule, $_urls))->onQueue('Content');
+        }
         return true;
     }
 

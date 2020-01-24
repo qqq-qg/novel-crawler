@@ -16,6 +16,7 @@ Route::group([], function () {
     Route::get('test', 'TestController@index')->name('Test.index');
 
     Route::get('bqg', 'TryBookRuleController@bqg')->name('TryBookRule.bqg');
+    Route::get('xbequge', 'TryBookRuleController@xbequge')->name('TryBookRule.xbequge');
 
 
     Route::get('/task-init', 'Books\CollectionTaskController@init')->name('collection-task-init');
