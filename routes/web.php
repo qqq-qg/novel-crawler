@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
+// Wap 路由
 Route::group([
     'prefix' => '/s',
     'namespace' => 'Wap'
@@ -12,6 +13,7 @@ Route::group([
     Route::get('/l', 'IndexController@getChapterGroup')->name('Index.getChapterGroup');
 });
 
+//Test
 Route::group([], function () {
     Route::get('test', 'TestController@index')->name('Test.index');
 
@@ -19,7 +21,7 @@ Route::group([], function () {
     Route::get('xbequge', 'TryBookRuleController@xbequge')->name('TryBookRule.xbequge');
 
 
-    Route::get('/task-init', 'Books\CollectionTaskController@init')->name('collection-task-init');
+    Route::get('/task-init', 'CollectionTaskController@init')->name('collection-task-init');
 });
 
 // 后台路由
@@ -36,11 +38,9 @@ Route::group($admin, function () {
     Route::any('enterpassword', 'AuthController@getEnterpassword')->name('getEnterpassword');
 
     Route::group(['middleware' => 'admin'], function () {
-
         Route::get('/', 'IndexController@getIndex')->name('Admin.getIndex');
         Route::post('/', 'IndexController@postIndex')->name('Admin.postIndex');
         Route::any('ajax', 'AjaxController@getIndex')->name('Admin.Ajax');
-
         //管理员管理
         Route::group(['prefix' => 'manager'], function () {
             Route::get('getIndex', 'ManagerController@getIndex')->name('Manager.getIndex');
@@ -50,19 +50,6 @@ Route::group($admin, function () {
             Route::post('postUpdate', 'ManagerController@postUpdate')->name('Manager.postUpdate');
             Route::get('getDelete', 'ManagerController@getDelete')->name('Manager.getDelete');
         });
-
-        //文章管理
-        Route::group(['prefix' => 'article'], function () {
-            Route::get('getIndex', 'ArticleController@getIndex')->name('Article.getIndex');
-            Route::get('getCreate', 'ArticleController@getCreate')->name('Article.getCreate');
-            Route::post('postCreate', 'ArticleController@postCreate')->name('Article.postCreate');
-            Route::get('getUpdate', 'ArticleController@getUpdate')->name('Article.getUpdate');
-            Route::post('postUpdate', 'ArticleController@postUpdate')->name('Article.postUpdate');
-            Route::get('getDelete', 'ArticleController@getDelete')->name('Article.getDelete');
-            Route::get('getCategorys', 'ArticleController@getCategorys')->name('Article.getCategorys');
-            Route::get('getRecycle', 'ArticleController@getRecycle')->name('Article.getRecycle');
-        });
-
         //菜单管理
         Route::group(['prefix' => 'menu'], function () {
             Route::get('getIndex', 'MenuController@getIndex')->name('Menu.getIndex');
@@ -72,7 +59,6 @@ Route::group($admin, function () {
             Route::post('postUpdate', 'MenuController@postUpdate')->name('Menu.postUpdate');
             Route::get('getDelete', 'MenuController@getDelete')->name('Menu.getDelete');
         });
-
         //数据管理
         Route::group(['prefix' => 'database'], function () {
             Route::get('getIndex', 'DatabaseController@getIndex')->name('Database.getIndex');
@@ -80,7 +66,6 @@ Route::group($admin, function () {
             Route::get('getRepair', 'DatabaseController@getRepair')->name('Database.getRepair');
             Route::get('getOptimize', 'DatabaseController@getOptimize')->name('Database.getOptimize');
         });
-
         //系统配置
         Route::group(['prefix' => 'setting'], function () {
             Route::get('getIndex', 'SettingController@getIndex')->name('Setting.getIndex');
@@ -96,36 +81,36 @@ Route::group($admin, function () {
             Route::get('getLinkSubmit', 'SettingController@getLinkSubmit')->name('Setting.getLinkSubmit');
             Route::post('postLinkSubmit', 'SettingController@postLinkSubmit')->name('Setting.postLinkSubmit');
         });
-
-        //微信配置
-        Route::group(['prefix' => 'setting'], function () {
-            Route::get('getIndex', 'WeixinController@getIndex')->name('Weixin.getIndex');
-            Route::get('getUsers', 'WeixinController@getUsers')->name('Weixin.getUsers');
-        });
-
         //采集配置
-        Route::resource('collect', 'CollectController',
-            [
-                'getIndex' => 'Collect.getIndex',
-            ]
-        );
-
         Route::group(['prefix' => 'collect'], function () {
             Route::get('getIndex', 'CollectController@getIndex')->name('Collect.getIndex');
         });
-
+        //小说设置
         Route::group(['prefix' => 'book'], function () {
             Route::get('/', 'BookController@getIndex')->name('Book.getIndex');
+
+            //栏目分类
+            Route::get('/categorys', 'BookController@getCategories')->name('Book.getCategories');
+            Route::post('/createCategory', 'BookController@createCategory')->name('Book.createCategory');
+            Route::get('/deleteCategory', 'BookController@deleteCategory')->name('Book.deleteCategory');
+
+            //采集规则
+            Route::get('/collectionRule', 'BookController@collectionRule')->name('Book.collectionRule');
+            Route::get('/getCreateCollectionRule', 'BookController@getCreateCollectionRule')->name('Book.getCreateCollectionRule');
+            Route::post('/createCollectionRule', 'BookController@createCollectionRule')->name('Book.createCollectionRule');
+            Route::get('/deleteCollectionRule', 'BookController@deleteCollectionRule')->name('Book.deleteCollectionRule');
+            Route::get('/collectionTask', 'BookController@collectionTask')->name('Book.collectionTask');
+
             //Route::get('/create', 'BookController@getCreate')->name('Book.getCreate');
             //Route::post('/create', 'BookController@postCreate')->name('Book.postCreate');
             Route::post('/update', 'BookController@postUpdate')->name('Book.postUpdate');
             Route::get('/delete', 'BookController@getDelete')->name('Book.getDelete');
-            //Route::get('/recycle', 'BookController@getRecycle')->name('Book.getRecycle');
 
             Route::get('/createQueue', 'BookController@createQueue')->name('Book.createQueue');
             Route::post('/updateQueue', 'BookController@updateQueue')->name('Book.updateQueue');
             Route::get('/queueNumber', 'BookController@queueNumber')->name('Book.getQueueNumber');
-            Route::get('/categorys', 'BookController@getCategorys')->name('Book.getCategorys');
+
+
 
             Route::get('/chapters', 'BookController@getChapters')->name('Book.getChapters');
             Route::get('/updateChapters', 'BookController@updateChapters')->name('Book.updateChapters');
@@ -168,7 +153,3 @@ Route::group($home, function () {
     Route::get('/', 'IndexController@getIndex')->name('getHomeIndex');
     Route::get('/test', 'IndexController@getTest');
 });*/
-
-
-//微信路由
-//Route::any('/wechat', 'Wechat\ServerController@getIndex');

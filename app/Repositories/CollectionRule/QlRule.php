@@ -29,6 +29,7 @@ Class QlRule
         return [
             'range' => $this->range,
             'rules' => $this->rules,
+            'page' => $this->page,
         ];
     }
 }

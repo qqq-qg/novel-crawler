@@ -1,0 +1,114 @@
+<?php
+
+namespace App\Repositories;
+
+use App\Models\Books\CollectionRuleModel;
+use App\Models\Books\CollectionTaskModel;
+use App\Repositories\CollectionRule\BookRule;
+use App\Repositories\CollectionRule\QlRule;
+
+class CollectionRuleRepository extends BaseRepository
+{
+    public function __construct()
+    {
+        parent::__construct(new CollectionRuleModel());
+    }
+
+    /**
+     * @param $keyword
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @Date: 2020/02/03 17:06
+     */
+    public function collectionRule($keyword)
+    {
+        $query = CollectionRuleModel::query()
+            ->where('status', CollectionRuleModel::ENABLE_STATUS)
+            ->orderBy('id', 'desc');
+        $lists = $query->paginate(static::$pageSize);
+        foreach ($lists->items() as $item) {
+            $item['rule_json'] = unserialize($item['rule_json'])->toArray();
+        }
+        return $lists;
+    }
+
+    /**
+     * @param $id
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|null|object
+     * @Date: 2020/02/03 17:09
+     */
+    public function getCollectionRuleById($id)
+    {
+        $model = CollectionRuleModel::query()->where('id', $id)->first();
+        $model->rule_json = unserialize($model['rule_json'])->toArray();
+        return $model;
+    }
+
+    /**
+     * 新增编辑规则
+     * @param $data
+     * @return bool
+     * @Date: 2020/02/03 17:06
+     */
+    public function createCollectionRule($data)
+    {
+        if (!empty($data['id'])) {
+            $model = CollectionRuleModel::query()->findOrNew($data['id']);
+        } else {
+            $model = new CollectionRuleModel();
+        }
+
+        $bookRule = new BookRule();
+        $bookRule->host = $data['host'] ?? '';
+        $bookRule->charset = $data['charset'] ?? '';
+
+        $cPage = empty($data['category']['page']) ? 1 : intval($data['category']['page']);
+        $rPage = empty($data['ranking']['page']) ? 1 : intval($data['ranking']['page']);
+        $bookRule->bookList = [
+            'category' => new QlRule('', ['url' => $data['category']['url']], $cPage > 1, $cPage),
+            'ranking' => new QlRule('', ['url' => $data['ranking']['url']], $rPage > 1, $rPage)
+        ];
+        $bookRule->home = new QlRule('', $data['home'] ?? []);
+        $bookRule->chapterList = new QlRule('', $data['chapterList'] ?? []);
+        $bookRule->content = new QlRule('', $data['content'] ?? []);
+        $bookRule->splitTag = $data['splitTag'] ?? '';
+        $replaceTags = [];
+        foreach ($data['replaceTags'] ?? [] as $item) {
+            if (!empty($item[0])) {
+                $replaceTags[] = [$item[0], $item[1] ?? ''];
+            }
+        }
+        $bookRule->replaceTags = $replaceTags;
+
+        $model->title = $data['title'] ?? '';
+        $model->rule_json = serialize($bookRule);
+        return $model->save();
+
+    }
+
+    /**
+     * 删除规则
+     * @param $id
+     * @return mixed
+     * @Date: 2020/02/03 17:06
+     */
+    public function deleteCollectionRule($id)
+    {
+        return CollectionRuleModel::query()->where('id', $id)->delete();
+    }
+
+    public function testCollectionRule($data)
+    {
+        if ($data['type'] === 'home') {
+            $bookRule = '';
+        }
+
+    }
+
+    public function collectionTask($keyword)
+    {
+        $query = CollectionTaskModel::query()
+            ->where('status', CollectionTaskModel::ENABLE_STATUS);
+        $query->orderBy('id', 'desc');
+        return $query->paginate(static::$pageSize);
+    }
+}

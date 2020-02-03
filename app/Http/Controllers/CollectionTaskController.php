@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Controllers\Books;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Books\CollectionRuleModel;
 use App\Models\Books\CollectionTaskModel;
 use App\Repositories\CollectionRule\BookRule;
@@ -157,7 +156,6 @@ class CollectionTaskController extends Controller
 
     private function rule4()
     {
-
         $bookRule = new BookRule();
         $bookRule->host = 'www.xbequge.com';
         $bookRule->charset = BookRule::CHARSET_GBK;

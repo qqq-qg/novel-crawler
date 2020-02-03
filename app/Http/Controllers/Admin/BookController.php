@@ -1,9 +1,14 @@
 <?php
+
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Requests\Admin\CreateCategoryRequest;
 use App\Repositories\BookChapterRepository;
 use App\Repositories\BookRepository;
+use App\Repositories\CollectionRuleRepository;
+use DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 use QL\QueryList;
 
 
@@ -16,13 +21,128 @@ class BookController extends BaseController
     public function getIndex(BookRepository $repository)
     {
         $lists = $repository->lists();
-        $categorys = $repository->getCategorys();
+        $categorys = $repository->getCategories();
         $data = [
             'lists' => $lists,
             'categorys' => $categorys
         ];
         return admin_view('book.index', $data);
     }
+
+    /**
+     * 栏目分类
+     * @param BookRepository $repository
+     * @return mixed
+     * @Date: 2020/02/02 21:29
+     */
+    public function getCategories(BookRepository $repository)
+    {
+        $lists = $repository->getCategories();
+        $data = [
+            'lists' => $lists,
+        ];
+        return admin_view('book.categorys', $data);
+    }
+
+    /**
+     * 新增栏目分类
+     * @param CreateCategoryRequest $request
+     * @param BookRepository $repository
+     * @return mixed
+     * @Date: 2020/02/02 21:29
+     */
+    public function createCategory(CreateCategoryRequest $request, BookRepository $repository)
+    {
+        $result = $repository->createCategory($request->all());
+        if ($result) {
+            return redirect()->route('Book.getCategories');
+        } else {
+            return back()->withErrors('创建失败')->withInput();
+        }
+    }
+
+    /**
+     * 删除栏目分类
+     * @param Request $request
+     * @param BookRepository $repository
+     * @return \Illuminate\Http\RedirectResponse
+     * @Date: 2020/02/02 21:50
+     */
+    public function deleteCategory(Request $request, BookRepository $repository)
+    {
+        $result = $repository->deleteCategory($request->get('id'));
+        if ($result) {
+            return redirect()->route('Book.getCategories');
+        } else {
+            return back()->withErrors('删除失败')->withInput();
+        }
+    }
+
+    /**
+     * 采集规则
+     * @param Request $request
+     * @param CollectionRuleRepository $repository
+     * @return mixed
+     * @Date: 2020/02/02 22:37
+     */
+    public function collectionRule(Request $request, CollectionRuleRepository $repository)
+    {
+        $lists = $repository->collectionRule($request->all());
+        $data = [
+            'lists' => $lists,
+        ];
+        return admin_view('book.collection_rule', $data);
+    }
+
+    public function getCreateCollectionRule(Request $request, CollectionRuleRepository $repository)
+    {
+        $id = $request->get('id', '');
+        $data = [];
+        if (!empty($id)) {
+            $data = $repository->getCollectionRuleById($id);
+        }
+        return admin_view('book.create_collection_rule', $data);
+    }
+
+    public function createCollectionRule(Request $request, CollectionRuleRepository $repository)
+    {
+        $result = $repository->createCollectionRule($request->all());
+        if ($result) {
+            return redirect()->route('Book.collectionRule');
+        } else {
+            return back()->withErrors('创建失败')->withInput();
+        }
+    }
+
+    public function deleteCollectionRule(Request $request, CollectionRuleRepository $repository)
+    {
+        $result = $repository->deleteCollectionRule($request->get('id'));
+        if ($result) {
+            return redirect()->route('Book.collectionRule');
+        } else {
+            return back()->withErrors('删除失败')->withInput();
+        }
+    }
+
+    public function testCollectionRule(Request $request, CollectionRuleRepository $repository)
+    {
+        try {
+            $data = $repository->testCollectionRule($request->all());
+            return Response::json(['code' => 0, 'data' => $data]);
+        } catch (\Exception $e) {
+            return Response::json(['code' => 500, 'message' => $e->getMessage()]);
+        }
+    }
+
+    public function collectionTask(Request $request, CollectionRuleRepository $repository)
+    {
+        $lists = $repository->collectionTask($request->all());
+        $data = [
+            'lists' => $lists,
+        ];
+        return admin_view('book.collection_task', $data);
+    }
+
 
     /**
      * 更新
@@ -56,25 +176,6 @@ class BookController extends BaseController
         }
     }
 
-    //回收站
-    public function getRecycle()
-    {
-
-    }
-
-    /**
-     * 栏目分类
-     * @param BookRepository $repository
-     * @return mixed
-     */
-    public function getCategorys(BookRepository $repository)
-    {
-        $lists = $repository->getCategorys();
-        $data = [
-            'lists' => $lists,
-        ];
-        return admin_view('book.categorys', $data);
-    }
 
     /**
      * 章节列表
@@ -178,16 +279,6 @@ class BookController extends BaseController
     }
 
     /**
-     * 获取最新章节信息
-     * @param $pid
-     * @return mixed
-     */
-    //protected function getLastArticle($pid)
-    //{
-    //    return DB::table('books_detail')->select('id','chapterid','title','fromhash')->where('pid',$pid)->orderBy('chapterid','desc')->first();
-    //}
-
-    /**
      * 获取内容
      * @param Request $request
      * @param BookChapterRepository $repository
@@ -250,180 +341,6 @@ class BookController extends BaseController
         $data = $request->all();
         $source = $data['source'];
         return $this->$source($data);
-    }
-
-    /*
-     * 1.读取待采集栏目页面所有指定链接
-     * 2.对链接进行补全，得到完整链接
-     * 3.将该链接放入数据库中查询,判断是否存在记录
-     *
-     * */
-    /*protected function dushu88($data)
-    {
-        $baseUrl = 'http://www.8dushu.com';
-
-        $catids = [];
-        if (empty($data['catid'])) {
-            $categorys = config('book.categorys');
-            foreach ($categorys as $v) {
-                $catids[] = $v['id'];
-            }
-        } else {
-            $catids = $data['catid'];
-        }
-
-        $pagesize = 31;
-        $data['number'] = intval($data['number']) < 1 ? 10 : intval($data['number']);
-        $data['zhangjieNumber'] = intval($data['zhangjieNumber']) < 1 ? 10 : intval($data['zhangjieNumber']);
-        //$totalNumber = count($catids) * $data['number'];
-        $rules = config('book.rules.88dushu.lists');//列表页采集规则
-
-        $SuccessCount = 0;
-
-        foreach ($catids as $catid) {
-
-            $totalPage = ceil($data['number'] / $pagesize);//需要采集的总页码
-            $catCount = 0;
-            for ($page = 1; $page <= $totalPage; $page++) {
-                $url = $baseUrl . '/sort' . $catid . '/' . $page . '/';
-                $result = QueryList::Query($url, $rules, '.booklist>ul>li', 'UTF-8', 'GBK', true)->getData();
-                array_shift($result);//移除第一行
-
-                if ($page == $totalPage) {
-                    $result = array_slice($result, 0, $data['number'] - $catCount);//最后一页截取指定剩余数量
-                }
-
-                foreach ($result as &$v) {
-                    $v = array_map('trim', $v);//移除所有字段空格
-
-                    if ($catCount >= $data['number']) {//当前分类已采集完毕
-                        break;
-                    }
-
-                    //已采集总数         应采集总数
-                    //if($SuccessCount >= $totalNumber){
-                    //    break 2;
-                    //}
-
-                    if (!empty($v['fromurl'])) {
-                        if (substr($v['fromurl'], 0, 4) !== 'http') $v['fromurl'] = $baseUrl . $v['fromurl'];
-                    } else {
-                        continue;
-                    }
-
-                    if (!empty($v['title'])) {
-                        //1062 Duplicate entry
-
-                        $item = DB::table('books')->where('fromhash', md5(trim($v['fromurl'])))->first();//根据unique索引检查数据是否存在
-
-                        if ($item) {
-                            $v = $item;//推送到任务队列
-                        } else {
-                            $v['wordcount'] = preg_replace('/[^0-9]+/', '', $v['wordcount']);
-                            $v = ['catid' => $catid, 'title' => $v['title'], 'introduce' => '', 'zhangjie' => $v['zhangjie'], 'author' => $v['author'], 'wordcount' => $v['wordcount'], 'follow' => 0, 'hits' => 0, 'status' => 1, 'fromurl' => $v['fromurl'], 'fromhash' => md5($v['fromurl']), 'created_at' => date('Y-m-d H:i:s'), 'updated_at' => date('Y-m-d H:i:s'),];
-                            $id = DB::table('books')->insertGetId($v);
-                            $v['id'] = $id;
-                        }
-                        $this->dispatch(new ArtCaiJi($v, $data['zhangjieNumber']));//推送到任务队列
-                        $catCount++;
-                        $SuccessCount++;
-                    }
-                }
-            }
-        }
-        return redirect()->route('Book.getIndex')->with('Message', '操作成功');
-    }*/
-
-    /**
-     * 1.读取待采集栏目页面所有指定链接
-     * 2.对链接进行补全，得到完整链接
-     * 3.将该链接放入数据库中查询,判断是否存在记录
-     * 75小说源
-     * @param $data
-     * @return \Illuminate\Http\RedirectResponse
-     * @throws \Exception
-     */
-    public function wx999($data)
-    {
-        $config = config('books.' . __FUNCTION__);
-
-        $baseUrl = $config['baseUrl'];
-        $customCategorys = $config['categorys'];//分类对应
-        $listsRules = $config['lists'];//列表页配置
-        $detailListRules = $config['detail_list'];//章节页配置
-        //$contentRules = $config['content'];//内容页配置
-        $pagesize = $listsRules['pagesize'];//列表页文章数量
-        $rules = $listsRules['rules'];//列表页采集规则
-        $pageurl = $listsRules['pageurl'];//列表页地址
-        $charset = $config['charset'];//编码
-        $catids = [];
-        if (empty($data['catid'])) {
-            $categorys = config('book.categorys');
-            foreach ($categorys as $v) {
-                $catids[] = $v['id'];
-            }
-        } else {
-            $catids = $data['catid'];
-        }
-
-
-        $data['number'] = intval($data['number']) < 1 ? 10 : intval($data['number']);
-        $data['zhangjieNumber'] = intval($data['zhangjieNumber']);
-        $SuccessCount = 0;
-
-        foreach ($catids as $catid) {
-            $customCatid = $customCategorys[$catid];//对应分类ID
-            $totalPage = ceil($data['number'] / $pagesize);//需要采集的总页码
-            $catCount = 0;
-            for ($page = 1; $page <= $totalPage; $page++) {
-
-                $url = $baseUrl . sprintf($pageurl, $customCatid, $page);
-
-                $html = request_spider($url);
-                $response = QueryList::Query($html, $rules, $listsRules['range'], 'UTF-8', $charset, true)->getData();
-
-                //过滤无效数据
-                $result = array_filter($response, function ($v) {
-                    if (!empty($v['title']) && !empty($v['fromurl'])) return true;
-                });
-
-                if ($page == $totalPage) {
-                    $result = array_slice($result, 0, $data['number'] - $catCount);//最后一页截取指定剩余数量
-                }
-
-                foreach ($result as &$v) {
-                    $v = array_map('trim', $v);//移除所有字段空格
-
-                    if ($catCount >= $data['number']) {//当前分类已采集完毕
-                        break;
-                    }
-
-                    //组成列表页链接
-                    if (substr($v['fromurl'], 0, 4) !== 'http') {
-                        $v['fromurl'] = $baseUrl . substr($v['fromurl'], 1);
-                    }
-                    $targetId = str_replace([$baseUrl . 'Book/', '.aspx'], '', $v['fromurl']);
-                    $v['fromurl'] = $baseUrl . sprintf($detailListRules['pageurl'], $customCatid, $targetId);
-
-                    //1062 Duplicate entry
-                    $item = DB::table('books')->where('fromhash', md5(trim($v['fromurl'])))->first();//根据unique索引检查数据是否存在
-
-                    if ($item) {
-                        $v = $item;//推送到任务队列
-                    } else {
-                        $v = ['catid' => $catid, 'title' => $v['title'], 'introduce' => '', 'zhangjie' => $v['zhangjie'], 'author' => $v['author'], 'wordcount' => 0, 'follow' => 0, 'hits' => 0, 'status' => 1, 'source' => __FUNCTION__, 'fromurl' => $v['fromurl'], 'fromhash' => md5($v['fromurl']), 'created_at' => date('Y-m-d H:i:s'), 'updated_at' => date('Y-m-d H:i:s'),];
-                        $id = DB::table('books')->insertGetId($v);
-                        $v['id'] = $id;
-                    }
-                    $v['catid'] = $customCatid;
-                    $this->dispatch(new \App\Jobs\Books\Wx999Chapter($v, $data['zhangjieNumber']));//推送到任务队列
-                    $catCount++;
-                    $SuccessCount++;
-                }
-            }
-        }
-
-        return redirect()->route('Book.getIndex')->with('Message', '操作成功');
     }
 
     /**

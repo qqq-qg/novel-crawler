@@ -7,7 +7,7 @@
 </div>
 <table class="table table-bordered table-hover bg-white text-center">
     <tr>
-        <td width="50"><input type="checkbox" id="checkall" class="i-checks "></td>
+        <td width="50"><input type="checkbox" id="checkall" class="i-checks "/></td>
         <td width="50">编号</td>
         <td width="100">栏目</td>
         <td width="150" align="left">标题</td>
@@ -24,12 +24,12 @@
     @if(count($lists) > 0)
         @foreach($lists as $v)
             <tr id="book_{{ $v['id'] }}">
-                <td><input type="checkbox" name="ids" value="{{ $v['id'] }}" class="i-checks"></td>
+                <td><input type="checkbox" name="ids" value="{{ $v['id'] }}" class="i-checks"/></td>
                 <td>{{ $v['id'] }}</td>
-                <td>{{ $categorys[$v['catid']]['name'] }}</td>
+                <td>{{ $categorys[$v['catid']]['name']??'' }}</td>
                 <td align="left"><strong>{{ $v['title'] }}</strong></td>
                 <td><i class="fa fa-file-image-o" onclick="preview('{!! bookimg($v['thumb']) !!}',210,280)"></i></td>
-                <td>{{ $v['zhangjie'] }}</td>
+                <td>{{ $v['zhangjie']??'' }}</td>
                 <td>{{ $v['author'] }}</td>
                 <td>{{ $v['wordcount'] }}</td>
                 <td>{{ $v['follow'] }}</td>
@@ -285,7 +285,7 @@
                     <div class="form-group">
                         <label class="col-sm-3 control-label">栏目选择</label>
                         <div class="col-sm-9">
-                            @foreach($categorys as $v)
+                            @foreach($categorys??[] as $v)
                                 <label class="i-checks">
                                     <input type="checkbox" name="catid[]" value="{{ $v['id'] }}">
                                     {{ $v['name'] }}
@@ -345,7 +345,7 @@
                     <div class="form-group updateType" id="updateType_1">
                         <label class="col-sm-3 control-label">栏目选择</label>
                         <div class="col-sm-9">
-                            @foreach($categorys as $v)
+                            @foreach($categorys??[] as $v)
                                 <label class="i-checks">
                                     <input type="checkbox" name="catid[]" value="{{ $v['id'] }}">
                                     {{ $v['name'] }}
@@ -415,7 +415,7 @@
                         <div class="col-sm-10">
                             <select name="catid" id="" class="form-control">
                                 <option value="0">请选择</option>
-                                @foreach($categorys as $v)
+                                @foreach($categorys??[] as $v)
                                     <option value="{{ $v['id'] }}">{{ $v['name'] }}</option>
                                 @endforeach
                             </select>

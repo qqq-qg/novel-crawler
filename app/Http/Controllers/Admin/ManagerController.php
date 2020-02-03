@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 use App\Repositories\ManagerRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 
 class ManagerController extends BaseController
@@ -50,6 +51,7 @@ class ManagerController extends BaseController
      * @param Request $request
      * @param ManagerRepository $repository
      * @return $this|\Illuminate\Http\RedirectResponse
+     * @throws ValidationException
      */
     public function postCreate(Request $request, ManagerRepository $repository)
     {

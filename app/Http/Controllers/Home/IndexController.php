@@ -10,7 +10,7 @@ class IndexController extends BaseController
 {
     public function getIndex(BookRepository $bookRepository, LinkRepository $linkRepository)
     {
-        $categorys = $bookRepository->getCategorys();
+        $categorys = $bookRepository->getCategories();
 
         //最近更新
         $newLists = \Cache::remember('newLists', 60, function () use ($bookRepository, $categorys) {
