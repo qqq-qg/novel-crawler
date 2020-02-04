@@ -98,6 +98,7 @@ Route::group($admin, function () {
             Route::get('/collectionRule', 'BookController@collectionRule')->name('Book.collectionRule');
             Route::get('/getCreateCollectionRule', 'BookController@getCreateCollectionRule')->name('Book.getCreateCollectionRule');
             Route::post('/createCollectionRule', 'BookController@createCollectionRule')->name('Book.createCollectionRule');
+            Route::post('/testCollectionRule', 'BookController@testCollectionRule')->name('Book.testCollectionRule');
             Route::get('/deleteCollectionRule', 'BookController@deleteCollectionRule')->name('Book.deleteCollectionRule');
             Route::get('/collectionTask', 'BookController@collectionTask')->name('Book.collectionTask');
 

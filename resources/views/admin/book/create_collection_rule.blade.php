@@ -334,18 +334,12 @@
                     <div class="hr-line-dashed"></div>
 
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">测试</label>
-                        <div class="col-sm-10">
-                            <div id="msg"></div>
-                        </div>
-                    </div>
-                    <div class="hr-line-dashed"></div>
-
-                    <div class="form-group">
                         <div class="col-sm-4 col-sm-offset-2">
                             <button class="btn btn-primary" type="submit">保存内容</button>
                             <a class="btn btn-white" href="{{ route('Book.collectionRule') }}">返回</a>
                             <button class="btn btn-info" type="button" onclick="testRule()">测试</button>
+                            <input type="hidden" id="test_type" name="test_type" value="">
+                            <input type="hidden" id="test_url" name="test_url" value="">
                         </div>
                     </div>
                 </div>
@@ -392,38 +386,72 @@
         }
 
         function testRule() {
-            this.doTestHome();
-            // $(testRuleModal).modal('show');
+            $('#msg').html("");
+            $(testRuleModal).modal('show');
         }
 
-        // var msg = $('#msg');
-
         function doTestList() {
-            console.log('doTestList');
-            msg.html('<p>doTestList</p>');
+            let url = $('#test_category_url').val();
+            if (url === '') {
+                layer.alert('URL 不能为空');
+                return false;
+            }
+            var msg = $('#msg');
+            msg.html("<li>正在请求中...</li>");
+            $('#test_type').val('category');
+            $('#test_url').val(url);
+            $.ajax({
+                url: "{{route('Book.testCollectionRule')}}",
+                type: 'post',
+                data: $('#sform').serialize(),
+                dataType: 'json',
+                success: function (res) {
+                    msg.prepend("<li>" + JSON.stringify(res.data) + "</li>");
+                }
+            })
         }
 
         function doTestHome() {
+            let url = $('#test_home_url').val();
+            if (url === '') {
+                layer.alert('URL 不能为空');
+                return false;
+            }
             var msg = $('#msg');
-            console.log('doTestHome');
-            msg.html('<p>doTestHome</p>');
-
-
+            msg.html("<li>正在请求中...</li>");
+            $('#test_type').val('home');
+            $('#test_url').val(url);
             $.ajax({
-                url: '?',
+                url: "{{route('Book.testCollectionRule')}}",
                 type: 'post',
-                data: {},
+                data: $('#sform').serialize(),
                 dataType: 'json',
                 success: function (res) {
-                    $.UpdateSysInfo(res);
+                    msg.prepend("<li>" + JSON.stringify(res.data) + "</li>");
+                    doGetContent(res.data.chapter_list_url);
                 }
             })
-            msg.append(123);
+        }
+
+        function doGetContent(url) {
+            var msg = $('#msg');
+            msg.prepend("<li>获取某随机章节正文...</li>");
+            $('#test_type').val('content');
+            $('#test_url').val(url);
+            $.ajax({
+                url: "{{route('Book.testCollectionRule')}}",
+                type: 'post',
+                data: $('#sform').serialize(),
+                dataType: 'json',
+                success: function (res) {
+                    msg.prepend("<li>" + JSON.stringify(res.data) + "</li>");
+                }
+            })
         }
     </script>
 
     <div class="modal" id="testRuleModal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content animated flipInX">
                 <form action="#" method="POST" class="form-horizontal">
                     {!! csrf_field() !!}
@@ -438,7 +466,8 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">分类/排行URL</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" name="title" value="" placeholder="皮皮虾快走">
+                                <input type="text" class="form-control" id="test_category_url" value=""
+                                       placeholder="http://xxx.com/xxx/{$page}.html">
                                 <span class="help-block m-b-none">{$page}表示页码</span>
                             </div>
                             <div class="col-sm-2">
@@ -448,7 +477,9 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">简介URL</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" name="title" value="" placeholder="皮皮虾快走">
+                                <input type="text" class="form-control" id="test_home_url"
+                                       value="https://www.xbequge.com/17_40024/"
+                                       placeholder="http://xxx.com/xxx">
                             </div>
                             <div class="col-sm-2">
                                 <button type="button" class="btn btn-primary" onclick="doTestHome()">测试</button>
@@ -457,7 +488,7 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">结果</label>
                             <div class="col-sm-10">
-                                {{--<div id="msg"></div>--}}
+                                <ul id="msg" style="display: block; height: 100px; overflow-y: auto;"></ul>
                             </div>
                         </div>
                     </div>

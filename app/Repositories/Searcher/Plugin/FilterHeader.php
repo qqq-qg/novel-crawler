@@ -28,7 +28,7 @@ class FilterHeader implements PluginContract
         } else {
             $html = $this->ql->getHtml();
         }
-        $html = preg_replace('/<head.+?>.+<body>/is', '<body>', $html);
+        $html = preg_replace('/<head.+?>.+<body/is', '<body', $html);
         $this->ql->setHtml($html);
         return $this->ql;
     }

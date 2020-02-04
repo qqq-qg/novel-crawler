@@ -31,6 +31,7 @@ class BooksJob extends BaseJob
         $ql = QueryList::get($this->url);
         if ($this->bookRule->needEncoding()) {
             $ql->use(FilterHeader::class)->filterHeader();
+            $ql->encoding(BookRule::CHARSET_UTF8, $this->bookRule->charset);
         }
         $data = $ql
             ->range($this->bookRule->home->range)
@@ -41,7 +42,7 @@ class BooksJob extends BaseJob
             'words_count' => trim($data['words_count'] ?? ''),
         ];
         $chapterListUrl = trim($data['chapter_list_url'] ?? $this->url);
-        $chapterListUrl = $this->get_full_url($chapterListUrl);
+        $chapterListUrl = get_full_url($chapterListUrl, $this->url);
         $bookModel = BooksModel::query()->where('from_hash', $fromHash)->first();
         if (!empty($bookModel)) {
             $bookModel->update($_bookData);
@@ -55,10 +56,10 @@ class BooksJob extends BaseJob
 
     private function chapter($bookModel, $chapterListUrl)
     {
-
         $ql = QueryList::get($chapterListUrl);
         if ($this->bookRule->needEncoding()) {
             $ql->use(FilterHeader::class)->filterHeader();
+            $ql->encoding(BookRule::CHARSET_UTF8, $this->bookRule->charset);
         }
         $data = $ql
             ->range($this->bookRule->chapterList->range)
@@ -71,7 +72,7 @@ class BooksJob extends BaseJob
         $urls = [];
         foreach ($data as $k => $item) {
             $from_url = trim($item['from_url']);
-            $from_url = $this->get_full_url($from_url);
+            $from_url = get_full_url($from_url, $this->url);
             $_chapter = [
                 'books_id' => $bookModel->id,
                 'chapter_index' => $k + 1,
@@ -100,17 +101,5 @@ class BooksJob extends BaseJob
             dispatch(new BooksContentMultiJob($this->bookRule, $_urls))->onQueue('Content');
         }
         return true;
-    }
-
-    private function get_full_url($path)
-    {
-        if (strpos($path, $this->bookRule->host) === false) {
-            $urlArr = parse_url($this->url);
-            if (strpos($path, '/') !== 0) {
-                $path = '/' . $path;
-            }
-            return "{$urlArr['scheme']}://{$urlArr['host']}{$path}";
-        }
-        return $path;
     }
 }

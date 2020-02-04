@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Jobs\BooksJob;
 use App\Models\Books\CollectionTaskModel;
 use App\Repositories\CollectionRule\BookRule;
+use App\Repositories\Searcher\Plugin\FilterHeader;
 use Illuminate\Console\Command;
 use QL\QueryList;
 
@@ -38,21 +39,15 @@ class CollectionBookTask extends Command
     private function queryData($url, BookRule $bookRule)
     {
         foreach ($bookRule->bookList as $listRlRule) {
-
+            $ql = QueryList::get($url);
             if ($bookRule->needEncoding()) {
-                $html = QueryList::get($url)->removeHead()
-                    ->encoding('utf-8', $bookRule->charset)->getHtml();
-                $data = QueryList::getInstance()
-                    ->setHtml($html)
-                    ->range($listRlRule->range)
-                    ->rules($listRlRule->rules)
-                    ->query()->getData();
-            } else {
-                $data = QueryList::get($url)
-                    ->range($listRlRule->range)
-                    ->rules($listRlRule->rules)
-                    ->query()->getData();
+                $ql->use(FilterHeader::class)->filterHeader();
+                $ql->encoding(BookRule::CHARSET_UTF8, $bookRule->charset);
             }
+            $data = $ql
+                ->range($listRlRule->range)
+                ->rules($listRlRule->rules)
+                ->query()->getData();
             if (empty($data)) {
                 continue;
             }

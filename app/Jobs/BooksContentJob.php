@@ -37,6 +37,14 @@ class BooksContentJob extends BaseJob
         $ql = QueryList::get($this->chapterUrl);
         if ($this->bookRule->needEncoding()) {
             $ql->use(FilterHeader::class)->filterHeader();
+            $ql->encoding(BookRule::CHARSET_UTF8, $this->bookRule->charset);
+            if (!empty($this->bookRule->replaceTags)) {
+                $html = $ql->getHtml();
+                foreach ($this->bookRule->replaceTags ?? [] as $tag) {
+                    $html = preg_replace($tag[0], $tag[1] ?? '', $html);
+                }
+                $ql->setHtml($html);
+            }
         }
         $data = $ql
             ->range($this->bookRule->content->range)

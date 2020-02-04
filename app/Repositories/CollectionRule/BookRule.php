@@ -51,7 +51,7 @@ Class BookRule
 
     public function needEncoding()
     {
-        if (empty($this->charset) || $this->charset == 'utf-8') {
+        if (empty($this->charset) || $this->charset == self::CHARSET_UTF8) {
             return false;
         }
         return true;

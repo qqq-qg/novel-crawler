@@ -57,6 +57,21 @@ class CollectionRuleRepository extends BaseRepository
             $model = new CollectionRuleModel();
         }
 
+        $bookRule = $this->getBookRule($data);
+
+        $model->title = $data['title'] ?? '';
+        $model->rule_json = serialize($bookRule);
+        return $model->save();
+
+    }
+
+    /**
+     * @param $data
+     * @return BookRule
+     * @Date: 2020/02/04 1:50
+     */
+    private function getBookRule($data)
+    {
         $bookRule = new BookRule();
         $bookRule->host = $data['host'] ?? '';
         $bookRule->charset = $data['charset'] ?? '';
@@ -78,11 +93,7 @@ class CollectionRuleRepository extends BaseRepository
             }
         }
         $bookRule->replaceTags = $replaceTags;
-
-        $model->title = $data['title'] ?? '';
-        $model->rule_json = serialize($bookRule);
-        return $model->save();
-
+        return $bookRule;
     }
 
     /**
@@ -96,13 +107,56 @@ class CollectionRuleRepository extends BaseRepository
         return CollectionRuleModel::query()->where('id', $id)->delete();
     }
 
+    /**
+     * @param $data
+     * @return array
+     * @Date: 2020/02/04 14:17
+     */
     public function testCollectionRule($data)
     {
-        if ($data['type'] === 'home') {
-            $bookRule = '';
-        }
-
+        $bookRule = $this->getBookRule($data);
+        $requestRepository = new BookRequestRepository($bookRule);
+        return $this->tryRequestCollection($requestRepository, $data['test_type'], $data['test_url']);
     }
+
+    /**
+     * @param BookRequestRepository $requestRepository
+     * @param $type
+     * @param $url
+     * @param int $tries
+     * @return array
+     * @Date: 2020/02/04 23:13
+     */
+    private function tryRequestCollection(BookRequestRepository $requestRepository, $type, $url, $tries = 3)
+    {
+        try {
+            if ($type == 'home') {
+                $result = $requestRepository->getHome($url);
+            } else if ($type == 'content') {
+                $result = $requestRepository->getContent($url);
+            } else {
+                $url = str_replace('{$page}', rand(1, 5), $url);
+                $result = $requestRepository->getCategory($url);
+                if (empty($result)) {
+                    $result = $requestRepository->getRanking($url);
+                }
+            }
+            return $result;
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+            if (strpos($message, 'Connection refused') > -1
+                || strpos($message, 'timed out') > -1
+            ) {
+                if ($tries-- > 0) {
+                    sleep(1);
+                    return $this->tryRequestCollection($requestRepository, $type, $url, $tries);
+                }
+                return ["Message" => "请求超时，请重试！"];
+            }
+            return ["Message" => $message];
+        }
+    }
+
 
     public function collectionTask($keyword)
     {

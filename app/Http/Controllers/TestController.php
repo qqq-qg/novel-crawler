@@ -13,6 +13,16 @@ class TestController extends Controller
     public function index()
     {
 
+        $html = file_get_contents('https://www.biquge.lu/book/22005/450343705.html');
+        $pattern = '/<script[\s\S]*?<\/script>/i';
+//        preg_match_all($pattern,$html,$match);
+//        dd($match);
+
+        $html = preg_replace($pattern, '', $html);
+
+        dd($html);
+
+
         dd(123);
         $arr = BooksContentModel::query()->select('id')
             ->where('id', '>=', 585)
