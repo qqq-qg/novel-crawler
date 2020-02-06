@@ -119,7 +119,7 @@ class DatabaseSeeder extends Seeder
                 'pid' => 9,
                 'name' => '栏目管理',
                 'prefix' => 'Book',
-                'route' => 'getCategorys',
+                'route' => 'getCategories',
                 'ico' => '',
                 'listorder' => 0,
                 'items' => 0,

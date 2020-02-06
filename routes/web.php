@@ -90,7 +90,7 @@ Route::group($admin, function () {
             Route::get('/', 'BookController@getIndex')->name('Book.getIndex');
 
             //栏目分类
-            Route::get('/categorys', 'BookController@getCategories')->name('Book.getCategories');
+            Route::get('/categories', 'BookController@getCategories')->name('Book.getCategories');
             Route::post('/createCategory', 'BookController@createCategory')->name('Book.createCategory');
             Route::get('/deleteCategory', 'BookController@deleteCategory')->name('Book.deleteCategory');
 
@@ -98,9 +98,14 @@ Route::group($admin, function () {
             Route::get('/collectionRule', 'BookController@collectionRule')->name('Book.collectionRule');
             Route::get('/getCreateCollectionRule', 'BookController@getCreateCollectionRule')->name('Book.getCreateCollectionRule');
             Route::post('/createCollectionRule', 'BookController@createCollectionRule')->name('Book.createCollectionRule');
-            Route::post('/testCollectionRule', 'BookController@testCollectionRule')->name('Book.testCollectionRule');
             Route::get('/deleteCollectionRule', 'BookController@deleteCollectionRule')->name('Book.deleteCollectionRule');
+            Route::post('/testCollectionRule', 'BookController@testCollectionRule')->name('Book.testCollectionRule');
+
+            //采集任务
             Route::get('/collectionTask', 'BookController@collectionTask')->name('Book.collectionTask');
+            Route::post('/createCollectionTask', 'BookController@createCollectionTask')->name('Book.createCollectionTask');
+            Route::get('/deleteCollectionTask', 'BookController@deleteCollectionTask')->name('Book.deleteCollectionTask');
+
 
             //Route::get('/create', 'BookController@getCreate')->name('Book.getCreate');
             //Route::post('/create', 'BookController@postCreate')->name('Book.postCreate');
@@ -110,7 +115,6 @@ Route::group($admin, function () {
             Route::get('/createQueue', 'BookController@createQueue')->name('Book.createQueue');
             Route::post('/updateQueue', 'BookController@updateQueue')->name('Book.updateQueue');
             Route::get('/queueNumber', 'BookController@queueNumber')->name('Book.getQueueNumber');
-
 
 
             Route::get('/chapters', 'BookController@getChapters')->name('Book.getChapters');

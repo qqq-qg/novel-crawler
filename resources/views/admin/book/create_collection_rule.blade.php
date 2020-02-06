@@ -336,8 +336,8 @@
                     <div class="form-group">
                         <div class="col-sm-4 col-sm-offset-2">
                             <button class="btn btn-primary" type="submit">保存内容</button>
-                            <a class="btn btn-white" href="{{ route('Book.collectionRule') }}">返回</a>
                             <button class="btn btn-info" type="button" onclick="testRule()">测试</button>
+                            <a class="btn btn-white" href="{{ route('Book.collectionRule') }}">返回</a>
                             <input type="hidden" id="test_type" name="test_type" value="">
                             <input type="hidden" id="test_url" name="test_url" value="">
                         </div>
@@ -478,7 +478,7 @@
                             <label class="col-sm-2 control-label">简介URL</label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" id="test_home_url"
-                                       value="https://www.xbequge.com/17_40024/"
+                                       value=""
                                        placeholder="http://xxx.com/xxx">
                             </div>
                             <div class="col-sm-2">

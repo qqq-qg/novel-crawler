@@ -28,7 +28,7 @@ class BookRequestRepository
         $ql = QueryList::get($url, [], ['timeout' => self::$timeout]);
         if ($this->bookRule->needEncoding()) {
             $ql->use(FilterHeader::class)->filterHeader();
-            $ql->encoding(BookRule::CHARSET_UTF8, $this->bookRule->charset);
+            $ql->encoding(BookRule::CHARSET_UTF8);
         }
         $data = $ql
             ->range($this->bookRule->bookList['category']->range)
@@ -45,7 +45,7 @@ class BookRequestRepository
         $ql = QueryList::get($url, [], ['timeout' => self::$timeout]);
         if ($this->bookRule->needEncoding()) {
             $ql->use(FilterHeader::class)->filterHeader();
-            $ql->encoding(BookRule::CHARSET_UTF8, $this->bookRule->charset);
+            $ql->encoding(BookRule::CHARSET_UTF8);
         }
         $data = $ql
             ->range($this->bookRule->bookList['ranking']->range)
@@ -62,7 +62,7 @@ class BookRequestRepository
         $ql = QueryList::get($url, [], ['timeout' => self::$timeout,]);
         if ($this->bookRule->needEncoding()) {
             $ql->use(FilterHeader::class)->filterHeader();
-            $ql->encoding(BookRule::CHARSET_UTF8, $this->bookRule->charset);
+            $ql->encoding(BookRule::CHARSET_UTF8);
         }
         $data = $ql
             ->range($this->bookRule->home->range)
@@ -83,7 +83,7 @@ class BookRequestRepository
         $ql = QueryList::get($chapterListUrl, [], ['timeout' => self::$timeout]);
         if ($this->bookRule->needEncoding()) {
             $ql->use(FilterHeader::class)->filterHeader();
-            $ql->encoding(BookRule::CHARSET_UTF8, $this->bookRule->charset);
+            $ql->encoding(BookRule::CHARSET_UTF8);
         }
         $data = $ql
             ->range($this->bookRule->chapterList->range)
@@ -99,7 +99,7 @@ class BookRequestRepository
         $ql = QueryList::get($randItem['from_url'], [], ['timeout' => self::$timeout]);
         if ($this->bookRule->needEncoding()) {
             $ql->use(FilterHeader::class)->filterHeader();
-            $ql->encoding(BookRule::CHARSET_UTF8, $this->bookRule->charset);
+            $ql->encoding(BookRule::CHARSET_UTF8);
             if (!empty($this->bookRule->replaceTags)) {
                 $html = $ql->getHtml();
                 foreach ($this->bookRule->replaceTags ?? [] as $tag) {

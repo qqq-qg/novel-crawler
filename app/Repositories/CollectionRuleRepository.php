@@ -157,6 +157,19 @@ class CollectionRuleRepository extends BaseRepository
         }
     }
 
+    /**
+     * @return array
+     * @Date: 2020/02/06 10:43
+     */
+    public function getRules()
+    {
+        $result = CollectionRuleModel::query()
+            ->select(['id', 'title'])
+            ->where('status', CollectionRuleModel::ENABLE_STATUS)
+            ->orderBy('id', 'desc')
+            ->get()->toArray();
+        return $result;
+    }
 
     public function collectionTask($keyword)
     {
@@ -164,5 +177,26 @@ class CollectionRuleRepository extends BaseRepository
             ->where('status', CollectionTaskModel::ENABLE_STATUS);
         $query->orderBy('id', 'desc');
         return $query->paginate(static::$pageSize);
+    }
+
+    public function createCollectionTask($data)
+    {
+        if (!empty($data['id'])) {
+            $model = CollectionTaskModel::query()->findOrNew($data['id']);
+        } else {
+            $model = new CollectionTaskModel();
+        }
+        $model->title = $data['title'];
+        $model->from_url = $data['from_url'];
+        $model->from_hash = md5($data['from_url']);
+        $model->rule_id = $data['rule_id'];
+        $model->page_limit = !empty($data['page_limit']) ? intval($data['page_limit']) : 1;
+        $model->retries = !empty($data['retries']) ? intval($data['retries']) : 3;
+        return $model->save();
+    }
+
+    public function deleteCollectionTask($id)
+    {
+        return CollectionTaskModel::query()->where('id', $id)->delete();
     }
 }

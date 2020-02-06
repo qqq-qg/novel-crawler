@@ -6,7 +6,7 @@
             <td width="50">编号</td>
             <td align="left">标题</td>
             <td align="left">规则</td>
-            <td width="200">操作</td>
+            <td width="150">操作</td>
         </tr>
         @if(count($lists) > 0)
             @foreach($lists as $v)

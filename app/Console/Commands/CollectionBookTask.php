@@ -42,13 +42,13 @@ class CollectionBookTask extends Command
             $ql = QueryList::get($url);
             if ($bookRule->needEncoding()) {
                 $ql->use(FilterHeader::class)->filterHeader();
-                $ql->encoding(BookRule::CHARSET_UTF8, $bookRule->charset);
+                $ql->encoding(BookRule::CHARSET_UTF8);
             }
             $data = $ql
                 ->range($listRlRule->range)
                 ->rules($listRlRule->rules)
                 ->query()->getData();
-            if (empty($data)) {
+            if ($data->isEmpty()) {
                 continue;
             }
             $homeUrlArr = $data->pluck('url')->all();
@@ -57,6 +57,7 @@ class CollectionBookTask extends Command
                 $homeUrl = get_full_url($homeUrl, $url);
                 dispatch(new BooksJob($bookRule, $homeUrl));
             }
+            break;
         }
 
     }

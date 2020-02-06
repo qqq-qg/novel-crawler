@@ -144,6 +144,10 @@ class CollectionTaskController extends Controller
         $bookRule->content = new QlRule('', [
             'content' => ['div#content', 'html', 'script']
         ]);
+        $bookRule->splitTag = '';
+        $bookRule->replaceTags = [
+            ['/<script[\s\S]*?<\/script>/i', '']
+        ];
 
         $model = CollectionRuleModel::query()->create(
             [

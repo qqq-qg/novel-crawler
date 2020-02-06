@@ -31,7 +31,7 @@ class BooksJob extends BaseJob
         $ql = QueryList::get($this->url);
         if ($this->bookRule->needEncoding()) {
             $ql->use(FilterHeader::class)->filterHeader();
-            $ql->encoding(BookRule::CHARSET_UTF8, $this->bookRule->charset);
+            $ql->encoding(BookRule::CHARSET_UTF8);
         }
         $data = $ql
             ->range($this->bookRule->home->range)
@@ -59,7 +59,7 @@ class BooksJob extends BaseJob
         $ql = QueryList::get($chapterListUrl);
         if ($this->bookRule->needEncoding()) {
             $ql->use(FilterHeader::class)->filterHeader();
-            $ql->encoding(BookRule::CHARSET_UTF8, $this->bookRule->charset);
+            $ql->encoding(BookRule::CHARSET_UTF8);
         }
         $data = $ql
             ->range($this->bookRule->chapterList->range)

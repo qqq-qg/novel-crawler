@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Requests\Admin\CollectionTaskRequest;
 use App\Http\Requests\Admin\CreateCategoryRequest;
 use App\Repositories\BookChapterRepository;
 use App\Repositories\BookRepository;
@@ -94,6 +95,12 @@ class BookController extends BaseController
         return admin_view('book.collection_rule', $data);
     }
 
+    /**
+     * @param Request $request
+     * @param CollectionRuleRepository $repository
+     * @return mixed
+     * @Date: 2020/02/06 10:27
+     */
     public function getCreateCollectionRule(Request $request, CollectionRuleRepository $repository)
     {
         $id = $request->get('id', '');
@@ -104,6 +111,12 @@ class BookController extends BaseController
         return admin_view('book.create_collection_rule', $data);
     }
 
+    /**
+     * @param Request $request
+     * @param CollectionRuleRepository $repository
+     * @return \Illuminate\Http\RedirectResponse
+     * @Date: 2020/02/06 10:28
+     */
     public function createCollectionRule(Request $request, CollectionRuleRepository $repository)
     {
         $result = $repository->createCollectionRule($request->all());
@@ -114,6 +127,12 @@ class BookController extends BaseController
         }
     }
 
+    /**
+     * @param Request $request
+     * @param CollectionRuleRepository $repository
+     * @return \Illuminate\Http\RedirectResponse
+     * @Date: 2020/02/06 10:28
+     */
     public function deleteCollectionRule(Request $request, CollectionRuleRepository $repository)
     {
         $result = $repository->deleteCollectionRule($request->get('id'));
@@ -124,6 +143,12 @@ class BookController extends BaseController
         }
     }
 
+    /**
+     * @param Request $request
+     * @param CollectionRuleRepository $repository
+     * @return \Illuminate\Http\JsonResponse
+     * @Date: 2020/02/06 10:28
+     */
     public function testCollectionRule(Request $request, CollectionRuleRepository $repository)
     {
         try {
@@ -134,13 +159,52 @@ class BookController extends BaseController
         }
     }
 
+    /**
+     * @param Request $request
+     * @param CollectionRuleRepository $repository
+     * @return mixed
+     * @Date: 2020/02/06 10:28
+     */
     public function collectionTask(Request $request, CollectionRuleRepository $repository)
     {
         $lists = $repository->collectionTask($request->all());
         $data = [
             'lists' => $lists,
+            'rules' => $repository->getRules()
         ];
         return admin_view('book.collection_task', $data);
+    }
+
+    /**
+     * @param CollectionTaskRequest $request
+     * @param CollectionRuleRepository $repository
+     * @return \Illuminate\Http\RedirectResponse
+     * @Date: 2020/02/06 10:28
+     */
+    public function createCollectionTask(CollectionTaskRequest $request, CollectionRuleRepository $repository)
+    {
+        $result = $repository->createCollectionTask($request->all());
+        if ($result) {
+            return redirect()->route('Book.collectionTask');
+        } else {
+            return back()->withErrors('创建失败')->withInput();
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @param CollectionRuleRepository $repository
+     * @return \Illuminate\Http\RedirectResponse
+     * @Date: 2020/02/06 11:08
+     */
+    public function deleteCollectionTask(Request $request, CollectionRuleRepository $repository)
+    {
+        $result = $repository->deleteCollectionTask($request->get('id'));
+        if ($result) {
+            return redirect()->route('Book.collectionTask');
+        } else {
+            return back()->withErrors('删除失败')->withInput();
+        }
     }
 
 

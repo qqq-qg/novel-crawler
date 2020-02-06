@@ -37,7 +37,7 @@ class BooksContentJob extends BaseJob
         $ql = QueryList::get($this->chapterUrl);
         if ($this->bookRule->needEncoding()) {
             $ql->use(FilterHeader::class)->filterHeader();
-            $ql->encoding(BookRule::CHARSET_UTF8, $this->bookRule->charset);
+            $ql->encoding(BookRule::CHARSET_UTF8);
             if (!empty($this->bookRule->replaceTags)) {
                 $html = $ql->getHtml();
                 foreach ($this->bookRule->replaceTags ?? [] as $tag) {

@@ -21,7 +21,7 @@
                         <li><a href="{{ route('getAdminLogout') }}">安全退出</a></li>
                     </ul>
                 </div>
-                <div class="logo-element">SCMS</div>
+                <div class="logo-element">MARS</div>
             </li>
             @foreach(App\Repositories\MenuRepository::lists() as $v)
                 <li class="{{ Request::getUri() == $v['url'] ? 'active' : '' }}">
