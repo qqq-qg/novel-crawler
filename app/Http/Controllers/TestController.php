@@ -8,61 +8,72 @@ use App\Models\Books\BooksContentModel;
 use App\Models\Books\CollectionRuleModel;
 use App\Repositories\CollectionRule\BookRule;
 
-class TestController extends Controller
-{
-    public function index()
-    {
+class TestController extends Controller {
+  public function index() {
+    $jobStr = <<<'EOF'
+{"displayName":"App\\Jobs\\BooksContentMultiJob","job":"Illuminate\\Queue\\CallQueuedHandler@call","maxTries":null,"delay":null,"timeout":null,"timeoutAt":null,"data":{"commandName":"App\\Jobs\\BooksContentMultiJob","command":"O:29:\"App\\Jobs\\BooksContentMultiJob\":10:{s:35:\"\u0000App\\Jobs\\BooksContentMultiJob\u0000urls\";a:200:{i:0;s:42:\"https:\/\/www.xbequge.com\/0_213\/4952870.html\";i:1;s:42:\"https:\/\/www.xbequge.com\/0_213\/4985033.html\";i:2;s:42:\"https:\/\/www.xbequge.com\/0_213\/5040015.html\";i:3;s:42:\"https:\/\/www.xbequge.com\/0_213\/5060779.html\";i:4;s:42:\"https:\/\/www.xbequge.com\/0_213\/5060780.html\";i:5;s:42:\"https:\/\/www.xbequge.com\/0_213\/5254040.html\";i:6;s:42:\"https:\/\/www.xbequge.com\/0_213\/5254041.html\";i:7;s:42:\"https:\/\/www.xbequge.com\/0_213\/5254042.html\";i:8;s:42:\"https:\/\/www.xbequge.com\/0_213\/5254043.html\";i:9;s:42:\"https:\/\/www.xbequge.com\/0_213\/5254044.html\";i:10;s:42:\"https:\/\/www.xbequge.com\/0_213\/5312885.html\";i:11;s:42:\"https:\/\/www.xbequge.com\/0_213\/5312886.html\";i:12;s:42:\"https:\/\/www.xbequge.com\/0_213\/5337628.html\";i:13;s:42:\"https:\/\/www.xbequge.com\/0_213\/5337629.html\";i:14;s:42:\"https:\/\/www.xbequge.com\/0_213\/5338979.html\";i:15;s:42:\"https:\/\/www.xbequge.com\/0_213\/5355546.html\";i:16;s:42:\"https:\/\/www.xbequge.com\/0_213\/5402337.html\";i:17;s:42:\"https:\/\/www.xbequge.com\/0_213\/5429874.html\";i:18;s:42:\"https:\/\/www.xbequge.com\/0_213\/5443836.html\";i:19;s:42:\"https:\/\/www.xbequge.com\/0_213\/5466530.html\";i:20;s:42:\"https:\/\/www.xbequge.com\/0_213\/5467286.html\";i:21;s:42:\"https:\/\/www.xbequge.com\/0_213\/5467287.html\";i:22;s:42:\"https:\/\/www.xbequge.com\/0_213\/5467288.html\";i:23;s:42:\"https:\/\/www.xbequge.com\/0_213\/5476416.html\";i:24;s:42:\"https:\/\/www.xbequge.com\/0_213\/5496553.html\";i:25;s:42:\"https:\/\/www.xbequge.com\/0_213\/5510077.html\";i:26;s:42:\"https:\/\/www.xbequge.com\/0_213\/5535075.html\";i:27;s:42:\"https:\/\/www.xbequge.com\/0_213\/5548794.html\";i:28;s:42:\"https:\/\/www.xbequge.com\/0_213\/5567341.html\";i:29;s:42:\"https:\/\/www.xbequge.com\/0_213\/5574610.html\";i:30;s:42:\"https:\/\/www.xbequge.com\/0_213\/5592998.html\";i:31;s:42:\"https:\/\/www.xbequge.com\/0_213\/5600189.html\";i:32;s:42:\"https:\/\/www.xbequge.com\/0_213\/5614233.html\";i:33;s:42:\"https:\/\/www.xbequge.com\/0_213\/5614234.html\";i:34;s:42:\"https:\/\/www.xbequge.com\/0_213\/5623012.html\";i:35;s:42:\"https:\/\/www.xbequge.com\/0_213\/5646820.html\";i:36;s:42:\"https:\/\/www.xbequge.com\/0_213\/5659663.html\";i:37;s:42:\"https:\/\/www.xbequge.com\/0_213\/5668137.html\";i:38;s:42:\"https:\/\/www.xbequge.com\/0_213\/5684065.html\";i:39;s:42:\"https:\/\/www.xbequge.com\/0_213\/5694853.html\";i:40;s:42:\"https:\/\/www.xbequge.com\/0_213\/5709559.html\";i:41;s:42:\"https:\/\/www.xbequge.com\/0_213\/5709560.html\";i:42;s:42:\"https:\/\/www.xbequge.com\/0_213\/5715394.html\";i:43;s:42:\"https:\/\/www.xbequge.com\/0_213\/5734404.html\";i:44;s:42:\"https:\/\/www.xbequge.com\/0_213\/5744872.html\";i:45;s:42:\"https:\/\/www.xbequge.com\/0_213\/5748486.html\";i:46;s:42:\"https:\/\/www.xbequge.com\/0_213\/5748487.html\";i:47;s:42:\"https:\/\/www.xbequge.com\/0_213\/5754951.html\";i:48;s:42:\"https:\/\/www.xbequge.com\/0_213\/5754952.html\";i:49;s:42:\"https:\/\/www.xbequge.com\/0_213\/5757962.html\";i:50;s:42:\"https:\/\/www.xbequge.com\/0_213\/5757963.html\";i:51;s:42:\"https:\/\/www.xbequge.com\/0_213\/5757964.html\";i:52;s:42:\"https:\/\/www.xbequge.com\/0_213\/5764957.html\";i:53;s:42:\"https:\/\/www.xbequge.com\/0_213\/5764958.html\";i:54;s:42:\"https:\/\/www.xbequge.com\/0_213\/5767446.html\";i:55;s:42:\"https:\/\/www.xbequge.com\/0_213\/5767614.html\";i:56;s:42:\"https:\/\/www.xbequge.com\/0_213\/5767615.html\";i:57;s:42:\"https:\/\/www.xbequge.com\/0_213\/5771526.html\";i:58;s:42:\"https:\/\/www.xbequge.com\/0_213\/5771527.html\";i:59;s:42:\"https:\/\/www.xbequge.com\/0_213\/5771716.html\";i:60;s:42:\"https:\/\/www.xbequge.com\/0_213\/5771735.html\";i:61;s:42:\"https:\/\/www.xbequge.com\/0_213\/5772126.html\";i:62;s:42:\"https:\/\/www.xbequge.com\/0_213\/5772133.html\";i:63;s:42:\"https:\/\/www.xbequge.com\/0_213\/5772339.html\";i:64;s:42:\"https:\/\/www.xbequge.com\/0_213\/5772340.html\";i:65;s:42:\"https:\/\/www.xbequge.com\/0_213\/5773882.html\";i:66;s:42:\"https:\/\/www.xbequge.com\/0_213\/5773883.html\";i:67;s:42:\"https:\/\/www.xbequge.com\/0_213\/5774183.html\";i:68;s:42:\"https:\/\/www.xbequge.com\/0_213\/5774184.html\";i:69;s:42:\"https:\/\/www.xbequge.com\/0_213\/5775997.html\";i:70;s:42:\"https:\/\/www.xbequge.com\/0_213\/5776032.html\";i:71;s:42:\"https:\/\/www.xbequge.com\/0_213\/5776225.html\";i:72;s:42:\"https:\/\/www.xbequge.com\/0_213\/5776226.html\";i:73;s:42:\"https:\/\/www.xbequge.com\/0_213\/5776639.html\";i:74;s:42:\"https:\/\/www.xbequge.com\/0_213\/5776646.html\";i:75;s:42:\"https:\/\/www.xbequge.com\/0_213\/5776936.html\";i:76;s:42:\"https:\/\/www.xbequge.com\/0_213\/5776953.html\";i:77;s:42:\"https:\/\/www.xbequge.com\/0_213\/5777413.html\";i:78;s:42:\"https:\/\/www.xbequge.com\/0_213\/5777705.html\";i:79;s:42:\"https:\/\/www.xbequge.com\/0_213\/5777877.html\";i:80;s:42:\"https:\/\/www.xbequge.com\/0_213\/5778252.html\";i:81;s:42:\"https:\/\/www.xbequge.com\/0_213\/5778511.html\";i:82;s:42:\"https:\/\/www.xbequge.com\/0_213\/5778916.html\";i:83;s:42:\"https:\/\/www.xbequge.com\/0_213\/5778950.html\";i:84;s:42:\"https:\/\/www.xbequge.com\/0_213\/5779133.html\";i:85;s:42:\"https:\/\/www.xbequge.com\/0_213\/5779695.html\";i:86;s:42:\"https:\/\/www.xbequge.com\/0_213\/5779696.html\";i:87;s:42:\"https:\/\/www.xbequge.com\/0_213\/5779919.html\";i:88;s:42:\"https:\/\/www.xbequge.com\/0_213\/5876418.html\";i:89;s:42:\"https:\/\/www.xbequge.com\/0_213\/5876419.html\";i:90;s:42:\"https:\/\/www.xbequge.com\/0_213\/5876420.html\";i:91;s:42:\"https:\/\/www.xbequge.com\/0_213\/5915292.html\";i:92;s:42:\"https:\/\/www.xbequge.com\/0_213\/5966165.html\";i:93;s:42:\"https:\/\/www.xbequge.com\/0_213\/5966166.html\";i:94;s:42:\"https:\/\/www.xbequge.com\/0_213\/5966167.html\";i:95;s:42:\"https:\/\/www.xbequge.com\/0_213\/5978809.html\";i:96;s:42:\"https:\/\/www.xbequge.com\/0_213\/6011330.html\";i:97;s:42:\"https:\/\/www.xbequge.com\/0_213\/6028249.html\";i:98;s:42:\"https:\/\/www.xbequge.com\/0_213\/6056834.html\";i:99;s:42:\"https:\/\/www.xbequge.com\/0_213\/6097514.html\";i:100;s:42:\"https:\/\/www.xbequge.com\/0_213\/6123642.html\";i:101;s:42:\"https:\/\/www.xbequge.com\/0_213\/6135899.html\";i:102;s:42:\"https:\/\/www.xbequge.com\/0_213\/6154528.html\";i:103;s:42:\"https:\/\/www.xbequge.com\/0_213\/6154529.html\";i:104;s:42:\"https:\/\/www.xbequge.com\/0_213\/6154530.html\";i:105;s:42:\"https:\/\/www.xbequge.com\/0_213\/6161029.html\";i:106;s:42:\"https:\/\/www.xbequge.com\/0_213\/6175220.html\";i:107;s:42:\"https:\/\/www.xbequge.com\/0_213\/6182039.html\";i:108;s:42:\"https:\/\/www.xbequge.com\/0_213\/6198016.html\";i:109;s:42:\"https:\/\/www.xbequge.com\/0_213\/6206831.html\";i:110;s:42:\"https:\/\/www.xbequge.com\/0_213\/6221552.html\";i:111;s:42:\"https:\/\/www.xbequge.com\/0_213\/6221553.html\";i:112;s:42:\"https:\/\/www.xbequge.com\/0_213\/6221554.html\";i:113;s:42:\"https:\/\/www.xbequge.com\/0_213\/6229395.html\";i:114;s:42:\"https:\/\/www.xbequge.com\/0_213\/6250260.html\";i:115;s:42:\"https:\/\/www.xbequge.com\/0_213\/6256197.html\";i:116;s:42:\"https:\/\/www.xbequge.com\/0_213\/6256198.html\";i:117;s:42:\"https:\/\/www.xbequge.com\/0_213\/6256199.html\";i:118;s:42:\"https:\/\/www.xbequge.com\/0_213\/6266418.html\";i:119;s:42:\"https:\/\/www.xbequge.com\/0_213\/6266419.html\";i:120;s:42:\"https:\/\/www.xbequge.com\/0_213\/6274028.html\";i:121;s:42:\"https:\/\/www.xbequge.com\/0_213\/6274475.html\";i:122;s:42:\"https:\/\/www.xbequge.com\/0_213\/6274476.html\";i:123;s:42:\"https:\/\/www.xbequge.com\/0_213\/6274477.html\";i:124;s:42:\"https:\/\/www.xbequge.com\/0_213\/6288973.html\";i:125;s:42:\"https:\/\/www.xbequge.com\/0_213\/6293409.html\";i:126;s:42:\"https:\/\/www.xbequge.com\/0_213\/6301985.html\";i:127;s:42:\"https:\/\/www.xbequge.com\/0_213\/6301986.html\";i:128;s:42:\"https:\/\/www.xbequge.com\/0_213\/6301987.html\";i:129;s:42:\"https:\/\/www.xbequge.com\/0_213\/6305890.html\";i:130;s:42:\"https:\/\/www.xbequge.com\/0_213\/6317400.html\";i:131;s:42:\"https:\/\/www.xbequge.com\/0_213\/6317401.html\";i:132;s:42:\"https:\/\/www.xbequge.com\/0_213\/6317402.html\";i:133;s:42:\"https:\/\/www.xbequge.com\/0_213\/6321307.html\";i:134;s:42:\"https:\/\/www.xbequge.com\/0_213\/6333919.html\";i:135;s:42:\"https:\/\/www.xbequge.com\/0_213\/6342501.html\";i:136;s:42:\"https:\/\/www.xbequge.com\/0_213\/6353365.html\";i:137;s:42:\"https:\/\/www.xbequge.com\/0_213\/6353366.html\";i:138;s:42:\"https:\/\/www.xbequge.com\/0_213\/6353367.html\";i:139;s:42:\"https:\/\/www.xbequge.com\/0_213\/6360008.html\";i:140;s:42:\"https:\/\/www.xbequge.com\/0_213\/6369437.html\";i:141;s:42:\"https:\/\/www.xbequge.com\/0_213\/6374337.html\";i:142;s:42:\"https:\/\/www.xbequge.com\/0_213\/6493467.html\";i:143;s:42:\"https:\/\/www.xbequge.com\/0_213\/6493468.html\";i:144;s:42:\"https:\/\/www.xbequge.com\/0_213\/6493469.html\";i:145;s:42:\"https:\/\/www.xbequge.com\/0_213\/6494977.html\";i:146;s:42:\"https:\/\/www.xbequge.com\/0_213\/6494978.html\";i:147;s:42:\"https:\/\/www.xbequge.com\/0_213\/6497962.html\";i:148;s:42:\"https:\/\/www.xbequge.com\/0_213\/6497963.html\";i:149;s:42:\"https:\/\/www.xbequge.com\/0_213\/6499558.html\";i:150;s:42:\"https:\/\/www.xbequge.com\/0_213\/6499559.html\";i:151;s:42:\"https:\/\/www.xbequge.com\/0_213\/6502486.html\";i:152;s:42:\"https:\/\/www.xbequge.com\/0_213\/6502487.html\";i:153;s:42:\"https:\/\/www.xbequge.com\/0_213\/6503810.html\";i:154;s:42:\"https:\/\/www.xbequge.com\/0_213\/6503811.html\";i:155;s:42:\"https:\/\/www.xbequge.com\/0_213\/6601695.html\";i:156;s:42:\"https:\/\/www.xbequge.com\/0_213\/6602431.html\";i:157;s:42:\"https:\/\/www.xbequge.com\/0_213\/6603630.html\";i:158;s:42:\"https:\/\/www.xbequge.com\/0_213\/6604124.html\";i:159;s:42:\"https:\/\/www.xbequge.com\/0_213\/6604381.html\";i:160;s:42:\"https:\/\/www.xbequge.com\/0_213\/6605710.html\";i:161;s:42:\"https:\/\/www.xbequge.com\/0_213\/6606395.html\";i:162;s:42:\"https:\/\/www.xbequge.com\/0_213\/6607679.html\";i:163;s:42:\"https:\/\/www.xbequge.com\/0_213\/6608289.html\";i:164;s:42:\"https:\/\/www.xbequge.com\/0_213\/6609603.html\";i:165;s:42:\"https:\/\/www.xbequge.com\/0_213\/6609837.html\";i:166;s:42:\"https:\/\/www.xbequge.com\/0_213\/6627396.html\";i:167;s:42:\"https:\/\/www.xbequge.com\/0_213\/6627397.html\";i:168;s:42:\"https:\/\/www.xbequge.com\/0_213\/6629765.html\";i:169;s:42:\"https:\/\/www.xbequge.com\/0_213\/6633224.html\";i:170;s:42:\"https:\/\/www.xbequge.com\/0_213\/6634235.html\";i:171;s:42:\"https:\/\/www.xbequge.com\/0_213\/6639247.html\";i:172;s:42:\"https:\/\/www.xbequge.com\/0_213\/6639248.html\";i:173;s:42:\"https:\/\/www.xbequge.com\/0_213\/6639249.html\";i:174;s:42:\"https:\/\/www.xbequge.com\/0_213\/6640272.html\";i:175;s:42:\"https:\/\/www.xbequge.com\/0_213\/6642153.html\";i:176;s:42:\"https:\/\/www.xbequge.com\/0_213\/6645252.html\";i:177;s:42:\"https:\/\/www.xbequge.com\/0_213\/6645253.html\";i:178;s:42:\"https:\/\/www.xbequge.com\/0_213\/6648079.html\";i:179;s:42:\"https:\/\/www.xbequge.com\/0_213\/6648080.html\";i:180;s:42:\"https:\/\/www.xbequge.com\/0_213\/6649066.html\";i:181;s:42:\"https:\/\/www.xbequge.com\/0_213\/6650851.html\";i:182;s:42:\"https:\/\/www.xbequge.com\/0_213\/6653692.html\";i:183;s:42:\"https:\/\/www.xbequge.com\/0_213\/6653693.html\";i:184;s:42:\"https:\/\/www.xbequge.com\/0_213\/6656448.html\";i:185;s:42:\"https:\/\/www.xbequge.com\/0_213\/6656449.html\";i:186;s:42:\"https:\/\/www.xbequge.com\/0_213\/6659880.html\";i:187;s:42:\"https:\/\/www.xbequge.com\/0_213\/6659881.html\";i:188;s:42:\"https:\/\/www.xbequge.com\/0_213\/6659899.html\";i:189;s:42:\"https:\/\/www.xbequge.com\/0_213\/6662548.html\";i:190;s:42:\"https:\/\/www.xbequge.com\/0_213\/6662549.html\";i:191;s:42:\"https:\/\/www.xbequge.com\/0_213\/6697019.html\";i:192;s:42:\"https:\/\/www.xbequge.com\/0_213\/6697020.html\";i:193;s:42:\"https:\/\/www.xbequge.com\/0_213\/6754047.html\";i:194;s:42:\"https:\/\/www.xbequge.com\/0_213\/6754048.html\";i:195;s:42:\"https:\/\/www.xbequge.com\/0_213\/6765451.html\";i:196;s:42:\"https:\/\/www.xbequge.com\/0_213\/6765452.html\";i:197;s:42:\"https:\/\/www.xbequge.com\/0_213\/6789457.html\";i:198;s:42:\"https:\/\/www.xbequge.com\/0_213\/6789458.html\";i:199;s:42:\"https:\/\/www.xbequge.com\/0_213\/6795538.html\";}s:39:\"\u0000App\\Jobs\\BooksContentMultiJob\u0000bookRule\";O:40:\"App\\Repositories\\CollectionRule\\BookRule\":8:{s:4:\"host\";s:15:\"www.xbequge.com\";s:7:\"charset\";s:3:\"gbk\";s:8:\"splitTag\";s:0:\"\";s:11:\"replaceTags\";a:3:{i:0;a:2:{i:0;s:50:\"\/<p>.+?(\u5929\u624d\u4e00\u79d2\u8bb0\u4f4f\u672c\u7ad9\u5730\u5740).+?<\\\/p>\/is\";i:1;s:0:\"\";}i:1;a:2:{i:0;s:28:\"\/<p class=\"content_detail\">\/\";i:1;s:3:\"<p>\";}i:2;a:2:{i:0;s:6:\"\/<br>\/\";i:1;s:0:\"\";}}s:8:\"bookList\";a:2:{s:8:\"category\";O:38:\"App\\Repositories\\CollectionRule\\QlRule\":4:{s:5:\"range\";s:0:\"\";s:5:\"rules\";a:1:{s:3:\"url\";a:4:{i:0;s:17:\".cbox ul li>div>a\";i:1;s:4:\"href\";i:2;N;i:3;N;}}s:8:\"nextPage\";b:0;s:4:\"page\";i:1;}s:7:\"ranking\";O:38:\"App\\Repositories\\CollectionRule\\QlRule\":4:{s:5:\"range\";s:0:\"\";s:5:\"rules\";a:1:{s:3:\"url\";a:4:{i:0;N;i:1;N;i:2;N;i:3;N;}}s:8:\"nextPage\";b:0;s:4:\"page\";i:1;}}s:4:\"home\";O:38:\"App\\Repositories\\CollectionRule\\QlRule\":4:{s:5:\"range\";s:0:\"\";s:5:\"rules\";a:3:{s:5:\"title\";a:4:{i:0;s:11:\"div.info h1\";i:1;s:4:\"text\";i:2;N;i:3;N;}s:11:\"words_count\";a:4:{i:0;s:4:\"none\";i:1;N;i:2;N;i:3;N;}s:16:\"chapter_list_url\";a:4:{i:0;s:4:\"self\";i:1;N;i:2;N;i:3;N;}}s:8:\"nextPage\";b:0;s:4:\"page\";i:0;}s:11:\"chapterList\";O:38:\"App\\Repositories\\CollectionRule\\QlRule\":4:{s:5:\"range\";s:0:\"\";s:5:\"rules\";a:2:{s:5:\"title\";a:4:{i:0;s:17:\"#chapterlist li>a\";i:1;s:4:\"text\";i:2;N;i:3;N;}s:8:\"from_url\";a:4:{i:0;s:17:\"#chapterlist li>a\";i:1;s:4:\"href\";i:2;N;i:3;N;}}s:8:\"nextPage\";b:0;s:4:\"page\";i:0;}s:7:\"content\";O:38:\"App\\Repositories\\CollectionRule\\QlRule\":4:{s:5:\"range\";s:0:\"\";s:5:\"rules\";a:1:{s:7:\"content\";a:4:{i:0;s:13:\"div#book_text\";i:1;s:4:\"html\";i:2;N;i:3;N;}}s:8:\"nextPage\";b:0;s:4:\"page\";i:0;}}s:6:\"\u0000*\u0000job\";N;s:10:\"connection\";N;s:5:\"queue\";s:7:\"Content\";s:15:\"chainConnection\";N;s:10:\"chainQueue\";N;s:5:\"delay\";N;s:10:\"middleware\";a:0:{}s:7:\"chained\";a:0:{}}"}}
+EOF;
 
-        $html = file_get_contents('https://www.biquge.lu/book/22005/450343705.html');
-        $pattern = '/<script[\s\S]*?<\/script>/i';
-//        preg_match_all($pattern,$html,$match);
-//        dd($match);
-
-        $html = preg_replace($pattern, '', $html);
-
-        dd($html);
+    $job = json_decode($jobStr, true);
+    $command = $job['data']['command'];
+    $obj = unserialize($command);
+    dispatch($obj);
+    dd($obj);
 
 
-        dd(123);
-        $arr = BooksContentModel::query()->select('id')
-            ->where('id', '>=', 585)
-            ->get()->pluck('id')->all();
-        $urls = BooksChapterModel::query()->select('from_url')->whereIn('id', $arr)
-            ->get()->pluck('from_url')->all();
-//        dd($urls);
-        $rule = CollectionRuleModel::query()->where('id', 4)->first();
-        $bookRule = unserialize($rule->rule_json);
-        dispatch(new BooksContentMultiJob($bookRule, $urls))->onQueue('Content');
+    dd($job);
+    $pass = password_hash('zzq1989zzq', PASSWORD_DEFAULT);
+    dd($pass);
+    $html = file_get_contents('https://www.biquge.lu/book/22005/450343705.html');
+    $pattern = '/<script[\s\S]*?<\/script>/i';
+    //        preg_match_all($pattern,$html,$match);
+    //        dd($match);
 
-        dd();
+    $html = preg_replace($pattern, '', $html);
 
-        /**
-         * @var BookRule $bookRule
-         */
-//        $bookRule = unserialize($rule->rule_json);
-//        dd($bookRule->replaceTags);
+    dd($html);
 
-        $contentArr = BooksContentModel::query()->where('id', '=', 585)->get();
 
-        foreach ($contentArr as $contentModel) {
-            $content = $contentModel->content;
-            foreach ($bookRule->replaceTags as $tag) {
-                $content = preg_replace($tag[0], $tag[1], $content);
-            }
-            $contentModel->update(['content' => $content]);
-        }
+    dd(123);
+    $arr = BooksContentModel::query()->select('id')
+      ->where('id', '>=', 585)
+      ->get()->pluck('id')->all();
+    $urls = BooksChapterModel::query()->select('from_url')->whereIn('id', $arr)
+      ->get()->pluck('from_url')->all();
+    //        dd($urls);
+    $rule = CollectionRuleModel::query()->where('id', 4)->first();
+    $bookRule = unserialize($rule->rule_json);
+    dispatch(new BooksContentMultiJob($bookRule, $urls))->onQueue('Content');
 
-        $content = BooksContentModel::query()->where('id', 758)->first()->content;
+    dd();
 
-        $pattern = '/<p>.+?(天才一秒记住本站地址).+?<\/p>/is';
-        $content = preg_replace($pattern, '', $content);
+    /**
+     * @var BookRule $bookRule
+     */
+    //        $bookRule = unserialize($rule->rule_json);
+    //        dd($bookRule->replaceTags);
 
-        $pattern = '/<p class="content_detail">/';
-        $content = preg_replace($pattern, '<p>    ', $content);
+    $contentArr = BooksContentModel::query()->where('id', '=', 585)->get();
 
-        $pattern = '/<br>/';
-        $content = preg_replace($pattern, '', $content);
-
-        dd($content);
+    foreach ($contentArr as $contentModel) {
+      $content = $contentModel->content;
+      foreach ($bookRule->replaceTags as $tag) {
+        $content = preg_replace($tag[0], $tag[1], $content);
+      }
+      $contentModel->update(['content' => $content]);
     }
+
+    $content = BooksContentModel::query()->where('id', 758)->first()->content;
+
+    $pattern = '/<p>.+?(天才一秒记住本站地址).+?<\/p>/is';
+    $content = preg_replace($pattern, '', $content);
+
+    $pattern = '/<p class="content_detail">/';
+    $content = preg_replace($pattern, '<p>    ', $content);
+
+    $pattern = '/<br>/';
+    $content = preg_replace($pattern, '', $content);
+
+    dd($content);
+  }
 }
