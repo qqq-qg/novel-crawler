@@ -12,18 +12,19 @@ use QL\QueryList;
 
 class NewBooksJob extends BaseJob
 {
-    private $bookRule, $url;
+    private $bookRule, $url, $source;
 
     /**
      * NewBooksJob constructor.
      * @param $url
      * @param BookRule $bookRule
      */
-    public function __construct(BookRule $bookRule, $url)
+    public function __construct(BookRule $bookRule, $url, $source)
     {
         parent::__construct();
         $this->url = $url;
         $this->bookRule = $bookRule;
+        $this->source = $source;
     }
 
     public function handle()
@@ -60,6 +61,7 @@ class NewBooksJob extends BaseJob
         } else {
             $_bookData['from_url'] = $this->url;
             $_bookData['from_hash'] = $fromHash;
+            $_bookData['source'] = $this->source;
             $bookModel = BooksModel::query()->create($_bookData);
         }
         return $this->chapter($bookModel, $chapterListUrl);

@@ -42,7 +42,7 @@ class SearcherBookTask extends Command
             $bookRule = unserialize($rule->rule_json);
             foreach ($data as $k => $datum) {
                 if (strpos($datum['link'], $bookRule->host) > -1) {
-                    dispatch(new NewBooksJob($bookRule, $datum['link']));
+                    dispatch(new NewBooksJob($bookRule, $datum['link'], $ruleId));
                     return true;
                 }
             }

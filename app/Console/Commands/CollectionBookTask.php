@@ -31,12 +31,12 @@ class CollectionBookTask extends Command
             for ($i = 1; $i <= $task['page_limit']; $i++) {
                 $url = str_replace('{$page}', $i, $task['from_url']);
                 echo "\tGET {$url}" . PHP_EOL;
-                $this->queryData($url, $bookRule);
+                $this->queryData($bookRule, $url, $task->rule['id']);
             }
         }
     }
 
-    private function queryData($url, BookRule $bookRule)
+    private function queryData(BookRule $bookRule, $url, $ruleId)
     {
         foreach ($bookRule->bookList as $listRlRule) {
             $ql = QueryList::get($url);
@@ -55,7 +55,7 @@ class CollectionBookTask extends Command
             //遍历每一本书
             foreach ($homeUrlArr as $homeUrl) {
                 $homeUrl = get_full_url($homeUrl, $url);
-                dispatch(new NewBooksJob($bookRule, $homeUrl));
+                dispatch(new NewBooksJob($bookRule, $homeUrl, $ruleId));
             }
             break;
         }
