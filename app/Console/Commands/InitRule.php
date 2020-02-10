@@ -25,6 +25,8 @@ class InitRule extends Command
         $model2 = $this->rule2();
 
         $model3 = $this->rule3();
+
+        $model4 = $this->rule4();
     }
 
     private function rule1()
@@ -73,6 +75,7 @@ class InitRule extends Command
         $model = CollectionRuleModel::query()->create(
             [
                 'title' => '纵横中文网',
+                'host' => $bookRule->host,
                 'rule_json' => serialize($bookRule),
             ]
         );
@@ -113,6 +116,7 @@ class InitRule extends Command
         $model = CollectionRuleModel::query()->create(
             [
                 'title' => '顶点小说网-2wxs',
+                'host' => $bookRule->host,
                 'rule_json' => serialize($bookRule),
             ]
         );
@@ -147,13 +151,64 @@ class InitRule extends Command
                 'from_url' => ['.listmain dd>a', 'href']
             ]);
         $bookRule->content = new QlRule('', [
-            'content' => ['div#content', 'html', '-script']
+            'content' => ['div#content', 'html', 'script']
         ]);
-        $bookRule->splitTag = '(https';
+        $bookRule->splitTag = '';
+        $bookRule->replaceTags = [
+            ['/<script[\s\S]*?<\/script>/i', '']
+        ];
 
         $model = CollectionRuleModel::query()->create(
             [
                 'title' => '笔趣阁-biquge',
+                'host' => $bookRule->host,
+                'rule_json' => serialize($bookRule),
+            ]
+        );
+        return $model;
+    }
+
+    private function rule4()
+    {
+        $bookRule = new BookRule();
+        $bookRule->host = 'www.xbequge.com';
+        $bookRule->charset = BookRule::CHARSET_GBK;
+        $bookRule->bookList = [
+            'category' => new QlRule('',
+                [
+                    'url' => ['ul.item-con li span.s2>a', 'href']
+                ], true, 1),
+
+            'ranking' => new QlRule('',
+                [
+                    'url' => ['ul.item-con li span.s2>a', 'href']
+                ], true, 2)
+        ];
+        $bookRule->home = new QlRule('',
+            [
+                'title' => ['div.info h1', 'text'],
+                'words_count' => ['none', ''],
+                'chapter_list_url' => ['self', ''],
+            ]);
+        $bookRule->chapterList = new QlRule('',
+            [
+                'title' => ['#chapterlist li>a', 'text'],
+                'from_url' => ['#chapterlist li>a', 'href']
+            ]);
+        $bookRule->content = new QlRule('', [
+            'content' => ['div#book_text', 'html']
+        ]);
+        $bookRule->splitTag = '';
+        $bookRule->replaceTags = [
+            ['/<p>.+?(天才一秒记住本站地址).+?<\/p>/is', ''],
+            ['/<p class="content_detail">/', '<p>  '],
+            ['/<br>/', ''],
+        ];
+
+        $model = CollectionRuleModel::query()->create(
+            [
+                'title' => '笔趣阁-www.xbequge.com',
+                'host' => $bookRule->host,
                 'rule_json' => serialize($bookRule),
             ]
         );
