@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Jobs\BooksJob;
+use App\Jobs\NewBooksJob;
 use App\Models\Books\CollectionTaskModel;
 use App\Repositories\CollectionRule\BookRule;
 use App\Repositories\Searcher\Plugin\FilterHeader;
@@ -55,7 +55,7 @@ class CollectionBookTask extends Command
             //遍历每一本书
             foreach ($homeUrlArr as $homeUrl) {
                 $homeUrl = get_full_url($homeUrl, $url);
-                dispatch(new BooksJob($bookRule, $homeUrl));
+                dispatch(new NewBooksJob($bookRule, $homeUrl));
             }
             break;
         }

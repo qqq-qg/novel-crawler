@@ -60,6 +60,7 @@ class CollectionRuleRepository extends BaseRepository
         $bookRule = $this->getBookRule($data);
 
         $model->title = $data['title'] ?? '';
+        $model->host = $bookRule->host;
         $model->rule_json = serialize($bookRule);
         return $model->save();
 

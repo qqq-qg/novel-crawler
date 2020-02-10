@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Jobs\BooksJob;
+use App\Jobs\NewBooksJob;
 use App\Models\Books\CollectionRuleModel;
 use App\Repositories\CollectionRule\BookRule;
 use App\Repositories\Searcher\ChromeSearcherRepository;
@@ -42,7 +42,7 @@ class SearcherBookTask extends Command
             $bookRule = unserialize($rule->rule_json);
             foreach ($data as $k => $datum) {
                 if (strpos($datum['link'], $bookRule->host) > -1) {
-                    dispatch(new BooksJob($bookRule, $datum['link']));
+                    dispatch(new NewBooksJob($bookRule, $datum['link']));
                     return true;
                 }
             }

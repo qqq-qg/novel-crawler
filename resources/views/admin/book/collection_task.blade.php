@@ -9,7 +9,7 @@
             <td align="left">规则名称</td>
             <td align="left">页数</td>
             <td align="left">状态</td>
-            <td width="200">操作</td>
+            <td width="150">操作</td>
         </tr>
         @if(count($lists) > 0)
             @foreach($lists as $v)
@@ -21,7 +21,6 @@
                     <td align="left">{{ $v['page_limit'] }}</td>
                     <td align="left">{{ $v['task_code'] }}</td>
                     <td>
-                        <button class="btn btn-sm btn-success" onclick="AddChild({{ $v['id'] }})">添加</button>
                         <button class="btn btn-sm btn-info" id="edit_{{ $v['id'] }}" data="{{ json_encode($v) }}"
                                 onclick="Edit({{ $v['id'] }})">编辑
                         </button>
@@ -57,12 +56,6 @@
                 $(createModal).find('select[name=' + k + ']').val(v);
             });
 
-            $(createModal).modal('show');
-        }
-
-        function AddChild() {
-            $(createModal).find('input').val('');
-            $(createModal).find('select').val('');
             $(createModal).modal('show');
         }
     </script>

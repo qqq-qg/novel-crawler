@@ -1,5 +1,7 @@
 php artisan queue:work
 php artisan queue:work --queue=default,Content
+php artisan queue:work --queue=Content
+
 php artisan task:run
 
 脚本执行监听队列

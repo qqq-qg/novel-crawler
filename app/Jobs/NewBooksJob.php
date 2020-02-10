@@ -7,14 +7,15 @@ use App\Models\Books\BooksContentModel;
 use App\Models\Books\BooksModel;
 use App\Repositories\CollectionRule\BookRule;
 use App\Repositories\Searcher\Plugin\FilterHeader;
+use Illuminate\Support\Facades\Log;
 use QL\QueryList;
 
-class BooksJob extends BaseJob
+class NewBooksJob extends BaseJob
 {
     private $bookRule, $url;
 
     /**
-     * BooksJob constructor.
+     * NewBooksJob constructor.
      * @param $url
      * @param BookRule $bookRule
      */
@@ -41,6 +42,16 @@ class BooksJob extends BaseJob
             'title' => trim($data['title'] ?? ''),
             'words_count' => trim($data['words_count'] ?? ''),
         ];
+
+        $otherBookModel = BooksModel::query()
+            ->where('title', $_bookData['title'])
+            ->where('from_hash', '<>', $fromHash)
+            ->first();
+        if ($otherBookModel) {
+            Log::info('info', ['message' => "书名：【{$_bookData['title']}】 已存在其他获取源"]);
+            return false;
+        }
+
         $chapterListUrl = trim($data['chapter_list_url'] ?? $this->url);
         $chapterListUrl = get_full_url($chapterListUrl, $this->url);
         $bookModel = BooksModel::query()->where('from_hash', $fromHash)->first();
@@ -51,7 +62,7 @@ class BooksJob extends BaseJob
             $_bookData['from_hash'] = $fromHash;
             $bookModel = BooksModel::query()->create($_bookData);
         }
-        $this->chapter($bookModel, $chapterListUrl);
+        return $this->chapter($bookModel, $chapterListUrl);
     }
 
     private function chapter($bookModel, $chapterListUrl)
@@ -70,6 +81,12 @@ class BooksJob extends BaseJob
             return false;
         }
         $urls = [];
+
+        $finishedUrlArr = BooksChapterModel::query()
+            ->select('from_hash')
+            ->where('books_id', $bookModel->id)
+            ->where('is_success', BooksChapterModel::ENABLE_STATUS)
+            ->get()->pluck('from_hash')->toArray();
         foreach ($data as $k => $item) {
             $from_url = trim($item['from_url']);
             $from_url = get_full_url($from_url, $this->url);
@@ -77,9 +94,12 @@ class BooksJob extends BaseJob
                 'books_id' => $bookModel->id,
                 'chapter_index' => $k + 1,
                 'title' => trim($item['title']),
-                'from_url' => $from_url
+                'from_url' => $from_url,
+                'from_hash' => md5($from_url)
             ];
-            $_chapter['from_hash'] = md5($_chapter['from_url']);
+            if (in_array($_chapter['from_hash'], $finishedUrlArr)) {
+                continue;
+            }
             $chapterModel = BooksChapterModel::query()->where('from_hash', $_chapter['from_hash'])->first();
             if (empty($chapterModel)) {
                 BooksChapterModel::query()->create($_chapter);
