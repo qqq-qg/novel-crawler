@@ -3,6 +3,11 @@
 namespace App\Listeners;
 
 use App\Events\BooksChangeSourceEvent;
+use App\Jobs\NewBooksJob;
+use App\Models\Books\BooksChapterModel;
+use App\Models\Books\BooksContentModel;
+use App\Models\Books\CollectionRuleModel;
+use App\Repositories\CollectionRule\BookRule;
 
 class BooksChangeSourceListener
 {
@@ -16,7 +21,25 @@ class BooksChangeSourceListener
      */
     public function handle(BooksChangeSourceEvent $event)
     {
+        $book = $event->book;
+
         //clear old chapter,content
-        //add fetch new data
+        $this->clearBeforeChapter($book->id);
+
+        //add new data
+        $rule = CollectionRuleModel::query()->where('id', $book->rule_id)->first();
+        /**
+         * @var BookRule $bookRule
+         */
+        $bookRule = unserialize($rule->rule_json);
+        dispatch(new NewBooksJob($bookRule, $book->from_url, $book->rule_id));
+    }
+
+    private function clearBeforeChapter($booksId)
+    {
+        $chapterId = BooksChapterModel::query()->where('books_id', $booksId)->pluck('id')->toArray();
+
+        $rst = BooksContentModel::query()->whereIn('id', $chapterId)->delete();
+        $rst = BooksChapterModel::query()->whereIn('id', $chapterId)->delete();
     }
 }

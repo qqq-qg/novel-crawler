@@ -88,7 +88,7 @@ class NewBooksJob extends BaseJob
             ->select('from_hash')
             ->where('books_id', $bookModel->id)
             ->where('is_success', BooksChapterModel::ENABLE_STATUS)
-            ->get()->pluck('from_hash')->toArray();
+            ->pluck('from_hash')->toArray();
         foreach ($data as $k => $item) {
             $from_url = trim($item['from_url']);
             $from_url = get_full_url($from_url, $this->url);
