@@ -3,10 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\BooksUpdateEvent;
-use App\Jobs\NewBooksJob;
 use App\Jobs\UpdateBooksJob;
-use App\Models\Books\BooksChapterModel;
-use App\Models\Books\BooksContentModel;
 use App\Models\Books\CollectionRuleModel;
 use App\Repositories\CollectionRule\BookRule;
 

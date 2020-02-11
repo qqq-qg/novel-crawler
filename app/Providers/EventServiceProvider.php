@@ -3,8 +3,10 @@
 namespace App\Providers;
 
 use App\Events\BooksChangeSourceEvent;
+use App\Events\BooksFetchContentEvent;
 use App\Events\BooksUpdateEvent;
 use App\Listeners\BooksChangeSourceListener;
+use App\Listeners\BooksFetchContentListener;
 use App\Listeners\BooksUpdateListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -23,6 +25,8 @@ class EventServiceProvider extends ServiceProvider
         BooksChangeSourceEvent::class => [BooksChangeSourceListener::class,],
         //更新
         BooksUpdateEvent::class => [BooksUpdateListener::class,],
+        //Fetch Content
+        BooksFetchContentEvent::class => [BooksFetchContentListener::class,],
     ];
 
     /**
@@ -33,7 +37,5 @@ class EventServiceProvider extends ServiceProvider
     public function boot()
     {
         parent::boot();
-
-        //
     }
 }

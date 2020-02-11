@@ -94,6 +94,7 @@ class UpdateBooksJob extends BaseJob
                 $urls[] = $_chapter['from_url'];
             }
         }
+        $this->book->update(['last_chapter_title' => $_chapter['title']]);
         if (empty($urls)) {
             return false;
         }
@@ -104,9 +105,18 @@ class UpdateBooksJob extends BaseJob
         return true;
     }
 
+    /**
+     * @param $data
+     * @param $title
+     * @param $chapterIndex
+     * @return int
+     */
     private function findLastTitleIndex($data, $title, $chapterIndex)
     {
         $index = 0;
+        if (empty($title)) {
+            return $index;
+        }
         $len = count($data);
         for ($i = $len - 1; $i >= 0; $i--) {
             if (trim($data[$i]['title']) == $title) {
