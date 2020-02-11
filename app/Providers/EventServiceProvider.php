@@ -3,11 +3,12 @@
 namespace App\Providers;
 
 use App\Events\BooksChangeSourceEvent;
+use App\Events\BooksUpdateEvent;
 use App\Listeners\BooksChangeSourceListener;
+use App\Listeners\BooksUpdateListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -17,12 +18,11 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        Registered::class => [
-            SendEmailVerificationNotification::class,
-        ],
-        BooksChangeSourceEvent::class => [
-            BooksChangeSourceListener::class
-        ]
+        Registered::class => [SendEmailVerificationNotification::class,],
+        //换源
+        BooksChangeSourceEvent::class => [BooksChangeSourceListener::class,],
+        //更新
+        BooksUpdateEvent::class => [BooksUpdateListener::class,],
     ];
 
     /**

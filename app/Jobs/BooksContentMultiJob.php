@@ -86,7 +86,7 @@ class BooksContentMultiJob extends BaseJob
                 print_r($errorInfo['error']);
             })
             ->start([
-                'maxThread' => 10,
+                'maxThread' => 30,
                 'maxTry' => 1,
             ]);
 
