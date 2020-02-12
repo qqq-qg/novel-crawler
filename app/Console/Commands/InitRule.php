@@ -27,6 +27,8 @@ class InitRule extends Command
         $model3 = $this->rule3();
 
         $model4 = $this->rule4();
+
+        echo "Rule init completed successfully.\n";
     }
 
     private function rule1()

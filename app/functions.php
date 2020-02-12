@@ -535,9 +535,12 @@ function get_real_url($url)
     }
 }
 
-function get_full_url($path, $url)
+function get_full_url($path, $fromUrl)
 {
-    $urlArr = parse_url($url);
+    if (strpos($path, 'http') !== false) {
+        return $path;
+    }
+    $urlArr = parse_url($fromUrl);
     if (strpos($path, $urlArr['host']) === false) {
         if (strpos($path, '/') !== 0) {
             $path = '/' . $path;
