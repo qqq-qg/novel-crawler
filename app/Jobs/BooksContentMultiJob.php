@@ -39,7 +39,7 @@ class BooksContentMultiJob extends BaseJob
     {
         $againUrl = [];
         $ql = QueryList::use(CurlMulti::class);
-        $ql->curlMulti($this->urls, ['verify' => false])
+        $ql->curlMulti($this->urls)
             ->success(function (QueryList $ql, CurlMulti $curl, $r) {
                 try {
                     $qlUrl = $r['info']['url'];
@@ -88,6 +88,11 @@ class BooksContentMultiJob extends BaseJob
             ->start([
                 'maxThread' => 30,
                 'maxTry' => 1,
+                'opt' => [
+                    CURLOPT_TIMEOUT => 10,
+                    CURLOPT_CONNECTTIMEOUT => 1,
+                    CURLOPT_RETURNTRANSFER => true
+                ],
             ]);
 
         if ($this->tryAgain && !empty($againUrl)) {
