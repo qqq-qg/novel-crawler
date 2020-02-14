@@ -18,8 +18,8 @@ class SearcherBookTask extends Command
     private $searchPage = 1;
 
     /**
-     * @var BookRule $bookRule
      * @return bool
+     * @var BookRule $bookRule
      */
 
     public function handle()
@@ -29,35 +29,37 @@ class SearcherBookTask extends Command
 
         $repo = new ChromeSearcherRepository($this->searchPage);
         $data = $repo->search($keyword);
-        $ruleIdArr = [3, 1, 2,];
-        $rules = CollectionRuleModel::getRuleById($ruleIdArr)->keyBy('id');
-        foreach ($ruleIdArr as $ruleId) {
-            $rule = $rules[$ruleId] ?? [];
-            if (empty($rule)) {
-                continue;
-            }
+        if (false === $data) {
+            return $this->tries();
+        }
+        /**
+         * @var CollectionRuleModel[] $rules
+         */
+        $rules = CollectionRuleModel::getAllRules()->keyBy('id');
+        foreach ($rules ?? [] as $rule) {
             /**
              * @var BookRule $bookRule
              */
             $bookRule = unserialize($rule->rule_json);
             foreach ($data as $k => $datum) {
                 if (strpos($datum['link'], $bookRule->host) > -1) {
-                    dispatch(new NewBooksJob($bookRule, $datum['link'], $ruleId));
+                    dispatch(new NewBooksJob($bookRule, $datum['link'], $rule->id));
                     return true;
                 }
             }
         }
-
-        echo 'Search Page ' . $this->searchPage . ' And No Match ...' . PHP_EOL;
-        if ($this->searchPage++ < self::MAX_SEARCH_PAGE) {
-            return $this->tries();
-        }
-        echo 'No More And Stop Search !' . PHP_EOL;
-        return false;
+        //try next page
+        return $this->tries();
     }
 
     public function tries()
     {
-        $this->handle();
+        if ($this->searchPage++ < self::MAX_SEARCH_PAGE) {
+            echo 'Search page ' . $this->searchPage . ' and no match ...' . PHP_EOL;
+            return $this->handle();
+        } else {
+            echo 'No more and stop search !' . PHP_EOL;
+            return false;
+        }
     }
 }

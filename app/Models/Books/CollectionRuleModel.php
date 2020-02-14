@@ -58,7 +58,7 @@ class CollectionRuleModel extends BaseModel
     {
         return self::query()
             ->where('status', CollectionRuleModel::ENABLE_STATUS)
-            ->where('rule_json', 'like', "%{$host}%")
+            ->where('host', $host)
             ->first();
     }
 }
