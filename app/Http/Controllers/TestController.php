@@ -2,13 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\BooksChangeSourceEvent;
-use App\Models\Books\BooksModel;
 
 class TestController extends Controller
 {
     public function index()
     {
-        event(new BooksChangeSourceEvent(new BooksModel()));
+        $pattern = '/<div[\s\S]*?>\s*?(<p[\s\S]*?>[\s\S]*?<\/p>)\s*?<\/div>/';
+        $pattern = '/<div\s*?.*?>\s*(<p\s*?.*?>[\s\S]*?<\/p>\s*?)<\/div>/';
+        $string1 = <<<EOF
+<div>
+  <div class="a">
+    <p>abc</p>
+    <p class="p-c">
+    de
+    f</p></div>
+</div>
+EOF;
+        if (preg_match($pattern, $string1, $arr)) {
+            dd($arr);
+        }
+        dd(false);
     }
 }
