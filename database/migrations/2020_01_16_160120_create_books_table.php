@@ -59,7 +59,8 @@ class CreateBooksTable extends Migration
           `id` int(10) unsigned NOT NULL,
           `content` text COLLATE utf8_unicode_ci NOT NULL COMMENT '小说内容',
           `created_at` timestamp NULL DEFAULT NULL,
-          `updated_at` timestamp NULL DEFAULT NULL
+          `updated_at` timestamp NULL DEFAULT NULL,
+        UNIQUE KEY `id` (`id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
       ");
     }

@@ -2,6 +2,8 @@
 
 namespace App\Console\Commands;
 
+use App\Events\BooksFetchContentEvent;
+use App\Models\Books\BooksModel;
 use Illuminate\Console\Command;
 use Nesk\Puphpeteer\Puppeteer;
 use Nesk\Rialto\Data\JsFunction;
@@ -14,7 +16,13 @@ class Test extends Command
 
     public function handle()
     {
-
+        $booksArr = BooksModel::query()
+            ->where(['status' => BooksModel::ENABLE_STATUS, 'update_status' => BooksModel::UPT_STATUS_LOADING])
+            ->get();
+        foreach ($booksArr as $book) {
+            event(new BooksFetchContentEvent($book->id));
+        }
+        die;
         $puppeteer = new Puppeteer();
         $browser = $puppeteer->launch(['headless' => false]);
 
