@@ -4,18 +4,38 @@ namespace App\Http\Controllers;
 
 
 use App\Events\BooksChangeSourceEvent;
+use App\Events\BooksFetchContentEvent;
+use App\Jobs\BooksContentMultiJob;
+use App\Models\Books\BooksChapterModel;
+use App\Models\Books\BooksContentModel;
 use App\Models\Books\BooksModel;
+use App\Models\Books\CollectionRuleModel;
+use App\Repositories\CollectionRule\BookRule;
+use App\Repositories\Searcher\Plugin\CurlMulti;
+use App\Repositories\Searcher\Plugin\FilterHeader;
+use QL\QueryList;
 
 class TestController extends Controller
 {
     public function index()
     {
+        $bookId = 41;
+        $book = BooksModel::query()
+            ->where(['status' => BooksModel::ENABLE_STATUS, 'update_status' => BooksModel::UPT_STATUS_LOADING])
+            ->where('id', $bookId)
+            ->first();
+        $rule = CollectionRuleModel::query()->where('id', $book->rule_id)->first();
+        $this->bookRule = unserialize($rule->rule_json);
+
+
 //        $this->jobUnserialize();
-        $this->changeSource();
+//        $this->changeSource();
+        $this->fetchContent();
         dd(11);
     }
 
-    private function preg(){
+    private function preg()
+    {
 
         $pattern = '/<div[\s\S]*?>\s*?(<p[\s\S]*?>[\s\S]*?<\/p>)\s*?<\/div>/';
         $pattern = '/<div\s*?.*?>\s*(<p\s*?.*?>[\s\S]*?<\/p>\s*?)<\/div>/';
@@ -38,6 +58,72 @@ EOF;
     {
         $book = BooksModel::query()->where('id', 41)->first();
         event(new BooksChangeSourceEvent($book));
+    }
+
+    /**
+     * @var BookRule $bookRule
+     */
+    private $bookRule;
+
+    private function fetchContent()
+    {
+        event(new BooksFetchContentEvent(41));
+        dd(123);
+
+        $urls = ['https://www.2wxs.com/xstxt/282699/34623439.html'];
+//        $html = QueryList::get($urls[0], [], ['verify' => false,'timeout'=>30])->getHtml();
+//        echo $html;die;
+        $ql = QueryList::use(CurlMulti::class);
+        $ql->curlMulti($urls)
+            ->success(function (QueryList $ql, CurlMulti $curl, $r) {
+                try {
+                    $qlUrl = $r['info']['url'];
+                    $urlHash = md5(trim($qlUrl));
+                    $chapterModel = BooksChapterModel::query()->where('from_hash', $urlHash)->first();
+                    if ($this->bookRule->needEncoding()) {
+                        $ql->use(FilterHeader::class)->filterHeader();
+                        $ql->encoding(BookRule::CHARSET_UTF8);
+                        if (!empty($this->bookRule->replaceTags)) {
+                            $html = $ql->getHtml();
+                            foreach ($this->bookRule->replaceTags ?? [] as $tag) {
+                                $html = preg_replace($tag[0], $tag[1] ?? '', $html);
+                            }
+                            $ql->setHtml($html);
+                        }
+                    }
+                    $data = $ql
+                        ->range($this->bookRule->content->range)
+                        ->rules($this->bookRule->content->rules)
+                        ->query()->getData()->first();
+
+                    $content = trim($data['content'] ?? '');
+                    if (!empty($this->bookRule->splitTag) && strpos($content, $this->bookRule->splitTag) > -1) {
+                        $content = explode($this->bookRule->splitTag, $content)[0];
+                    }
+                    foreach ($this->bookRule->replaceTags ?? [] as $tag) {
+                        $content = preg_replace($tag[0], $tag[1] ?? '', $content);
+                    }
+                    if (!empty($content)) {
+                        $contentModel = BooksContentModel::query()->where('id', $chapterModel->id)->first();
+                        if (!empty($contentModel)) {
+                            $contentModel->update(['content' => $content]);
+                        } else {
+                            BooksContentModel::query()->create(['id' => $chapterModel->id, 'content' => $content]);
+                        }
+                        $chapterModel->saveProcessed();
+                    }
+                } catch (\Exception $e) {
+                    $againUrl[] = $qlUrl;
+                }
+            })
+            ->error(function ($errorInfo, CurlMulti $curl) {
+                echo "Error url:{$errorInfo['info']['url']} \r\n";
+                print_r($errorInfo['error']);
+            })
+            ->start([
+                'maxThread' => 30,
+                'maxTry' => 1,
+            ]);
     }
 
     private function jobUnserialize()

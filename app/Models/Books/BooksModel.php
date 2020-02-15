@@ -34,6 +34,6 @@ class BooksModel extends BaseModel
 {
     protected $table = 'books';
 
-    const UPT_STATUS_LOADING = 'loading';
-    const UPT_STATUS_FINISHED = 'finished';
+    const UPT_STATUS_LOADING = 'LOADING';
+    const UPT_STATUS_FINISHED = 'FINISHED';
 }

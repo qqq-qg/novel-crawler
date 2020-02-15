@@ -22,7 +22,7 @@ class BooksFetchContentListener
         $bookQuery = BooksModel::query()
             ->where(['status' => BooksModel::ENABLE_STATUS, 'update_status' => BooksModel::UPT_STATUS_LOADING]);
         if (!empty($bookId)) {
-            $bookQuery->where('books_id', $bookId);
+            $bookQuery->where('id', $bookId);
         }
         /**
          * @var BooksModel[] $bookArr
@@ -31,7 +31,7 @@ class BooksFetchContentListener
         foreach ($bookArr as $book) {
             $chapterUrlArr = BooksChapterModel::query()->select('from_url')
                 ->where('books_id', $book->id)
-                ->where('is_success', BooksChapterModel::ENABLE_STATUS)
+                ->whereIn('is_success', [BooksChapterModel::DEFAULT_STATUS, BooksChapterModel::DISABLE_STATUS])
                 ->pluck('from_url')->toArray();
             $rule = CollectionRuleModel::query()->where('id', $book->rule_id)->first();
             /**
@@ -40,7 +40,7 @@ class BooksFetchContentListener
             $bookRule = unserialize($rule->rule_json);
             $group = array_chunk($chapterUrlArr, 200);
             foreach ($group as $_urls) {
-                dispatch(new BooksContentMultiJob($bookRule, $_urls))->onQueue('FixContent');
+                dispatch(new BooksContentMultiJob($bookRule, $_urls));
             }
         }
     }

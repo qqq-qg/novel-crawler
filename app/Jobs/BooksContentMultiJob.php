@@ -88,11 +88,6 @@ class BooksContentMultiJob extends BaseJob
             ->start([
                 'maxThread' => 30,
                 'maxTry' => 1,
-                'opt' => [
-                    CURLOPT_TIMEOUT => 10,
-                    CURLOPT_CONNECTTIMEOUT => 1,
-                    CURLOPT_RETURNTRANSFER => true
-                ],
             ]);
 
         if ($this->tryAgain && !empty($againUrl)) {
