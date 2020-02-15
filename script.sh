@@ -1,5 +1,5 @@
 php artisan queue:work
-php artisan queue:work --queue=default,Content
+php artisan queue:work --queue=default,Content --memory=512
 php artisan queue:work --queue=Content
 
 php artisan task:run

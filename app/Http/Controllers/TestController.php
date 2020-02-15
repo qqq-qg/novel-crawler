@@ -5,11 +5,9 @@ namespace App\Http\Controllers;
 
 use App\Events\BooksChangeSourceEvent;
 use App\Events\BooksFetchContentEvent;
-use App\Jobs\BooksContentMultiJob;
 use App\Models\Books\BooksChapterModel;
 use App\Models\Books\BooksContentModel;
 use App\Models\Books\BooksModel;
-use App\Models\Books\CollectionRuleModel;
 use App\Repositories\CollectionRule\BookRule;
 use App\Repositories\Searcher\Plugin\CurlMulti;
 use App\Repositories\Searcher\Plugin\FilterHeader;
@@ -19,18 +17,13 @@ class TestController extends Controller
 {
     public function index()
     {
-        $bookId = 41;
-        $book = BooksModel::query()
-            ->where(['status' => BooksModel::ENABLE_STATUS, 'update_status' => BooksModel::UPT_STATUS_LOADING])
-            ->where('id', $bookId)
-            ->first();
-        $rule = CollectionRuleModel::query()->where('id', $book->rule_id)->first();
-        $this->bookRule = unserialize($rule->rule_json);
-
-
+        $redis = app("redis.connection");
+//        $redis->set('library', 'phpredis');//存储key为library ，值phpredis得记录
+        $val = $redis->get("library");//获取key为library得记录值
+        dd($val);
 //        $this->jobUnserialize();
 //        $this->changeSource();
-        $this->fetchContent();
+//        $this->fetchContent();
         dd(11);
     }
 

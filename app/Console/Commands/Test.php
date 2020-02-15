@@ -16,6 +16,9 @@ class Test extends Command
 
     public function handle()
     {
+        $redis = app("redis.connection");
+        $val = $redis->get("name");
+        dd($val);
         $booksArr = BooksModel::query()
             ->where(['status' => BooksModel::ENABLE_STATUS, 'update_status' => BooksModel::UPT_STATUS_LOADING])
             ->get();
