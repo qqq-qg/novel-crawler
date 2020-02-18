@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Jobs\NewBooksFuzzyJob;
 use App\Jobs\NewBooksJob;
 use App\Models\Books\CollectionRuleModel;
 use App\Repositories\BookRequestRepository;
@@ -73,11 +74,11 @@ class SearcherBookTask extends Command
     {
         foreach ($this->searchResultData as $k => $datum) {
             if (strpos($datum['title'], $this->keyword) > -1) {
-//                $res = $this->tryGetWithoutRule($datum['link']);
-//                if (!empty($res)) {
-                    //todo
+                $res = $this->tryGetWithoutRule($datum['link']);
+                if (!empty($res)) {
+                    dispatch(new NewBooksFuzzyJob($this->keyword, $datum['link']));
                     return true;
-//                }
+                }
             }
         }
         echo 'No result match, task end !!!' . PHP_EOL;
@@ -86,10 +87,16 @@ class SearcherBookTask extends Command
 
     private function tryGetWithoutRule($link)
     {
-        $res = BookRequestRepository::tryPregCategory($link);
+        $chapterList = BookRequestRepository::tryPregCategory($link);
+        if (empty($chapterList)) {
+            return false;
+        }
 
-        $res = BookRequestRepository::tryPregContent($link);
-
-        return false;
+        $chapterInfo = $chapterList[array_rand($chapterList)];
+        $content = BookRequestRepository::tryPregContent($chapterInfo['from_url'] ?? '');
+        if (empty($content)) {
+            return false;
+        }
+        return $chapterList;
     }
 }

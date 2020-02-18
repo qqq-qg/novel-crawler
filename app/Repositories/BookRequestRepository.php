@@ -122,32 +122,52 @@ class BookRequestRepository
 
     public static function tryPregCategory($url)
     {
-//        $rules = [];
-//        $ql = QueryList::get($url, [], ['timeout' => 30]);
-//        $ql->use(FilterHeader::class)->filterHeader();
-//        $ql->encoding(BookRule::CHARSET_UTF8);
-//
-//        file_put_contents('home.html',$ql->getHtml());
-//        dd();
-        $html = file_get_contents('home.html');
-
-        $pregArr = [];
-        foreach ([] as $item){
-
+        $chapterListArr = [];
+        $ql = QueryList::get($url, [], ['timeout' => 30]);
+        $ql->use(FilterHeader::class)->filterHeader();
+        $ql->encoding(BookRule::CHARSET_UTF8);
+        $ulHtmlList = $ql->find('ul')->htmls();
+        foreach ($ulHtmlList ?? [] as $ulHtml) {
+            $temp = QueryList::html($ulHtml)->rules([
+                'title' => ['li>a', 'text'],
+                'from_url' => ['li>a', 'href']
+            ])->queryData();
+            if (is_array($temp) && count($temp) >= 30) {
+                $chapterListArr[] = $temp;
+            }
         }
-        die;
-        $_bookData = [
-            'title' => trim($data['title'] ?? ''),
-            'words_count' => trim($data['words_count'] ?? ''),
-        ];
-        $chapterListUrl = trim($data['chapter_list_url'] ?? $url);
-        $chapterListUrl = get_full_url($chapterListUrl, $url);
-        $_bookData['chapter_list_url'] = $chapterListUrl;
-        return $_bookData;
+        $chapterList = collect($chapterListArr)->sortByDesc(function ($items, $key) {
+            return count($items);
+        })->first();
+
+        foreach ($chapterList as $k => $info) {
+            $chapterList[$k]['title'] = $info['title'] ?? '';
+            $chapterList[$k]['from_url'] = get_full_url($info['from_url'] ?? '', $url);
+        }
+        return $chapterList;
     }
 
-    public static function tryPregContent($url)
+    public static function tryPregContent($url, $ql = null)
     {
-        return false;
+        $contentArr = [];
+        if (is_null($ql)) {
+            $ql = QueryList::get($url, [], ['timeout' => 30]);
+        }
+        $ql->use(FilterHeader::class)->filterHeader();
+        $ql->encoding(BookRule::CHARSET_UTF8);
+        $pHtmlList = $ql->find('div>p')->parent('div')->htmls();
+        foreach ($pHtmlList ?? [] as $pHtml) {
+            $temp = QueryList::html($pHtml)->find('p')->htmls();
+            if (!empty($temp) && count($temp) > 0) {
+                $contentArr[] = $temp->map(function ($val) {
+                    return "<p>{$val}</p>";
+                });
+            }
+        }
+        $content = collect($contentArr)->sortByDesc(function ($items, $key) {
+            return count($items);
+        })->first()->toArray();
+
+        return join("<br/>", $content ?? []);
     }
 }
