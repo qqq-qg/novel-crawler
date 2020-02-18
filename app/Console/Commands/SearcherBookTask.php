@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Jobs\NewBooksJob;
 use App\Models\Books\CollectionRuleModel;
+use App\Repositories\BookRequestRepository;
 use App\Repositories\CollectionRule\BookRule;
 use App\Repositories\Searcher\ChromeSearcherRepository;
 use Illuminate\Console\Command;
@@ -16,6 +17,8 @@ class SearcherBookTask extends Command
 
     const MAX_SEARCH_PAGE = 5;
     private $searchPage = 1;
+    private $searchResultData = [];
+    private $keyword = '';
 
     /**
      * @return bool
@@ -25,13 +28,15 @@ class SearcherBookTask extends Command
     public function handle()
     {
         $title = $this->option('title');
-        $keyword = $title ?? '哈利波特之万界店主';
+        $this->keyword = $title ?? '哈利波特之万界店主';
 
         $repo = new ChromeSearcherRepository($this->searchPage);
-        $data = $repo->search($keyword);
+        $data = $repo->search($this->keyword);
         if (false === $data) {
             return $this->tries();
         }
+        //汇总搜索结果集
+        $this->searchResultData = array_merge($this->searchResultData, $data);
         /**
          * @var CollectionRuleModel[] $rules
          */
@@ -40,9 +45,9 @@ class SearcherBookTask extends Command
             /**
              * @var BookRule $bookRule
              */
-            $bookRule = unserialize($rule->rule_json);
             foreach ($data as $k => $datum) {
-                if (strpos($datum['link'], $bookRule->host) > -1) {
+                if (strpos($datum['link'], $rule->host) > -1) {
+                    $bookRule = unserialize($rule->rule_json);
                     dispatch(new NewBooksJob($bookRule, $datum['link'], $rule->id));
                     return true;
                 }
@@ -59,7 +64,32 @@ class SearcherBookTask extends Command
             return $this->handle();
         } else {
             echo 'No more and stop search !' . PHP_EOL;
-            return false;
+            echo 'Try without rule, pls wait ...' . PHP_EOL;
+            return $this->handelWithoutRule();
         }
+    }
+
+    private function handelWithoutRule()
+    {
+        foreach ($this->searchResultData as $k => $datum) {
+            if (strpos($datum['title'], $this->keyword) > -1) {
+//                $res = $this->tryGetWithoutRule($datum['link']);
+//                if (!empty($res)) {
+                    //todo
+                    return true;
+//                }
+            }
+        }
+        echo 'No result match, task end !!!' . PHP_EOL;
+        return false;
+    }
+
+    private function tryGetWithoutRule($link)
+    {
+        $res = BookRequestRepository::tryPregCategory($link);
+
+        $res = BookRequestRepository::tryPregContent($link);
+
+        return false;
     }
 }

@@ -8,6 +8,7 @@ use App\Events\BooksFetchContentEvent;
 use App\Models\Books\BooksChapterModel;
 use App\Models\Books\BooksContentModel;
 use App\Models\Books\BooksModel;
+use App\Repositories\BookRequestRepository;
 use App\Repositories\CollectionRule\BookRule;
 use App\Repositories\Searcher\Plugin\CurlMulti;
 use App\Repositories\Searcher\Plugin\FilterHeader;
@@ -17,10 +18,13 @@ class TestController extends Controller
 {
     public function index()
     {
-        $redis = app("redis.connection");
+        $link = 'https://www.xbequge.com/17_40024/';
+        $res = BookRequestRepository::tryPregCategory($link);
+        dd($res);
+//        $redis = app("redis.connection");
 //        $redis->set('library', 'phpredis');//存储key为library ，值phpredis得记录
-        $val = $redis->get("library");//获取key为library得记录值
-        dd($val);
+//        $val = $redis->get("library");//获取key为library得记录值
+//        dd($val);
 //        $this->jobUnserialize();
 //        $this->changeSource();
 //        $this->fetchContent();

@@ -119,4 +119,35 @@ class BookRequestRepository
         $randItem['content'] = $content;
         return $randItem;
     }
+
+    public static function tryPregCategory($url)
+    {
+//        $rules = [];
+//        $ql = QueryList::get($url, [], ['timeout' => 30]);
+//        $ql->use(FilterHeader::class)->filterHeader();
+//        $ql->encoding(BookRule::CHARSET_UTF8);
+//
+//        file_put_contents('home.html',$ql->getHtml());
+//        dd();
+        $html = file_get_contents('home.html');
+
+        $pregArr = [];
+        foreach ([] as $item){
+
+        }
+        die;
+        $_bookData = [
+            'title' => trim($data['title'] ?? ''),
+            'words_count' => trim($data['words_count'] ?? ''),
+        ];
+        $chapterListUrl = trim($data['chapter_list_url'] ?? $url);
+        $chapterListUrl = get_full_url($chapterListUrl, $url);
+        $_bookData['chapter_list_url'] = $chapterListUrl;
+        return $_bookData;
+    }
+
+    public static function tryPregContent($url)
+    {
+        return false;
+    }
 }
