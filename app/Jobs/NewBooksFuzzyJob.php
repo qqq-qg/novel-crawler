@@ -6,9 +6,7 @@ use App\Models\Books\BooksChapterModel;
 use App\Models\Books\BooksContentModel;
 use App\Models\Books\BooksModel;
 use App\Repositories\BookRequestRepository;
-use App\Repositories\Searcher\Plugin\CurlMulti;
 use Illuminate\Support\Facades\Log;
-use QL\QueryList;
 
 class NewBooksFuzzyJob extends BaseJob
 {
@@ -102,44 +100,8 @@ class NewBooksFuzzyJob extends BaseJob
         }
         $group = array_chunk($urls, 200);
         foreach ($group as $_urls) {
-            $this->content($_urls);
+            dispatch(new BooksContentFuzzyJob($_urls));
         }
         return true;
-    }
-
-    private function content($urls)
-    {
-        $ql = QueryList::use(CurlMulti::class);
-        $ql->curlMulti($urls)
-            ->success(function (QueryList $ql, CurlMulti $curl, $r) {
-                try {
-                    $qlUrl = $r['info']['url'];
-                    $urlHash = md5(trim($qlUrl));
-                    $chapterModel = BooksChapterModel::query()->where('from_hash', $urlHash)->first();
-                    $content = BookRequestRepository::tryPregContent('', $ql);
-                    if (empty($content)) {
-                        return false;
-                    }
-                    if (!empty($content)) {
-                        $contentModel = BooksContentModel::query()->where('id', $chapterModel->id)->first();
-                        if (!empty($contentModel)) {
-                            $contentModel->update(['content' => $content]);
-                        } else {
-                            BooksContentModel::query()->create(['id' => $chapterModel->id, 'content' => $content]);
-                        }
-                        $chapterModel->saveProcessed();
-                    }
-                } catch (\Exception $e) {
-                    $againUrl[] = $qlUrl;
-                }
-            })
-            ->error(function ($errorInfo, CurlMulti $curl) {
-                echo "Error url:{$errorInfo['info']['url']} \r\n";
-                print_r($errorInfo['error']);
-            })
-            ->start([
-                'maxThread' => 30,
-                'maxTry' => 1,
-            ]);
     }
 }
