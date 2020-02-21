@@ -12,16 +12,33 @@ use App\Repositories\CollectionRule\BookRule;
 use App\Repositories\Searcher\Plugin\CurlMulti;
 use App\Repositories\Searcher\Plugin\FilterHeader;
 use App\Repositories\TryAnalysis\TryAnalysisCategory;
+use App\Repositories\TryAnalysis\TryAnalysisContent;
+use DOMElement;
 use QL\QueryList;
 
 class TestController extends Controller
 {
     public function index()
     {
-        $ql = QueryList::getInstance()->setHtml(file_get_contents('t.html'));
-        $resp = new TryAnalysisCategory('https://www.biqukan.com/75_75307/', $ql);
-        $res = $resp->handle();
-        dd($res);
+
+//        $chapterList = (new TryAnalysisCategory('https://www.biqukan.com/75_75307/'))->handle();
+//        dd($chapterList);
+        $content = (new TryAnalysisContent('https://www.biqukan.com/75_75307/519415669.html'))->handle();
+        if (empty($content)) {
+            return false;
+        }
+        dd($content);
+        $ql = QueryList::html(file_get_contents('t.html'));
+        $rootDivHtmlArr = $ql->find('body')->children('div')->map(function ($item) {
+            return $item->htmlOuter();
+        });
+        $leafArr = [];
+        foreach ($rootDivHtmlArr as $rootDivHtml) {
+            $tmp = $this->findDivLeaf($rootDivHtml);
+            $leafArr = array_merge($leafArr, $tmp);
+        }
+        dd($leafArr);
+        die;
 //        $link = 'https://www.biqukan.com/75_75307/';
 //        $res = BookRequestRepository::tryPregCategory($link);
 //        dd($res);
@@ -33,6 +50,22 @@ class TestController extends Controller
 //        $this->changeSource();
 //        $this->fetchContent();
         dd(11);
+    }
+
+    private function findDivLeaf($divHtml)
+    {
+        $leaf = [];
+        $subArr = QueryList::html($divHtml)->find('div:eq(0)')->children('div')->map(function ($item) {
+            return $item->htmlOuter();
+        });
+        if (count($subArr) === 0) {
+            return [$divHtml];
+        }
+        foreach ($subArr as $_sub) {
+            $tmp = $this->findDivLeaf($_sub);
+            $leaf = array_merge($leaf, $tmp);
+        }
+        return $leaf;
     }
 
     private function preg()

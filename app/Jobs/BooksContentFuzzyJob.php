@@ -4,8 +4,8 @@ namespace App\Jobs;
 
 use App\Models\Books\BooksChapterModel;
 use App\Models\Books\BooksContentModel;
-use App\Repositories\BookRequestRepository;
 use App\Repositories\Searcher\Plugin\CurlMulti;
+use App\Repositories\TryAnalysis\TryAnalysisContent;
 use QL\QueryList;
 
 /**
@@ -37,7 +37,7 @@ class BooksContentFuzzyJob extends BaseJob
                     $qlUrl = $r['info']['url'];
                     $urlHash = md5(trim($qlUrl));
                     $chapterModel = BooksChapterModel::query()->where('from_hash', $urlHash)->first();
-                    $content = BookRequestRepository::tryPregContent('', $ql);
+                    $content = (new TryAnalysisContent('', $ql))->handle();
                     if (empty($content)) {
                         return false;
                     }

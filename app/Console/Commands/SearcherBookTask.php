@@ -39,7 +39,6 @@ class SearcherBookTask extends Command
         }
         //汇总搜索结果集
         $this->searchResultData = array_merge($this->searchResultData, $data);
-        info('$this->searchResultData', $this->searchResultData);
         /**
          * @var CollectionRuleModel[] $rules
          */
@@ -74,6 +73,7 @@ class SearcherBookTask extends Command
 
     private function handelWithoutRule()
     {
+        info('$this->searchResultData', $this->searchResultData);
         foreach ($this->searchResultData as $k => $datum) {
             if (strpos($datum['title'], $this->keyword) > -1) {
                 $res = $this->tryGetWithoutRule($datum['link']);
