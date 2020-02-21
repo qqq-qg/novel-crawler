@@ -8,19 +8,23 @@ use App\Events\BooksFetchContentEvent;
 use App\Models\Books\BooksChapterModel;
 use App\Models\Books\BooksContentModel;
 use App\Models\Books\BooksModel;
-use App\Repositories\BookRequestRepository;
 use App\Repositories\CollectionRule\BookRule;
 use App\Repositories\Searcher\Plugin\CurlMulti;
 use App\Repositories\Searcher\Plugin\FilterHeader;
+use App\Repositories\TryAnalysis\TryAnalysisCategory;
 use QL\QueryList;
 
 class TestController extends Controller
 {
     public function index()
     {
-        $link = 'https://www.xbequge.com/17_40024/';
-        $res = BookRequestRepository::tryPregCategory($link);
+        $ql = QueryList::getInstance()->setHtml(file_get_contents('t.html'));
+        $resp = new TryAnalysisCategory('https://www.biqukan.com/75_75307/', $ql);
+        $res = $resp->handle();
         dd($res);
+//        $link = 'https://www.biqukan.com/75_75307/';
+//        $res = BookRequestRepository::tryPregCategory($link);
+//        dd($res);
 //        $redis = app("redis.connection");
 //        $redis->set('library', 'phpredis');//存储key为library ，值phpredis得记录
 //        $val = $redis->get("library");//获取key为library得记录值

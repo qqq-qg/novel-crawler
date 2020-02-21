@@ -5,9 +5,10 @@ namespace App\Console\Commands;
 use App\Jobs\NewBooksFuzzyJob;
 use App\Jobs\NewBooksJob;
 use App\Models\Books\CollectionRuleModel;
-use App\Repositories\BookRequestRepository;
 use App\Repositories\CollectionRule\BookRule;
 use App\Repositories\Searcher\ChromeSearcherRepository;
+use App\Repositories\TryAnalysis\TryAnalysisCategory;
+use App\Repositories\TryAnalysis\TryAnalysisContent;
 use Illuminate\Console\Command;
 
 class SearcherBookTask extends Command
@@ -16,7 +17,7 @@ class SearcherBookTask extends Command
 
     protected $description = '搜索任务，启动队列';
 
-    const MAX_SEARCH_PAGE = 5;
+    const MAX_SEARCH_PAGE = 2;
     private $searchPage = 1;
     private $searchResultData = [];
     private $keyword = '';
@@ -29,7 +30,7 @@ class SearcherBookTask extends Command
     public function handle()
     {
         $title = $this->option('title');
-        $this->keyword = $title ?? '哈利波特之万界店主';
+        $this->keyword = $title ?? '哈利波特之眠龙勿扰';
 
         $repo = new ChromeSearcherRepository($this->searchPage);
         $data = $repo->search($this->keyword);
@@ -38,6 +39,7 @@ class SearcherBookTask extends Command
         }
         //汇总搜索结果集
         $this->searchResultData = array_merge($this->searchResultData, $data);
+        info('$this->searchResultData', $this->searchResultData);
         /**
          * @var CollectionRuleModel[] $rules
          */
@@ -60,8 +62,8 @@ class SearcherBookTask extends Command
 
     public function tries()
     {
-        if ($this->searchPage++ < self::MAX_SEARCH_PAGE) {
-            echo 'Search page ' . $this->searchPage . ' and no match ...' . PHP_EOL;
+        echo 'Search page ' . $this->searchPage . ' and no match ...' . PHP_EOL;
+        if ($this->searchPage++ <= self::MAX_SEARCH_PAGE) {
             return $this->handle();
         } else {
             echo 'No more and stop search !' . PHP_EOL;
@@ -87,13 +89,13 @@ class SearcherBookTask extends Command
 
     private function tryGetWithoutRule($link)
     {
-        $chapterList = BookRequestRepository::tryPregCategory($link);
+        $chapterList = (new TryAnalysisCategory($link))->handle();
         if (empty($chapterList)) {
             return false;
         }
 
         $chapterInfo = $chapterList[array_rand($chapterList)];
-        $content = BookRequestRepository::tryPregContent($chapterInfo['from_url'] ?? '');
+        $content = (new TryAnalysisContent($chapterInfo['from_url']))->handle();
         if (empty($content)) {
             return false;
         }

@@ -5,7 +5,7 @@ namespace App\Jobs;
 use App\Models\Books\BooksChapterModel;
 use App\Models\Books\BooksContentModel;
 use App\Models\Books\BooksModel;
-use App\Repositories\BookRequestRepository;
+use App\Repositories\TryAnalysis\TryAnalysisCategory;
 use Illuminate\Support\Facades\Log;
 
 class NewBooksFuzzyJob extends BaseJob
@@ -50,19 +50,15 @@ class NewBooksFuzzyJob extends BaseJob
             $bookModel = BooksModel::query()->create($_bookData);
         }
 
-        $chapterList = BookRequestRepository::tryPregCategory($this->url);
+        $chapterList = (new TryAnalysisCategory($this->url))->handle();
         if (empty($chapterList)) {
             return false;
         }
-        return $this->chapter($bookModel);
+        return $this->chapter($bookModel, $chapterList);
     }
 
-    private function chapter($bookModel)
+    private function chapter($bookModel, $chapterList)
     {
-        $chapterList = BookRequestRepository::tryPregCategory($this->url);
-        if (empty($chapterList)) {
-            return false;
-        }
         $urls = [];
 
         $finishedUrlArr = BooksChapterModel::query()
