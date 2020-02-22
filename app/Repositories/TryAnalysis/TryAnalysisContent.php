@@ -21,51 +21,37 @@ class TryAnalysisContent
 
     public function handle()
     {
-        $contentArr = [];
-//        if (is_null($this->ql)) {
-//            $this->ql = QueryList::get($this->url, [], ['timeout' => 30]);
-//            $this->ql->use(FilterHeader::class)->filterHeader();
-//            $this->ql->encoding(BookRule::CHARSET_UTF8);
-//        }
-        $this->ql = QueryList::html(file_get_contents('t.html'));
-        $rootDivHtmlArr = $this->ql->find('body')->children('div')->map(function ($item) {
-            return $item->htmlOuter();
-        });
-        $leafArr = [];
-        foreach ($rootDivHtmlArr as $rootDivHtml) {
-            $tmp = $this->findDivLeaf($rootDivHtml);
-            $leafArr = array_merge($leafArr, $tmp);
-        }
-        //刷选 $leafArr
-
-        dd($leafArr);
-        //
-        $pHtmlList = $this->ql->find('div>p')->parent('div')->htmls();
-        foreach ($pHtmlList ?? [] as $pHtml) {
-            $temp = QueryList::html($pHtml)->find('p')->htmls();
-            if (!empty($temp) && count($temp) > 0) {
-                $contentArr[] = $temp->map(function ($val) {
-                    return "<p>{$val}</p>";
-                });
+        try {
+            if (is_null($this->ql)) {
+                $this->ql = QueryList::get($this->url, [], ['timeout' => 30]);
+                $this->ql->use(FilterHeader::class)->filterHeader();
+                $this->ql->encoding(BookRule::CHARSET_UTF8);
             }
+            $rootDivHtmlArr = $this->ql->find('body')->children('div')
+                ->map(function ($item) {
+                    return $item->htmlOuter();
+                });
+            $leafArr = [];
+            foreach ($rootDivHtmlArr as $rootDivHtml) {
+                $tmp = $this->findDivLeaf($rootDivHtml);
+                $leafArr = array_merge($leafArr, $tmp);
+            }
+            return $this->autoChoose($leafArr);
+        } catch (\Exception|\Throwable $e) {
+            info('Exception of TryAnalysisContent', [$e->getMessage()]);
         }
-        if (empty($contentArr)) {
-            return '';
-        }
-        $content = collect($contentArr)->sortByDesc(function ($items, $key) {
-            return count($items);
-        })->first()->toArray();
-
-        return join("<br/>", $content ?? []);
+        return '';
     }
-
 
     private function findDivLeaf($divHtml)
     {
         $leaf = [];
-        $subArr = QueryList::html($divHtml)->find('div:eq(0)')->children('div')->map(function ($item) {
-            return $item->htmlOuter();
-        });
+        $subArr = QueryList::html($divHtml)
+            ->find('div:eq(0)')
+            ->children('div')
+            ->map(function ($item) {
+                return $item->htmlOuter();
+            });
         if (count($subArr) === 0) {
             return [$divHtml];
         }
@@ -74,5 +60,29 @@ class TryAnalysisContent
             $leaf = array_merge($leaf, $tmp);
         }
         return $leaf;
+    }
+
+    private function autoChoose($leafArr)
+    {
+        foreach ($leafArr as $divHtml) {
+            $pDomArr = QueryList::html($divHtml)->find('p')
+                ->map(function ($item) {
+                    return $item->htmlOuter();
+                });
+            if (!empty($pDomArr) && count($pDomArr) >= 5) {
+                return join("", $pDomArr->toArray());
+            }
+
+            $brDomArr = QueryList::html($divHtml)->find('br')->htmls();
+            if (!empty($brDomArr) && count($brDomArr) >= 5) {
+                return $divHtml;
+            }
+
+            $chWords = intval((strlen($divHtml) - mb_strlen($divHtml, "utf8")) / 2);
+            if ($chWords >= 200) {
+                return $divHtml;
+            }
+        }
+        return '';
     }
 }

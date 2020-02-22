@@ -519,13 +519,22 @@ function is_time_out($message)
     return false;
 }
 
+/**
+ * 获取真正地址
+ * @param $url
+ * @return mixed
+ */
 function get_real_url($url)
 {
-    //得到百度跳转的真正地址
+    stream_context_set_default([
+        'ssl' => [
+            'verify_peer' => false,
+            'verify_peer_name' => false,
+        ],
+    ]);
     $header = get_headers($url, 1);
     if (strpos($header[0], '301') || strpos($header[0], '302')) {
         if (is_array($header['Location'])) {
-            //return $header['Location'][count($header['Location'])-1];
             return $header['Location'][0];
         } else {
             return $header['Location'];
@@ -535,6 +544,12 @@ function get_real_url($url)
     }
 }
 
+/**
+ * 获取全路径
+ * @param $path
+ * @param $fromUrl
+ * @return string
+ */
 function get_full_url($path, $fromUrl)
 {
     if (strpos($path, 'http') !== false) {

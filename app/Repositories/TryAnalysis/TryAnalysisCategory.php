@@ -51,16 +51,20 @@ class TryAnalysisCategory
 
     public function handle()
     {
-        if (is_null($this->ql)) {
-            $this->ql = QueryList::get($this->url, [], ['timeout' => 30]);
-            $this->ql->use(FilterHeader::class)->filterHeader();
-            $this->ql->encoding(BookRule::CHARSET_UTF8);
-        }
-        foreach (self::$categoryRules as $categoryRule) {
-            $res = call_user_func_array([$this, $categoryRule['type']], ['categoryRule' => $categoryRule]);
-            if (!empty($res)) {
-                return $res;
+        try {
+            if (is_null($this->ql)) {
+                $this->ql = QueryList::get($this->url, [], ['timeout' => 30]);
+                $this->ql->use(FilterHeader::class)->filterHeader();
+                $this->ql->encoding(BookRule::CHARSET_UTF8);
             }
+            foreach (self::$categoryRules as $categoryRule) {
+                $res = call_user_func_array([$this, $categoryRule['type']], ['categoryRule' => $categoryRule]);
+                if (!empty($res)) {
+                    return $res;
+                }
+            }
+        } catch (\Exception|\Throwable $e) {
+            info('Exception of TryAnalysisCategory', [$e->getMessage()]);
         }
         return [];
     }

@@ -5,15 +5,14 @@ namespace App\Http\Controllers;
 
 use App\Events\BooksChangeSourceEvent;
 use App\Events\BooksFetchContentEvent;
+use App\Jobs\BooksContentFuzzyJob;
 use App\Models\Books\BooksChapterModel;
 use App\Models\Books\BooksContentModel;
 use App\Models\Books\BooksModel;
 use App\Repositories\CollectionRule\BookRule;
 use App\Repositories\Searcher\Plugin\CurlMulti;
 use App\Repositories\Searcher\Plugin\FilterHeader;
-use App\Repositories\TryAnalysis\TryAnalysisCategory;
 use App\Repositories\TryAnalysis\TryAnalysisContent;
-use DOMElement;
 use QL\QueryList;
 
 class TestController extends Controller
@@ -21,24 +20,19 @@ class TestController extends Controller
     public function index()
     {
 
-//        $chapterList = (new TryAnalysisCategory('https://www.biqukan.com/75_75307/'))->handle();
-//        dd($chapterList);
-        $content = (new TryAnalysisContent('https://www.biqukan.com/75_75307/519415669.html'))->handle();
-        if (empty($content)) {
-            return false;
+        $urls = BooksChapterModel::query()->where('books_id', 41)->pluck('from_url')->toArray();
+        foreach (array_chunk($urls, 200) as $_urls) {
+            dispatch(new BooksContentFuzzyJob($_urls));
         }
+        dd(111);
+
+//        $url = 'http://www.biquge.info/34_34863/';
+//        $a = (new TryAnalysisCategory($url))->handle();
+//        dd($a);
+
+        $content = (new TryAnalysisContent('http://www.biquge.info/12930814.html'))->handle();
         dd($content);
-        $ql = QueryList::html(file_get_contents('t.html'));
-        $rootDivHtmlArr = $ql->find('body')->children('div')->map(function ($item) {
-            return $item->htmlOuter();
-        });
-        $leafArr = [];
-        foreach ($rootDivHtmlArr as $rootDivHtml) {
-            $tmp = $this->findDivLeaf($rootDivHtml);
-            $leafArr = array_merge($leafArr, $tmp);
-        }
-        dd($leafArr);
-        die;
+
 //        $link = 'https://www.biqukan.com/75_75307/';
 //        $res = BookRequestRepository::tryPregCategory($link);
 //        dd($res);
@@ -52,21 +46,6 @@ class TestController extends Controller
         dd(11);
     }
 
-    private function findDivLeaf($divHtml)
-    {
-        $leaf = [];
-        $subArr = QueryList::html($divHtml)->find('div:eq(0)')->children('div')->map(function ($item) {
-            return $item->htmlOuter();
-        });
-        if (count($subArr) === 0) {
-            return [$divHtml];
-        }
-        foreach ($subArr as $_sub) {
-            $tmp = $this->findDivLeaf($_sub);
-            $leaf = array_merge($leaf, $tmp);
-        }
-        return $leaf;
-    }
 
     private function preg()
     {

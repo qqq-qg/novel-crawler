@@ -69,7 +69,11 @@ class ChromeSearcherRepository implements SearcherRepositoryInterface
         }
         $data = $result->all();
         foreach ($data as $k => $datum) {
-            $data[$k]['link'] = get_real_url($datum['link']);
+            try {
+                $data[$k]['link'] = get_real_url($datum['link']);
+            } catch (\Exception|\Throwable $e) {
+
+            }
         }
         return $data;
     }

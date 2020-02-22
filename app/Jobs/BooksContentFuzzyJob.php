@@ -4,7 +4,9 @@ namespace App\Jobs;
 
 use App\Models\Books\BooksChapterModel;
 use App\Models\Books\BooksContentModel;
+use App\Repositories\CollectionRule\BookRule;
 use App\Repositories\Searcher\Plugin\CurlMulti;
+use App\Repositories\Searcher\Plugin\FilterHeader;
 use App\Repositories\TryAnalysis\TryAnalysisContent;
 use QL\QueryList;
 
@@ -34,6 +36,8 @@ class BooksContentFuzzyJob extends BaseJob
         $ql->curlMulti($this->urls)
             ->success(function (QueryList $ql, CurlMulti $curl, $r) {
                 try {
+                    $ql->use(FilterHeader::class)->filterHeader();
+                    $ql->encoding(BookRule::CHARSET_UTF8);
                     $qlUrl = $r['info']['url'];
                     $urlHash = md5(trim($qlUrl));
                     $chapterModel = BooksChapterModel::query()->where('from_hash', $urlHash)->first();
