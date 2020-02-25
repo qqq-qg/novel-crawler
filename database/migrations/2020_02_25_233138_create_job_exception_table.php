@@ -5,14 +5,14 @@ use Illuminate\Database\Schema\Blueprint;
 
 class CreateJobExceptionTable extends Migration
 {
-	/**
-	 * Run the migrations.
-	 *
-	 * @return void
-	 */
-	public function up()
-	{
-		Schema::connection('mysql')->create('job_exception', function(Blueprint $table) {
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::connection('mysql')->create('job_exception', function(Blueprint $table) {
 			$table->bigInteger('id', true)->unsigned();
 			$table->string('job')->default('')->comment('job类');
 			$table->integer('execution_time')->default(0)->comment('执行时间');
@@ -23,15 +23,15 @@ class CreateJobExceptionTable extends Migration
 			$table->timestamps();
 		});
 
-	}
+    }
 
-	/**
-	 * Reverse the migrations.
-	 *
-	 * @return void
-	 */
-	public function down()
-	{
-		Schema::connection('mysql')->drop('job_exception');
-	}
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::connection('mysql')->drop('job_exception');
+    }
 }

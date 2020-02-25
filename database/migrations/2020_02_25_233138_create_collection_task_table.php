@@ -5,14 +5,14 @@ use Illuminate\Database\Schema\Blueprint;
 
 class CreateCollectionTaskTable extends Migration
 {
-	/**
-	 * Run the migrations.
-	 *
-	 * @return void
-	 */
-	public function up()
-	{
-		Schema::connection('mysql')->create('collection_task', function(Blueprint $table) {
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::connection('mysql')->create('collection_task', function(Blueprint $table) {
 			$table->bigInteger('id', true)->unsigned();
 			$table->string('title')->default('')->comment('标题');
 			$table->string('from_url')->default('')->comment('采集链接');
@@ -26,15 +26,15 @@ class CreateCollectionTaskTable extends Migration
 			$table->timestamps();
 		});
 
-	}
+    }
 
-	/**
-	 * Reverse the migrations.
-	 *
-	 * @return void
-	 */
-	public function down()
-	{
-		Schema::connection('mysql')->drop('collection_task');
-	}
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::connection('mysql')->drop('collection_task');
+    }
 }

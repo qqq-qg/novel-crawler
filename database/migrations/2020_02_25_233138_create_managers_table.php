@@ -5,14 +5,14 @@ use Illuminate\Database\Schema\Blueprint;
 
 class CreateManagersTable extends Migration
 {
-	/**
-	 * Run the migrations.
-	 *
-	 * @return void
-	 */
-	public function up()
-	{
-		Schema::connection('mysql')->create('managers', function(Blueprint $table) {
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::connection('mysql')->create('managers', function(Blueprint $table) {
 			$table->increments('id');
 			$table->string('username', 50)->comment('用户名');
 			$table->string('password', 60)->comment('密码');
@@ -25,15 +25,15 @@ class CreateManagersTable extends Migration
 			$table->timestamps();
 		});
 
-	}
+    }
 
-	/**
-	 * Reverse the migrations.
-	 *
-	 * @return void
-	 */
-	public function down()
-	{
-		Schema::connection('mysql')->drop('managers');
-	}
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::connection('mysql')->drop('managers');
+    }
 }

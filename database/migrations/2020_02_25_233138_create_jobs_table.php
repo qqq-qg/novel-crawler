@@ -5,14 +5,14 @@ use Illuminate\Database\Schema\Blueprint;
 
 class CreateJobsTable extends Migration
 {
-	/**
-	 * Run the migrations.
-	 *
-	 * @return void
-	 */
-	public function up()
-	{
-		Schema::connection('mysql')->create('jobs', function(Blueprint $table) {
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::connection('mysql')->create('jobs', function(Blueprint $table) {
 			$table->bigInteger('id', true)->unsigned();
 			$table->string('queue')->index();
 			$table->text('payload');
@@ -22,15 +22,15 @@ class CreateJobsTable extends Migration
 			$table->integer('created_at')->unsigned();
 		});
 
-	}
+    }
 
-	/**
-	 * Reverse the migrations.
-	 *
-	 * @return void
-	 */
-	public function down()
-	{
-		Schema::connection('mysql')->drop('jobs');
-	}
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::connection('mysql')->drop('jobs');
+    }
 }

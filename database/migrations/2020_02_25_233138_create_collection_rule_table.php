@@ -5,14 +5,14 @@ use Illuminate\Database\Schema\Blueprint;
 
 class CreateCollectionRuleTable extends Migration
 {
-	/**
-	 * Run the migrations.
-	 *
-	 * @return void
-	 */
-	public function up()
-	{
-		Schema::connection('mysql')->create('collection_rule', function(Blueprint $table) {
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::connection('mysql')->create('collection_rule', function(Blueprint $table) {
 			$table->bigInteger('id', true)->unsigned();
 			$table->string('title')->default('')->comment('标题');
 			$table->string('host', 64)->default('')->comment('域名');
@@ -21,15 +21,15 @@ class CreateCollectionRuleTable extends Migration
 			$table->timestamps();
 		});
 
-	}
+    }
 
-	/**
-	 * Reverse the migrations.
-	 *
-	 * @return void
-	 */
-	public function down()
-	{
-		Schema::connection('mysql')->drop('collection_rule');
-	}
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::connection('mysql')->drop('collection_rule');
+    }
 }

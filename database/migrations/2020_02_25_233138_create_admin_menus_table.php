@@ -5,14 +5,14 @@ use Illuminate\Database\Schema\Blueprint;
 
 class CreateAdminMenusTable extends Migration
 {
-	/**
-	 * Run the migrations.
-	 *
-	 * @return void
-	 */
-	public function up()
-	{
-		Schema::connection('mysql')->create('admin_menus', function(Blueprint $table) {
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::connection('mysql')->create('admin_menus', function(Blueprint $table) {
 			$table->increments('id');
 			$table->smallInteger('pid')->unsigned()->comment('父ID');
 			$table->string('name')->comment('菜单名称');
@@ -23,15 +23,15 @@ class CreateAdminMenusTable extends Migration
 			$table->boolean('items')->comment('子分类数量');
 		});
 
-	}
+    }
 
-	/**
-	 * Reverse the migrations.
-	 *
-	 * @return void
-	 */
-	public function down()
-	{
-		Schema::connection('mysql')->drop('admin_menus');
-	}
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::connection('mysql')->drop('admin_menus');
+    }
 }

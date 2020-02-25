@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class $CLASS$ extends Migration
+class CreateSettingsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,7 +12,12 @@ class $CLASS$ extends Migration
      */
     public function up()
     {
-        $UP$
+        Schema::connection('mysql')->create('settings', function(Blueprint $table) {
+			$table->string('item')->unique();
+			$table->string('name');
+			$table->string('value');
+		});
+
     }
 
     /**
@@ -22,6 +27,6 @@ class $CLASS$ extends Migration
      */
     public function down()
     {
-        $DOWN$
+        Schema::connection('mysql')->drop('settings');
     }
 }
