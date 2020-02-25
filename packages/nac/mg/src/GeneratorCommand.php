@@ -193,7 +193,7 @@ class GeneratorCommand extends Command
     protected function generate()
     {
         if ($this->fields) {
-            parent::fireFile();
+            $this->fireFile();
             if ($this->log) {
                 $file = $this->datePrefix . '_' . $this->migrationName;
                 $this->repository->log($file, $this->batch);
@@ -219,16 +219,10 @@ class GeneratorCommand extends Command
      */
     protected function getFileGenerationPath()
     {
-        $path = $this->getPathByOptionOrConfig('path', 'migration_target_path');
+        $path = base_path() . '/database/migrations';
         $migrationName = str_replace('/', '_', $this->migrationName);
         $fileName = $this->getDatePrefix() . '_' . $migrationName . '.php';
         return "{$path}/{$fileName}";
-    }
-
-    protected function getPathByOptionOrConfig($option, $configName)
-    {
-        if ($path = $this->option($option)) return $path;
-        return config("generators.config.{$configName}");
     }
 
     /**
@@ -272,7 +266,7 @@ class GeneratorCommand extends Command
      */
     protected function getTemplatePath()
     {
-        return $this->getPathByOptionOrConfig('templatePath', 'migration_template_path');
+        return __DIR__ . '/templates/migration.txt';
     }
 
     protected function askYn($question)
