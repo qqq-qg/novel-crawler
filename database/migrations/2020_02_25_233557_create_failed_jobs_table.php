@@ -13,13 +13,13 @@ class CreateFailedJobsTable extends Migration
     public function up()
     {
         Schema::connection('mysql')->create('failed_jobs', function(Blueprint $table) {
-			$table->bigInteger('id', true)->unsigned();
-			$table->text('connection', 65535);
-			$table->text('queue', 65535);
-			$table->text('payload');
-			$table->text('exception');
-			$table->timestamp('failed_at')->default(DB::raw('CURRENT_TIMESTAMP'));
-		});
+            $table->bigInteger('id', true)->unsigned();
+            $table->text('connection', 65535);
+            $table->text('queue', 65535);
+            $table->text('payload');
+            $table->text('exception');
+            $table->timestamp('failed_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+        });
 
     }
 

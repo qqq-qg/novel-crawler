@@ -47,6 +47,6 @@ abstract class AbsTable {
      */
     protected function replaceFieldsWith($schema, $template)
     {
-        return str_replace('$FIELDS$', implode(PHP_EOL."\t\t\t", $schema), $template);
+        return str_replace('$FIELDS$', implode(PHP_EOL."            ", $schema), $template);
     }
 }
