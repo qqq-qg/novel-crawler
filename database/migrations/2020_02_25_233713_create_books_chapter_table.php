@@ -12,7 +12,7 @@ class CreateBooksChapterTable extends Migration
      */
     public function up()
     {
-        Schema::connection('mysql')->create('books_chapter', function(Blueprint $table) {
+        Schema::connection('mysql')->create('books_chapter', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('books_id')->unsigned()->default(0)->comment('ID');
             $table->integer('chapter_index')->unsigned()->default(0)->comment('序号');

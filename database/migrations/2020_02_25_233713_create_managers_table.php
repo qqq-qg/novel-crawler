@@ -12,7 +12,7 @@ class CreateManagersTable extends Migration
      */
     public function up()
     {
-        Schema::connection('mysql')->create('managers', function(Blueprint $table) {
+        Schema::connection('mysql')->create('managers', function (Blueprint $table) {
             $table->increments('id');
             $table->string('username', 50)->comment('用户名');
             $table->string('password', 60)->comment('密码');

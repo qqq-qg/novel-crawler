@@ -12,7 +12,7 @@ class CreateBooksTable extends Migration
      */
     public function up()
     {
-        Schema::connection('mysql')->create('books', function(Blueprint $table) {
+        Schema::connection('mysql')->create('books', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title')->default('')->comment('标题');
             $table->string('category')->default('')->comment('分类');

@@ -12,7 +12,7 @@ class CreateAdminMenusTable extends Migration
      */
     public function up()
     {
-        Schema::connection('mysql')->create('admin_menus', function(Blueprint $table) {
+        Schema::connection('mysql')->create('admin_menus', function (Blueprint $table) {
             $table->increments('id');
             $table->smallInteger('pid')->unsigned()->comment('父ID');
             $table->string('name')->comment('菜单名称');

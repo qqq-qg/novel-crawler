@@ -12,7 +12,7 @@ class CreateSettingsTable extends Migration
      */
     public function up()
     {
-        Schema::connection('mysql')->create('settings', function(Blueprint $table) {
+        Schema::connection('mysql')->create('settings', function (Blueprint $table) {
             $table->string('item')->unique();
             $table->string('name');
             $table->string('value');

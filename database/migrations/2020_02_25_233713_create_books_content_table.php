@@ -12,7 +12,7 @@ class CreateBooksContentTable extends Migration
      */
     public function up()
     {
-        Schema::connection('mysql')->create('books_content', function(Blueprint $table) {
+        Schema::connection('mysql')->create('books_content', function (Blueprint $table) {
             $table->bigInteger('id')->unsigned()->index('id');
             $table->text('content', 65535)->comment('小说内容');
             $table->timestamps();

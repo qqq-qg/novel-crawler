@@ -12,7 +12,7 @@ class CreateCategoryTable extends Migration
      */
     public function up()
     {
-        Schema::connection('mysql')->create('category', function(Blueprint $table) {
+        Schema::connection('mysql')->create('category', function (Blueprint $table) {
             $table->bigInteger('id', true)->unsigned();
             $table->string('name', 64)->default('')->comment('分类名称');
             $table->integer('listorder')->default(99)->comment('排序，数字越小越前');
