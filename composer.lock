@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b9de8a92b4547a0f2dcd07d75e636f7c",
+    "content-hash": "96cc8fcda41111141841f2ab9b802689",
     "packages": [
         {
             "name": "ares333/php-curl",
@@ -2015,6 +2015,39 @@
                 "psr-3"
             ],
             "time": "2019-12-20T14:22:59+00:00"
+        },
+        {
+            "name": "nac/mg",
+            "version": "1.1",
+            "source": {
+                "type": "git",
+                "url": "ssh://gogs@106.12.127.29:22/git/laravel6-migrations-generator.git",
+                "reference": "aa2aa0a7ef567b658afa0fc538dae9c979a4aa14"
+            },
+            "dist": {
+                "type": "tar",
+                "url": "https://api.nacrane.top/packages/dist/nac/mg/nac-mg-1.1-ed7bf1.tar",
+                "reference": "aa2aa0a7ef567b658afa0fc538dae9c979a4aa14",
+                "shasum": "ea490e67cc3c30bba268e47aa0c2c0144b61c445"
+            },
+            "require": {
+                "illuminate/support": "^6.12.0"
+            },
+            "type": "project",
+            "autoload": {
+                "psr-4": {
+                    "Nac\\Mg\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "The Laravel Framework.",
+            "keywords": [
+                "laravel",
+                "migrate"
+            ],
+            "time": "2020-02-26T01:15:52+00:00"
         },
         {
             "name": "nesbot/carbon",
