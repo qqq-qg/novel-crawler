@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Books\BooksChapterModel;
+use App\Models\Books\BooksContentFilterRuleModel;
 use App\Models\Books\BooksContentModel;
 use App\Repositories\CollectionRule\BookRule;
 use App\Repositories\Searcher\Plugin\CurlMulti;
@@ -20,6 +21,12 @@ class BooksContentFuzzyJob extends BaseJob
 {
     private $urls;
     private $tryAgain = true;
+
+    /**
+     * @var BooksContentFilterRuleModel $filterRuleModel
+     */
+    private $filterRuleModel;
+    private $needAnalysisFilterRule = true;
 
     public function __construct(array $urls, $tryAgain = true)
     {
@@ -40,12 +47,16 @@ class BooksContentFuzzyJob extends BaseJob
                     $ql->encoding(BookRule::CHARSET_UTF8);
                     $qlUrl = $r['info']['url'];
                     $urlHash = md5(trim($qlUrl));
+                    /* @var BooksChapterModel $chapterModel */
                     $chapterModel = BooksChapterModel::query()->where('from_hash', $urlHash)->first();
                     $content = (new TryAnalysisContent('', $ql))->handle();
                     if (empty($content)) {
                         return false;
                     }
                     if (!empty($content)) {
+                        if ($this->needAnalysisFilterRule) {
+                            $this->analysisContentFilterRule($content, $chapterModel->books_id);
+                        }
                         $contentModel = BooksContentModel::query()->where('id', $chapterModel->id)->first();
                         if (!empty($contentModel)) {
                             $contentModel->update(['content' => $content]);
@@ -81,5 +92,14 @@ class BooksContentFuzzyJob extends BaseJob
             return $this->handle();
         }
         return false;
+    }
+
+    public function analysisContentFilterRule($content, $booksId)
+    {
+        $filterRuleModel = BooksContentFilterRuleModel::query()->where('books_id', $booksId)->first();
+        if (empty($filterRuleModel)) {
+            $filterRuleModel = new BooksContentFilterRuleModel();
+        }
+        //todo 
     }
 }
