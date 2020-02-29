@@ -3,6 +3,7 @@
 namespace App\Models\Books;
 
 use App\Models\BaseModel;
+use App\Repositories\CollectionRule\BookRule;
 
 /**
  * Class CollectionRuleModel
@@ -36,23 +37,42 @@ class CollectionRuleModel extends BaseModel
     }
 
     /**
-     * @param array $ids
-     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
-     * @Date: 2020/01/21 15:48
+     * @return array
+     * @author Nacrane
+     * @Date: 2020/02/29 @Time: 10:39
      */
-    public static function getRuleById(array $ids)
+    public static function getAllRuleReplaceTags()
+    {
+        $ruleReplaceTagsArr = [];
+        /** @var CollectionRuleModel[] $allRules */
+        $allRules = self::getAllRules();
+        foreach ($allRules as $rule) {
+            /** @var BookRule $bookRule */
+            $bookRule = unserialize($rule->rule_json);
+            $ruleReplaceTagsArr = array_merge($ruleReplaceTagsArr, $bookRule->replaceTags);
+        }
+        return array_unique($ruleReplaceTagsArr);
+    }
+
+    /**
+     * @param $id
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|object|null|CollectionRuleModel
+     * @author Nacrane
+     * @Date: 2020/02/29 13:55
+     */
+    public static function getRuleById($id)
     {
         return self::query()
             ->where('status', CollectionRuleModel::ENABLE_STATUS)
-            ->whereIn('id', $ids)
-            ->orderBy('id', 'asc')
-            ->get();
+            ->where('id', $id)
+            ->first();
     }
 
     /**
      * @param $host
-     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|null|object
-     * @Date: 2020/01/21 15:44
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|object|null|CollectionRuleModel
+     * @author Nacrane
+     * @Date: 2020/02/29 @Time: 13:56
      */
     public static function getRuleByHost($host)
     {
