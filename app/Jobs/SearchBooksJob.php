@@ -21,7 +21,6 @@ class SearchBooksJob extends BaseJob
         parent::__construct();
         $this->title = $title;
         $this->maxSearchPage = $maxSearchPage;
-        $this->queue = 'Search';
     }
 
     public function handle()
