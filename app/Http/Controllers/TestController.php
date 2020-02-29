@@ -19,13 +19,24 @@ class TestController extends Controller
 {
     public function index()
     {
+        $urls = BooksChapterModel::query()
+            ->where('books_id', 1)
+            ->where('is_success', 0)
+            ->orderBy('id', 'asc')
+//            ->limit(10)
+            ->pluck('from_url')->toArray();
+//        $job = new BooksContentFuzzyJob($urls);
+//        $job->handle();
+//        dd(123);
 
-        $urls = BooksChapterModel::query()->where('books_id', 41)->pluck('from_url')->toArray();
         foreach (array_chunk($urls, 200) as $_urls) {
             dispatch(new BooksContentFuzzyJob($_urls));
         }
-        dd(111);
+        dd(date('Y-m-d H:i:s'));
 
+        $ql = QueryList::html(file_get_contents('1.html'));
+        $content = (new TryAnalysisContent('', $ql))->handle();
+        dd($content);
 //        $url = 'http://www.biquge.info/34_34863/';
 //        $a = (new TryAnalysisCategory($url))->handle();
 //        dd($a);

@@ -126,6 +126,7 @@ class BooksContentFuzzyJob extends BaseJob
             $filterRuleModel = BooksContentFilterRuleModel::query()->where('books_id', $chapterModel->books_id)->first();
             if (empty($filterRuleModel)) {
                 $filterRuleModel = new BooksContentFilterRuleModel();
+                $filterRuleModel->books_id = $chapterModel->books_id;
                 $filterRuleModel->rule = json_encode([]);
                 $filterRuleModel->save();
             }
@@ -134,20 +135,19 @@ class BooksContentFuzzyJob extends BaseJob
         if (is_null($this->ruleReplaceTags)) {
             $this->ruleReplaceTags = CollectionRuleModel::getAllRuleReplaceTags();
         }
-        $tags = json_decode($filterRuleModel->rule, true) ?? [];
+        $tags = json_decode($this->filterRuleModel->rule, true) ?? [];
         foreach ($this->ruleReplaceTags as $tag) {
             if (preg_match($tag[0], $content, $arr)) {
-                $content = preg_replace($tag[0], $tag[1] ?? '', $content);
                 if (in_array($tag[0], array_column($tags, 0))) {
                     $tags[] = $tag;
                 }
             }
         }
         if (!empty($tags)) {
-            $filterRuleModel->rule = json_encode($tags);
-            $filterRuleModel->save();
+            $this->filterRuleModel->rule = json_encode($tags);
+            $this->filterRuleModel->save();
         }
-        return $content;
+        return $this->replaceContentData($tags, $content);
     }
 
     private function replaceContentData($replaceRules, $content)

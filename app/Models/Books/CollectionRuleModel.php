@@ -49,9 +49,11 @@ class CollectionRuleModel extends BaseModel
         foreach ($allRules as $rule) {
             /** @var BookRule $bookRule */
             $bookRule = unserialize($rule->rule_json);
-            $ruleReplaceTagsArr = array_merge($ruleReplaceTagsArr, $bookRule->replaceTags);
+            foreach ($bookRule->replaceTags as $tag) {
+                $ruleReplaceTagsArr[] = $tag;
+            }
         }
-        return array_unique($ruleReplaceTagsArr);
+        return $ruleReplaceTagsArr;
     }
 
     /**
