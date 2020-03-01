@@ -57,7 +57,7 @@ class ChromeSearcherRepository implements SearcherRepositoryInterface
             // 返回值一定要是页面的HTML内容
             return $html;
         }, [
-//            'headless' => false, // 启动可视化Chrome浏览器,方便调试
+            'headless' => true, // 启动可视化Chrome浏览器,方便调试
 //            'devtools' => true, // 打开浏览器的开发者工具
             'no-sandbox' => true,
             'disable-setuid-sandbox' => true,

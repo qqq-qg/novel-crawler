@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Events\BooksFetchContentEvent;
 use App\Models\Books\BooksModel;
+use App\Repositories\Searcher\ChromeSearcherRepository;
 use Illuminate\Console\Command;
 use Nesk\Puphpeteer\Puppeteer;
 use Nesk\Rialto\Data\JsFunction;
@@ -16,16 +17,19 @@ class Test extends Command
 
     public function handle()
     {
-        $redis = app("redis.connection");
-        $val = $redis->get("name");
-        dd($val);
-        $booksArr = BooksModel::query()
-            ->where(['status' => BooksModel::ENABLE_STATUS, 'update_status' => BooksModel::UPT_STATUS_LOADING])
-            ->get();
-        foreach ($booksArr as $book) {
-            event(new BooksFetchContentEvent($book->id));
-        }
-        die;
+        $repo = new ChromeSearcherRepository(1);
+        $data = $repo->search('行走于神话的巫');
+        dd($data);
+//        $redis = app("redis.connection");
+//        $val = $redis->get("name");
+//        dd($val);
+//        $booksArr = BooksModel::query()
+//            ->where(['status' => BooksModel::ENABLE_STATUS, 'update_status' => BooksModel::UPT_STATUS_LOADING])
+//            ->get();
+//        foreach ($booksArr as $book) {
+//            event(new BooksFetchContentEvent($book->id));
+//        }
+//        die;
         $puppeteer = new Puppeteer();
         $browser = $puppeteer->launch(['headless' => false]);
 
