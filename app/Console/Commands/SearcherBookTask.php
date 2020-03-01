@@ -7,7 +7,7 @@ use Illuminate\Console\Command;
 
 class SearcherBookTask extends Command
 {
-    protected $signature = 'search:run {title}';
+    protected $signature = 'search {title}';
 
     protected $description = '搜索任务，启动队列';
 
