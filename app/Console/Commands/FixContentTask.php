@@ -29,11 +29,9 @@ class FixContentTask extends Command
             ->where('is_success', 0)
             ->orderBy('id', 'asc')
             ->pluck('from_url')->toArray();
-        if (empty($book->rule_id)) {
-            /**
-             * @var CollectionRuleModel $rule
-             */
-            $rule = CollectionRuleModel::query()->where('id', $book->rule_id)->first();
+        
+        if (!empty($book->rule_id)) {
+            $rule = CollectionRuleModel::getRuleById($book->rule_id);
             /**
              * @var BookRule $bookRule
              */
@@ -48,6 +46,5 @@ class FixContentTask extends Command
             dispatch(new BooksContentFuzzyJob($_urls));
         }
         return true;
-
     }
 }
