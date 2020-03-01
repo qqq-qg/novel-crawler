@@ -58,8 +58,9 @@ class ChromeSearcherRepository implements SearcherRepositoryInterface
             return $html;
         }, [
 //            'headless' => false, // 启动可视化Chrome浏览器,方便调试
-            'no-sandbox' => true,
 //            'devtools' => true, // 打开浏览器的开发者工具
+            'no-sandbox' => true,
+            'disable-setuid-sandbox' => true,
         ])
             ->rules([
                 'title' => ['h3', 'text'],
