@@ -18,7 +18,12 @@ class FixContentTask extends Command
 
     public function handle()
     {
-        $book = BooksModel::getBookById($this->argument('id'));
+        $id = $this->argument('id');
+        $book = BooksModel::getBookById($id);
+        if (empty($book)) {
+            echo "BookId {$id} 不存在\n";
+            return false;
+        }
         $urls = BooksChapterModel::query()
             ->where('books_id', $book->id)
             ->where('is_success', 0)
