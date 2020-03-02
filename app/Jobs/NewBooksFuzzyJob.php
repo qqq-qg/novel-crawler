@@ -94,7 +94,7 @@ class NewBooksFuzzyJob extends BaseJob
         if (empty($urls)) {
             return false;
         }
-        $group = array_chunk($urls, 200);
+        $group = array_chunk($urls, BooksChapterModel::CHUNK_COUNT);
         foreach ($group as $_urls) {
             dispatch(new BooksContentFuzzyJob($_urls));
         }

@@ -5,14 +5,11 @@ namespace App\Jobs;
 use App\Models\Books\BooksChapterModel;
 use App\Models\Books\BooksContentModel;
 use App\Models\Books\BooksModel;
-use App\Repositories\CollectionRule\BookRule;
-use App\Repositories\Searcher\Plugin\FilterHeader;
 use App\Repositories\TryAnalysis\TryAnalysisCategory;
-use QL\QueryList;
 
 class UpdateBooksFuzzyJob extends BaseJob
 {
-    private $bookRule, $book;
+    private $book;
 
     /**
      * UpdateBooksJob constructor.
@@ -26,27 +23,12 @@ class UpdateBooksFuzzyJob extends BaseJob
 
     public function handle()
     {
-        $chapterList = (new TryAnalysisCategory($this->book->from_url))->handle();
-        if (empty($chapterList)) {
-            return false;
-        }
-//        todo
-//        $this->book->update($_bookData);
-//        return $this->chapter($chapterListUrl);
+        return $this->chapter($this->book->from_url);
     }
 
     private function chapter($chapterListUrl)
     {
-        $ql = QueryList::get($chapterListUrl);
-        if ($this->bookRule->needEncoding()) {
-            $ql->use(FilterHeader::class)->filterHeader();
-            $ql->encoding(BookRule::CHARSET_UTF8);
-        }
-        $data = $ql
-            ->range($this->bookRule->chapterList->range)
-            ->rules($this->bookRule->chapterList->rules)
-            ->query()->getData()->all();
-
+        $data = (new TryAnalysisCategory($chapterListUrl))->handle();
         if (empty($data)) {
             return false;
         }
@@ -61,7 +43,6 @@ class UpdateBooksFuzzyJob extends BaseJob
                 continue;
             }
             $from_url = trim($item['from_url']);
-            $from_url = get_full_url($from_url, $this->book->from_url);
             $_chapter = [
                 'books_id' => $this->book->id,
                 'chapter_index' => $k + 1,
@@ -86,19 +67,13 @@ class UpdateBooksFuzzyJob extends BaseJob
         if (empty($urls)) {
             return false;
         }
-        $group = array_chunk($urls, 200);
+        $group = array_chunk($urls, BooksChapterModel::CHUNK_COUNT);
         foreach ($group as $_urls) {
-            dispatch(new BooksContentMultiJob($this->bookRule, $_urls))->onQueue('Content');
+            dispatch(new BooksContentFuzzyJob($_urls));
         }
         return true;
     }
 
-    /**
-     * @param $data
-     * @param $title
-     * @param $chapterIndex
-     * @return int
-     */
     private function findLastTitleIndex($data, $title, $chapterIndex)
     {
         $index = 0;

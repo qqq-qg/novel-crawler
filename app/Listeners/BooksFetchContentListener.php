@@ -48,7 +48,7 @@ class BooksFetchContentListener
              * @var BookRule $bookRule
              */
             $bookRule = unserialize($rule->rule_json);
-            $group = array_chunk($chapterUrlArr, 200);
+            $group = array_chunk($chapterUrlArr, BooksChapterModel::CHUNK_COUNT);
             foreach ($group as $_urls) {
                 dispatch(new BooksContentMultiJob($bookRule, $_urls));
             }

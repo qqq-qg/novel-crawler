@@ -27,6 +27,8 @@ class BooksChapterModel extends BaseModel
 {
     protected $table = 'books_chapter';
 
+    const CHUNK_COUNT = 200;
+
     //标记章节采集完成
     public function saveProcessed()
     {
