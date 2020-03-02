@@ -29,6 +29,9 @@ class FixContentTask extends Command
                 ->where('is_success', 0)
                 ->orderBy('id', 'asc')
                 ->pluck('from_url')->toArray();
+            if (empty($urls)) {
+                continue;
+            }
             if (!empty($book->rule_id)) {
                 $rule = CollectionRuleModel::getRuleById($book->rule_id);
                 /**
