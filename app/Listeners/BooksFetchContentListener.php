@@ -22,8 +22,8 @@ class BooksFetchContentListener
         $bookId = $event->bookId;
         $bookQuery = BooksModel::query()
             ->where(['status' => BooksModel::ENABLE_STATUS, 'update_status' => BooksModel::UPT_STATUS_LOADING]);
-        if (!empty($bookId)) {
-            $bookQuery->where('id', $bookId);
+        if (is_array($bookId) && !empty($bookId)) {
+            $bookQuery->whereIn('id', $bookId);
         }
         /**
          * @var BooksModel[] $bookArr
