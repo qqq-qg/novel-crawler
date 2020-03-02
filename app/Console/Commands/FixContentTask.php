@@ -18,33 +18,51 @@ class FixContentTask extends Command
 
     public function handle()
     {
-        $id = $this->argument('id');
-        $book = BooksModel::getBookById($id);
-        if (empty($book)) {
-            echo "BookId {$id} 不存在\n";
-            return false;
-        }
-        $urls = BooksChapterModel::query()
-            ->where('books_id', $book->id)
-            ->where('is_success', 0)
-            ->orderBy('id', 'asc')
-            ->pluck('from_url')->toArray();
-        
-        if (!empty($book->rule_id)) {
-            $rule = CollectionRuleModel::getRuleById($book->rule_id);
-            /**
-             * @var BookRule $bookRule
-             */
-            $bookRule = unserialize($rule->rule_json);
-            foreach (array_chunk($urls, 200) as $_urls) {
-                dispatch(new BooksContentMultiJob($bookRule, $_urls, false));
+        $ids = $this->getBooksIds();
+        /**
+         * @var BooksModel[] $booksModelArr
+         */
+        $booksModelArr = BooksModel::query()->whereIn('id', $ids)->get();
+        foreach ($booksModelArr as $book) {
+            $urls = BooksChapterModel::query()
+                ->where('books_id', $book->id)
+                ->where('is_success', 0)
+                ->orderBy('id', 'asc')
+                ->pluck('from_url')->toArray();
+            if (!empty($book->rule_id)) {
+                $rule = CollectionRuleModel::getRuleById($book->rule_id);
+                /**
+                 * @var BookRule $bookRule
+                 */
+                $bookRule = unserialize($rule->rule_json);
+                foreach (array_chunk($urls, 200) as $_urls) {
+                    dispatch(new BooksContentMultiJob($bookRule, $_urls, false));
+                }
+                continue;
             }
-            return true;
-        }
-
-        foreach (array_chunk($urls, 200) as $_urls) {
-            dispatch(new BooksContentFuzzyJob($_urls));
+            foreach (array_chunk($urls, 200) as $_urls) {
+                dispatch(new BooksContentFuzzyJob($_urls));
+            }
         }
         return true;
+    }
+
+    private function getBooksIds()
+    {
+        $arg = $this->argument('id');
+        $res = preg_split("/[,，]+/u", $arg);
+        $arr = [];
+        foreach ($res as $v) {
+            if (strpos($v, '-')) {
+                $tmp = explode('-', $v);
+                for ($i = $tmp[0]; $i <= $tmp[1]; $i++) {
+                    $arr[] = intval($i);
+                }
+            } else {
+                $arr[] = intval($v);
+            }
+        }
+        sort($arr);
+        return array_unique($arr);
     }
 }
