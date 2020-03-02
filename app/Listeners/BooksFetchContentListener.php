@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\BooksFetchContentEvent;
+use App\Jobs\BooksContentFuzzyJob;
 use App\Jobs\BooksContentMultiJob;
 use App\Models\Books\BooksChapterModel;
 use App\Models\Books\BooksModel;
@@ -33,6 +34,15 @@ class BooksFetchContentListener
                 ->where('books_id', $book->id)
                 ->whereIn('is_success', [BooksChapterModel::DEFAULT_STATUS, BooksChapterModel::DISABLE_STATUS])
                 ->pluck('from_url')->toArray();
+            if (empty($chapterUrlArr)) {
+                continue;
+            }
+            if (empty($book->rule_id)) {
+                foreach (array_chunk($chapterUrlArr, 200) as $_urls) {
+                    dispatch(new BooksContentFuzzyJob($_urls));
+                }
+                continue;
+            }
             $rule = CollectionRuleModel::query()->where('id', $book->rule_id)->first();
             /**
              * @var BookRule $bookRule

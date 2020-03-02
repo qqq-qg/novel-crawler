@@ -564,3 +564,21 @@ function get_full_url($path, $fromUrl)
     }
     return $path;
 }
+
+function format_ranger_array($string)
+{
+    $res = preg_split("/[,，]+/u", $string);
+    $arr = [];
+    foreach ($res as $v) {
+        if (strpos($v, '-')) {
+            $tmp = explode('-', $v);
+            for ($i = $tmp[0]; $i <= $tmp[1]; $i++) {
+                $arr[] = intval($i);
+            }
+        } else {
+            $arr[] = intval($v);
+        }
+    }
+    sort($arr);
+    return array_unique($arr);
+}
