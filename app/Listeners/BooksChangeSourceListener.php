@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\BooksChangeSourceEvent;
+use App\Jobs\NewBooksFuzzyJob;
 use App\Jobs\NewBooksJob;
 use App\Models\Books\BooksChapterModel;
 use App\Models\Books\BooksContentModel;
@@ -26,6 +27,10 @@ class BooksChangeSourceListener
         //clear old chapter,content
         $this->clearBeforeChapter($book->id);
 
+        if (empty($book->rule_id)) {
+            dispatch(new NewBooksFuzzyJob($book->title, $book->from_url));
+            return;
+        }
         //add new data
         $rule = CollectionRuleModel::query()->where('id', $book->rule_id)->first();
         /**
