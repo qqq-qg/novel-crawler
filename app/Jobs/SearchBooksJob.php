@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Books\CollectionRuleModel;
+use App\Models\Books\HostBlacklistModel;
 use App\Repositories\CollectionRule\BookRule;
 use App\Repositories\Searcher\ChromeSearcherRepository;
 use App\Repositories\TryAnalysis\TryAnalysisCategory;
@@ -67,8 +68,15 @@ class SearchBooksJob extends BaseJob
     private function handelWithoutRule()
     {
         info('$this->searchResultData', $this->searchResultData);
+        $blacklist = HostBlacklistModel::getALlEnableHost();
         foreach ($this->searchResultData as $k => $datum) {
             if (strpos($datum['title'], $this->title) > -1) {
+                //黑名单
+                $host = parse_url($datum['link'])['host'] ?? '';
+                if (in_array($host, $blacklist)) {
+                    continue;
+                }
+                //尝试是否可采集
                 $res = $this->tryGetWithoutRule($datum['link']);
                 if (!empty($res)) {
                     dispatch(new NewBooksFuzzyJob($this->title, $datum['link']));
