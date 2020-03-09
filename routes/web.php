@@ -19,9 +19,6 @@ Route::group([], function () {
 
     Route::get('bqg', 'TryBookRuleController@bqg')->name('TryBookRule.bqg');
     Route::get('xbequge', 'TryBookRuleController@xbequge')->name('TryBookRule.xbequge');
-
-
-    Route::get('/task-init', 'CollectionTaskController@init')->name('collection-task-init');
 });
 
 // 后台路由
