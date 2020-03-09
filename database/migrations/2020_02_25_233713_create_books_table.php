@@ -24,7 +24,7 @@ class CreateBooksTable extends Migration
             $table->string('words_count')->default('')->comment('字数');
             $table->boolean('level')->default(0)->comment('等级');
             $table->integer('follow')->unsigned()->default(0)->comment('关注人数');
-            $table->bigInteger('hits')->unsigned()->default(0)->comment('浏览次数');
+            $table->integer('hits')->unsigned()->default(0)->comment('浏览次数');
             $table->enum('update_status', array('LOADING','FINISHED'))->default('LOADING')->comment('更新状态');
             $table->boolean('status')->default(1)->index()->comment('状态');
             $table->integer('rule_id')->default(0)->comment('规则ID');

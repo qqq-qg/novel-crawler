@@ -14,7 +14,7 @@ class CreateLinksubmitTable extends Migration
     {
         Schema::connection('mysql')->create('linksubmit', function (Blueprint $table) {
             $table->string('site')->default('baidu')->comment('百度|360|搜狗|谷歌');
-            $table->bigInteger('bookid')->unsigned()->comment('书本ID');
+            $table->integer('bookid')->unsigned()->comment('书本ID');
             $table->integer('detailid')->unsigned()->comment('Detail表ID');
             $table->timestamps();
         });

@@ -13,7 +13,7 @@ class CreateCollectionTaskTable extends Migration
     public function up()
     {
         Schema::connection('mysql')->create('collection_task', function (Blueprint $table) {
-            $table->bigInteger('id', true)->unsigned();
+            $table->integer('id', true)->unsigned();
             $table->string('title')->default('')->comment('标题');
             $table->string('from_url')->default('')->comment('采集链接');
             $table->string('from_hash')->default('')->comment('采集链接');

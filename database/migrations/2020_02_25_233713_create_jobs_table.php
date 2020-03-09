@@ -13,7 +13,7 @@ class CreateJobsTable extends Migration
     public function up()
     {
         Schema::connection('mysql')->create('jobs', function (Blueprint $table) {
-            $table->bigInteger('id', true)->unsigned();
+            $table->integer('id', true)->unsigned();
             $table->string('queue')->index();
             $table->text('payload');
             $table->boolean('attempts');

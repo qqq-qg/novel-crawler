@@ -13,7 +13,7 @@ class CreateJobExceptionTable extends Migration
     public function up()
     {
         Schema::connection('mysql')->create('job_exception', function (Blueprint $table) {
-            $table->bigInteger('id', true)->unsigned();
+            $table->integer('id', true)->unsigned();
             $table->string('job')->default('')->comment('job类');
             $table->integer('execution_time')->default(0)->comment('执行时间');
             $table->string('code', 16)->default('')->comment('状态码');

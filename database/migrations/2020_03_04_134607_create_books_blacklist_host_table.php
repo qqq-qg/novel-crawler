@@ -14,7 +14,7 @@ class CreateBooksBlacklistHostTable extends Migration
     public function up()
     {
         Schema::connection('mysql')->create('books_host_blacklist', function (Blueprint $table) {
-            $table->bigInteger('id', true)->unsigned();
+            $table->integer('id', true)->unsigned();
             $table->string('host', 64)->default('')->unique()->comment('域名');
             $table->boolean('status')->default(1)->comment('状态,1-正常，2-无效');
             $table->timestamps();
