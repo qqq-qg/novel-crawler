@@ -45,6 +45,7 @@ class BooksContentMultiJob extends BaseJob
                     $qlUrl = $r['info']['url'];
                     $urlHash = md5(trim($qlUrl));
                     $chapterModel = BooksChapterModel::query()->where('from_hash', $urlHash)->first();
+                    $chapterModel->increment('fetch_times', 1);
                     if ($this->bookRule->needEncoding()) {
                         $ql->use(FilterHeader::class)->filterHeader();
                         $ql->encoding(BookRule::CHARSET_UTF8);

@@ -29,6 +29,8 @@ class BooksChapterModel extends BaseModel
 
     const CHUNK_COUNT = 200;
 
+    const MAX_FETCH_TIMES = 10;
+
     //标记章节采集完成
     public function saveProcessed()
     {

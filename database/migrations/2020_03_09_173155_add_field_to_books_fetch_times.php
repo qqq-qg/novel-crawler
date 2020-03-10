@@ -11,7 +11,7 @@ class AddFieldToBooksFetchTimes extends Migration
      */
     public function up()
     {
-        DB::statement('alter table `books_chapter` add column `fetch_times` int(11) NOT NULL DEFAULT 10 comment "获取次数" after `title`');
+        DB::statement('alter table `books_chapter` add column `fetch_times` int(11) NOT NULL DEFAULT 0 comment "获取次数" after `title`');
     }
 
     /**
@@ -22,6 +22,6 @@ class AddFieldToBooksFetchTimes extends Migration
     public function down()
     {
 
-        DB::statement('alter table `books` drop column `fetch_times`');
+        DB::statement('alter table `books_chapter` drop column `fetch_times`');
     }
 }
