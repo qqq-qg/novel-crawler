@@ -4,11 +4,10 @@
  * @param $template
  * @return mixed
  */
-function admin_view($template)
-{
-    $params = func_get_args();//获取函数传入的参数列表 数组
-    $params[0] = 'admin.' . $params[0];
-    return call_user_func_array('view', $params);//调用回调函数，并把一个数组参数作为回调函数的参数
+function admin_view($template) {
+  $params = func_get_args();//获取函数传入的参数列表 数组
+  $params[0] = 'admin.' . $params[0];
+  return call_user_func_array('view', $params);//调用回调函数，并把一个数组参数作为回调函数的参数
 }
 
 /**
@@ -16,11 +15,10 @@ function admin_view($template)
  * @param $template
  * @return mixed
  */
-function home_view($template)
-{
-    $params = func_get_args();//获取函数传入的参数列表 数组
-    $params[0] = 'home.' . $params[0];
-    return call_user_func_array('view', $params);//调用回调函数，并把一个数组参数作为回调函数的参数
+function home_view($template) {
+  $params = func_get_args();//获取函数传入的参数列表 数组
+  $params[0] = 'home.' . $params[0];
+  return call_user_func_array('view', $params);//调用回调函数，并把一个数组参数作为回调函数的参数
 }
 
 /**
@@ -28,11 +26,10 @@ function home_view($template)
  * @param $template
  * @return mixed
  */
-function wap_view($template)
-{
-    $params = func_get_args();//获取函数传入的参数列表 数组
-    $params[0] = 'wap.' . $params[0];
-    return call_user_func_array('view', $params);//调用回调函数，并把一个数组参数作为回调函数的参数
+function wap_view($template) {
+  $params = func_get_args();//获取函数传入的参数列表 数组
+  $params[0] = 'wap.' . $params[0];
+  return call_user_func_array('view', $params);//调用回调函数，并把一个数组参数作为回调函数的参数
 }
 
 /**
@@ -40,9 +37,8 @@ function wap_view($template)
  * @param $mobile
  * @return int
  */
-function is_mobile($mobile)
-{
-    return preg_match('/1[3|4|5|7|8]{1}\d{9}/', $mobile);
+function is_mobile($mobile) {
+  return preg_match('/1[3|4|5|7|8]{1}\d{9}/', $mobile);
 }
 
 /**
@@ -50,9 +46,8 @@ function is_mobile($mobile)
  * @param $email
  * @return int
  */
-function is_email($email)
-{
-    return preg_match('/^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$/', $email);
+function is_email($email) {
+  return preg_match('/^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$/', $email);
 }
 
 /**
@@ -60,30 +55,29 @@ function is_email($email)
  * @param $thumb
  * @return string
  */
-function upload_base64_thumb($thumb)
-{
-    if (empty($thumb)) return '';
-    if (strpos($thumb, 'data:image') === false) return $thumb;
-    $filepath = '/uploads/thumbs/' . date('Ym') . '/';//缩略图按月划分
-    $fileroot = public_path() . $filepath;
+function upload_base64_thumb($thumb) {
+  if (empty($thumb)) return '';
+  if (strpos($thumb, 'data:image') === false) return $thumb;
+  $filepath = '/uploads/thumbs/' . date('Ym') . '/';//缩略图按月划分
+  $fileroot = public_path() . $filepath;
 
-    $filename = time() . rand(100, 999);
-    $fileext = str_replace('data:image/', '', strstr($thumb, ';', true));
-    in_array($fileext, ['jpg', 'png', 'gif', 'bmp']) or $fileext = 'jpg';//jpeg->jpg
-    $filename .= '.' . $fileext;
+  $filename = time() . rand(100, 999);
+  $fileext = str_replace('data:image/', '', strstr($thumb, ';', true));
+  in_array($fileext, ['jpg', 'png', 'gif', 'bmp']) or $fileext = 'jpg';//jpeg->jpg
+  $filename .= '.' . $fileext;
 
-    if (!\File::isDirectory($fileroot)) {
-        \File::makeDirectory($fileroot, 0777, true);
-    }
-    if (preg_match('/^(data:\s*image\/(\w+);base64,)/', $thumb, $result)) {
-        \File::put($fileroot . $filename, base64_decode(str_replace($result[1], '', $thumb)));
-        $thumb = \File::exists($fileroot . $filename) ? $fileroot . $filename : '';
-        $thumb = str_replace(public_path(), '', $thumb);//path => ''
-    } else {
-        $thumb = '';
-    }
+  if (!\File::isDirectory($fileroot)) {
+    \File::makeDirectory($fileroot, 0777, true);
+  }
+  if (preg_match('/^(data:\s*image\/(\w+);base64,)/', $thumb, $result)) {
+    \File::put($fileroot . $filename, base64_decode(str_replace($result[1], '', $thumb)));
+    $thumb = \File::exists($fileroot . $filename) ? $fileroot . $filename : '';
+    $thumb = str_replace(public_path(), '', $thumb);//path => ''
+  } else {
+    $thumb = '';
+  }
 
-    return $thumb;
+  return $thumb;
 }
 
 /**
@@ -92,34 +86,33 @@ function upload_base64_thumb($thumb)
  * @param string $dir
  * @return string
  */
-function save_remote_thumb($thumb, $dir = 'books')
-{
-    if (empty($thumb)) return '';
+function save_remote_thumb($thumb, $dir = 'books') {
+  if (empty($thumb)) return '';
 
-    $filepath = '/uploads/' . $dir . '/' . date('Ym/d') . '/';//缩略图按月划分
-    $fileroot = public_path() . $filepath;
-    if (!is_dir($fileroot)) mkdir($fileroot, 0777, true);
+  $filepath = '/uploads/' . $dir . '/' . date('Ym/d') . '/';//缩略图按月划分
+  $fileroot = public_path() . $filepath;
+  if (!is_dir($fileroot)) mkdir($fileroot, 0777, true);
 
-    $filename = time() . rand(100000, 999999);
-    $fileext = substr($thumb, strrpos($thumb, '.'));
-    in_array($fileext, ['jpg', 'png', 'gif', 'bmp']) or $fileext = 'jpg';//jpeg->jpg
-    $filename .= '.' . $fileext;
+  $filename = time() . rand(100000, 999999);
+  $fileext = substr($thumb, strrpos($thumb, '.'));
+  in_array($fileext, ['jpg', 'png', 'gif', 'bmp']) or $fileext = 'jpg';//jpeg->jpg
+  $filename .= '.' . $fileext;
 
-    $result = \File::put($fileroot . $filename, file_get_contents($thumb));
+  $result = \File::put($fileroot . $filename, file_get_contents($thumb));
 
-    if ($result) {
-        if (isImage($fileroot . $filename)) {
-            $thumb = $filepath . $filename;
-        } else {
-            \File::delete($fileroot . $filename);
-            $thumb = '';
-        }
+  if ($result) {
+    if (isImage($fileroot . $filename)) {
+      $thumb = $filepath . $filename;
     } else {
-        $thumb = '';
+      \File::delete($fileroot . $filename);
+      $thumb = '';
     }
+  } else {
+    $thumb = '';
+  }
 
 
-    return $thumb;
+  return $thumb;
 }
 
 /**
@@ -127,14 +120,13 @@ function save_remote_thumb($thumb, $dir = 'books')
  * @param $file
  * @return mixed
  */
-function makeQiNiuKey($file)
-{
-    //$file = str_replace( array('/' , '\\') , DIRECTORY_SEPARATOR , $file );
-    $rule = array(
-        public_path() . '/uploads/books/',
-        '/uploads/books/',
-    );
-    return str_replace($rule, '', $file);
+function makeQiNiuKey($file) {
+  //$file = str_replace( array('/' , '\\') , DIRECTORY_SEPARATOR , $file );
+  $rule = array(
+    public_path() . '/uploads/books/',
+    '/uploads/books/',
+  );
+  return str_replace($rule, '', $file);
 
 }
 
@@ -144,31 +136,29 @@ function makeQiNiuKey($file)
  * @param $key
  * @return string
  */
-function uploadToQiniu($file, $key = '')
-{
-    if (empty($file)) return false;
-    if (empty(env('IMG_URL'))) {
-        return str_replace(public_path(), '', $file);
-    }
-    $upload = new \App\Http\Controllers\Admin\UploadController();
-    if (empty($key)) $key = makeQiNiuKey($file);
-    //统一分隔符
-    $thumb = str_replace(array('/', '\\'), DIRECTORY_SEPARATOR, $file);
-    $file = $upload->put($thumb, $key);
-    if (isset($file['key'])) {
-        return '/' . $file['key'];
-    } else {
-        return '';
-    }
+function uploadToQiniu($file, $key = '') {
+  if (empty($file)) return false;
+  if (empty(env('IMG_URL'))) {
+    return str_replace(public_path(), '', $file);
+  }
+  $upload = new \App\Http\Controllers\Admin\UploadController();
+  if (empty($key)) $key = makeQiNiuKey($file);
+  //统一分隔符
+  $thumb = str_replace(array('/', '\\'), DIRECTORY_SEPARATOR, $file);
+  $file = $upload->put($thumb, $key);
+  if (isset($file['key'])) {
+    return '/' . $file['key'];
+  } else {
+    return '';
+  }
 }
 
 /**
  * validate.js
  * @return string
  */
-function jquery_validate_js()
-{
-    return <<<php
+function jquery_validate_js() {
+  return <<<php
     <script src="/skin/js/plugins/validate/jquery.validate.min.js"></script>
     <script src="/skin/js/plugins/validate/messages_zh.min.js"></script>
 php;
@@ -178,9 +168,8 @@ php;
  * 生成jquery.validate的默认设置
  * @return string
  */
-function jquery_validate_default()
-{
-    $js = <<<php
+function jquery_validate_default() {
+  $js = <<<php
     $.validator.setDefaults({
         highlight: function(a) {
             $(a).closest(".form-group").removeClass("has-success").addClass("has-error")
@@ -200,7 +189,7 @@ function jquery_validate_default()
         validClass: "help-block m-b-none"
     });
 php;
-    return $js;
+  return $js;
 
 }
 
@@ -209,12 +198,11 @@ php;
  * @param $obj
  * @return mixed
  */
-function obj2arr($obj)
-{
-    if (is_object($obj)) {
-        return json_decode(json_encode($obj), true);
-    }
-    return $obj;
+function obj2arr($obj) {
+  if (is_object($obj)) {
+    return json_decode(json_encode($obj), true);
+  }
+  return $obj;
 }
 
 /**
@@ -222,14 +210,13 @@ function obj2arr($obj)
  * @param $route
  * @return string
  */
-function route2url($route = '')
-{
-    if (empty($route)) return '/';
-    try {
-        return route($route);
-    } catch (\Exception $exception) {
-        return '';
-    }
+function route2url($route = '') {
+  if (empty($route)) return '/';
+  try {
+    return route($route);
+  } catch (\Exception $exception) {
+    return '';
+  }
 }
 
 /**
@@ -239,34 +226,33 @@ function route2url($route = '')
  * @param string $extends
  * @return bool
  */
-function seditor($content = '', $name = 'content', $editor = 'ueditor', $extends = '')
-{
+function seditor($content = '', $name = 'content', $editor = 'ueditor', $extends = '') {
 
-    if ($editor == 'kindeditor') {
-        $url = "/plugins/editor/kindeditor/kindeditor.js";
-        $lang = "/plugins/editor/kindeditor/lang/zh_CN.js";
-        echo "<script charset='utf-8' src='$url'></script>";
-        echo "<script charset='utf-8' src='$lang'></script>";
-        echo "<script>";
-        echo " KindEditor.ready(function(K) { window.editor = K.create('#$name',{width:'100%',cssPath : '/plugins/editor/kindeditor/plugins/code/new.css',resizeMode:0});});";
-        echo "</script>";
+  if ($editor == 'kindeditor') {
+    $url = "/plugins/editor/kindeditor/kindeditor.js";
+    $lang = "/plugins/editor/kindeditor/lang/zh_CN.js";
+    echo "<script charset='utf-8' src='$url'></script>";
+    echo "<script charset='utf-8' src='$lang'></script>";
+    echo "<script>";
+    echo " KindEditor.ready(function(K) { window.editor = K.create('#$name',{width:'100%',cssPath : '/plugins/editor/kindeditor/plugins/code/new.css',resizeMode:0});});";
+    echo "</script>";
 
-    } else if ($editor == 'ueditor') {
-        echo "<script id='content' type='text/plain' style='width:100%;height:500px;' name='{$name}' {$extends}>" . $content . "</script>";
-        echo "<script type='text/javascript' src='/skin/plugins/editor/ueditor/ueditor.config.js'></script>";
-        echo "<script type='text/javascript' src='/skin/plugins/editor/ueditor/ueditor.all.js'></script>";
-        echo "<script type='text/javascript'> var ue = UE.getEditor('{$name}',{elementPathEnabled:false,contextMenu:[],enableAutoSave: false,saveInterval:500000});</script>";
+  } else if ($editor == 'ueditor') {
+    echo "<script id='content' type='text/plain' style='width:100%;height:500px;' name='{$name}' {$extends}>" . $content . "</script>";
+    echo "<script type='text/javascript' src='/skin/plugins/editor/ueditor/ueditor.config.js'></script>";
+    echo "<script type='text/javascript' src='/skin/plugins/editor/ueditor/ueditor.all.js'></script>";
+    echo "<script type='text/javascript'> var ue = UE.getEditor('{$name}',{elementPathEnabled:false,contextMenu:[],enableAutoSave: false,saveInterval:500000});</script>";
 
-    } else if ($editor == 'markdown') {
-        echo "<textarea name='" . $name . "' data-provide='markdown' {$extends}>" . $content . "</textarea>";
-        echo "<link rel='stylesheet' type='text/css' href='/skin/plugins/editor/markdown/bootstrap-markdown.min.css' />";
-        echo "<script type='text/javascript' src='/skin/plugins/editor/markdown/markdown.js'></script>";
-        echo "<script type='text/javascript' src='/skin/plugins/editor/markdown/to-markdown.js'></script>";
-        echo "<script type='text/javascript' src='/skin/plugins/editor/markdown/bootstrap-markdown.js'></script>";
-        echo "<script type='text/javascript' src='/skin/plugins/editor/markdown/bootstrap-markdown.zh.js'></script>";
+  } else if ($editor == 'markdown') {
+    echo "<textarea name='" . $name . "' data-provide='markdown' {$extends}>" . $content . "</textarea>";
+    echo "<link rel='stylesheet' type='text/css' href='/skin/plugins/editor/markdown/bootstrap-markdown.min.css' />";
+    echo "<script type='text/javascript' src='/skin/plugins/editor/markdown/markdown.js'></script>";
+    echo "<script type='text/javascript' src='/skin/plugins/editor/markdown/to-markdown.js'></script>";
+    echo "<script type='text/javascript' src='/skin/plugins/editor/markdown/bootstrap-markdown.js'></script>";
+    echo "<script type='text/javascript' src='/skin/plugins/editor/markdown/bootstrap-markdown.zh.js'></script>";
 
-    }
-    return false;
+  }
+  return false;
 }
 
 /**
@@ -274,12 +260,11 @@ function seditor($content = '', $name = 'content', $editor = 'ueditor', $extends
  * @param string $img
  * @return string
  */
-function imgurl($img = '')
-{
-    if (!$img) {
-        return '/skin/manager/images/nopic.png';
-    }
-    return $img;
+function imgurl($img = '') {
+  if (!$img) {
+    return '/skin/manager/images/nopic.png';
+  }
+  return $img;
 }
 
 /**
@@ -287,20 +272,19 @@ function imgurl($img = '')
  * @param string $img
  * @return string
  */
-function bookimg($img = '')
-{
-    if (!$img) {
-        return asset('/skin/default/images/nocover.jpg');
+function bookimg($img = '') {
+  if (!$img) {
+    return asset('/skin/default/images/nocover.jpg');
+  }
+  if (substr($img, 0, 4) !== 'http') {
+    //使用七牛链接
+    if (strpos($img, '/uploads/') === false) {
+      $image = config('upload.domain') . $img;
+      return asset('skin/default/images/lazy.gif') . '" class="lazy" data-original="' . $image;
     }
-    if (substr($img, 0, 4) !== 'http') {
-        //使用七牛链接
-        if (strpos($img, '/uploads/') === false) {
-            $image = config('upload.domain') . $img;
-            return asset('skin/default/images/lazy.gif') . '" class="lazy" data-original="' . $image;
-        }
-        return asset($img);
-    }
-    return $img;
+    return asset($img);
+  }
+  return $img;
 }
 
 /**
@@ -310,36 +294,35 @@ function bookimg($img = '')
  * @param int $aid
  * @return string
  */
-function bookurl($catid, $id = 0, $aid = 0)
-{
-    if ($aid) {
-        if (is_numeric($aid)) {
-            return route('BookContent', [
-                'catid' => $catid,
-                'id' => $id,
-                'aid' => $aid,
-            ]);
-        } else if ($aid == 'chapter') {
-            return route('BookChapter', [
-                'catid' => $catid,
-                'id' => $id,
-            ]);
-        } else {
-            return route('BookLastContent', [
-                'catid' => $catid,
-                'id' => $id,
-            ]);
-        }
-    }
-    if ($id) {
-        return route('BookLists', [
-            'catid' => $catid,
-            'id' => $id,
-        ]);
-    }
-    return route('BookCat', [
+function bookurl($catid, $id = 0, $aid = 0) {
+  if ($aid) {
+    if (is_numeric($aid)) {
+      return route('BookContent', [
         'catid' => $catid,
+        'id' => $id,
+        'aid' => $aid,
+      ]);
+    } else if ($aid == 'chapter') {
+      return route('BookChapter', [
+        'catid' => $catid,
+        'id' => $id,
+      ]);
+    } else {
+      return route('BookLastContent', [
+        'catid' => $catid,
+        'id' => $id,
+      ]);
+    }
+  }
+  if ($id) {
+    return route('BookLists', [
+      'catid' => $catid,
+      'id' => $id,
     ]);
+  }
+  return route('BookCat', [
+    'catid' => $catid,
+  ]);
 }
 
 /**
@@ -349,25 +332,24 @@ function bookurl($catid, $id = 0, $aid = 0)
  * @param int $aid
  * @return mixed
  */
-function wapurl($catid = 0, $id = 0, $aid = 0)
-{
-    $baseUrl = env('WAP_URL');
-    if (!$catid) return $baseUrl;
-    $url = bookurl($catid, $id, $aid);
-    return str_replace(url(), $baseUrl, $url);
+function wapurl($catid = 0, $id = 0, $aid = 0) {
+  $baseUrl = env('WAP_URL');
+  if (!$catid) return $baseUrl;
+  $url = bookurl($catid, $id, $aid);
+  return '';
+//  return str_replace(url(), $baseUrl, $url);
 }
 
 /**
  * 日志记录
  * @param $message
  */
-function logwrite($message)
-{
-    if (is_array($message) || is_object($message)) {
-        \Log::debug("\n" . var_export($message, true));
-    } else {
-        \Log::debug("\n" . $message);
-    }
+function logwrite($message) {
+  if (is_array($message) || is_object($message)) {
+    \Log::debug("\n" . var_export($message, true));
+  } else {
+    \Log::debug("\n" . $message);
+  }
 }
 
 /**
@@ -377,37 +359,36 @@ function logwrite($message)
  * @return mixed
  * @throws Exception
  */
-function request_spider($url, $spider = 'baidu')
-{
-    switch ($spider) {
-        case 'baidu':
-            $ip = '220.181.108.' . rand(1, 255);
-            $userAgent = 'Mozilla/5.0 (compatible; Baiduspider/2.0; +http://www.baidu.com/search/spider.html)';
-            break;
-        default:
-            $ip = '220.181.108.' . rand(1, 255);
-            $userAgent = 'Mozilla/5.0 (compatible; Baiduspider/2.0; +http://www.baidu.com/search/spider.html)';
-            break;
-    }
+function request_spider($url, $spider = 'baidu') {
+  switch ($spider) {
+    case 'baidu':
+      $ip = '220.181.108.' . rand(1, 255);
+      $userAgent = 'Mozilla/5.0 (compatible; Baiduspider/2.0; +http://www.baidu.com/search/spider.html)';
+      break;
+    default:
+      $ip = '220.181.108.' . rand(1, 255);
+      $userAgent = 'Mozilla/5.0 (compatible; Baiduspider/2.0; +http://www.baidu.com/search/spider.html)';
+      break;
+  }
 
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_HEADER, 0);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 20);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        'X-FORWARDED-FOR:' . $ip . '',
-        'CLIENT-IP:' . $ip . ''
-    ]);
-    curl_setopt($ch, CURLOPT_USERAGENT, $userAgent);
-    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 20);
-    $content = curl_exec($ch);
-    $error_message = curl_error($ch);
-    curl_close($ch);
-    if (empty($error_message)) {
-        return $content;
-    } else {
-        throw new Exception($error_message);
-    }
+  $ch = curl_init($url);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+  curl_setopt($ch, CURLOPT_HEADER, 0);
+  curl_setopt($ch, CURLOPT_TIMEOUT, 20);
+  curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'X-FORWARDED-FOR:' . $ip . '',
+    'CLIENT-IP:' . $ip . ''
+  ]);
+  curl_setopt($ch, CURLOPT_USERAGENT, $userAgent);
+  curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 20);
+  $content = curl_exec($ch);
+  $error_message = curl_error($ch);
+  curl_close($ch);
+  if (empty($error_message)) {
+    return $content;
+  } else {
+    throw new Exception($error_message);
+  }
 }
 
 /**
@@ -415,12 +396,11 @@ function request_spider($url, $spider = 'baidu')
  * @param $image
  * @return bool
  */
-function isImage($image)
-{
-    $info = @getimagesize($image);
-    if (!$info) return false;
-    //$ext = image_type_to_extension($info[2]);
-    return true;
+function isImage($image) {
+  $info = @getimagesize($image);
+  if (!$info) return false;
+  //$ext = image_type_to_extension($info[2]);
+  return true;
 }
 
 /**
@@ -428,13 +408,12 @@ function isImage($image)
  * @param $file
  * @return string
  */
-function staticPath($file)
-{
-    $staticPath = env('STATIC_URL');
-    if (!empty($staticPath)) {
-        return $staticPath . $file;
-    }
-    return url('skin' . $file);
+function staticPath($file) {
+  $staticPath = env('STATIC_URL');
+  if (!empty($staticPath)) {
+    return $staticPath . $file;
+  }
+  return url('skin' . $file);
 }
 
 /**
@@ -443,80 +422,75 @@ function staticPath($file)
  * @param string $type
  * @return mixed
  */
-function post_url_to_baidu($url, $type = 'pc')
-{
-    if (is_array($url)) {
-        $url = implode("\n", $url);
-    }
-    if ($type == 'pc') {
-        $api = 'http://data.zz.baidu.com/urls?site=www.txshu.com&token=IyoSxgVWMlEdD9fL';
-    } else {
-        $api = 'http://data.zz.baidu.com/urls?site=m.txshu.com&token=IyoSxgVWMlEdD9fL';
-    }
-    $ch = curl_init();
-    $options = array(
-        CURLOPT_URL => $api,
-        CURLOPT_POST => true,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_POSTFIELDS => $url,
-        CURLOPT_HTTPHEADER => array('Content-Type: text/plain'),
-    );
-    curl_setopt_array($ch, $options);
-    $result = curl_exec($ch);
-    return $result;
+function post_url_to_baidu($url, $type = 'pc') {
+  if (is_array($url)) {
+    $url = implode("\n", $url);
+  }
+  if ($type == 'pc') {
+    $api = 'http://data.zz.baidu.com/urls?site=www.txshu.com&token=IyoSxgVWMlEdD9fL';
+  } else {
+    $api = 'http://data.zz.baidu.com/urls?site=m.txshu.com&token=IyoSxgVWMlEdD9fL';
+  }
+  $ch = curl_init();
+  $options = array(
+    CURLOPT_URL => $api,
+    CURLOPT_POST => true,
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_POSTFIELDS => $url,
+    CURLOPT_HTTPHEADER => array('Content-Type: text/plain'),
+  );
+  curl_setopt_array($ch, $options);
+  $result = curl_exec($ch);
+  return $result;
 }
 
 /**
  * 移动端域名
  * @return mixed
  */
-function wap_domain()
-{
-    return str_replace(['http://', 'https://'], '', env('WAP_URL'));
+function wap_domain() {
+  return str_replace(['http://', 'https://'], '', env('WAP_URL'));
 }
 
 //ping一个IP地址，能不能通
-function ping($ip)
-{
-    $ip_port = explode(':', $ip);
-    if (filter_var($ip_port[0], FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {        //IPv6
-        $socket = socket_create(AF_INET6, SOCK_STREAM, SOL_TCP);
-    } elseif (filter_var($ip_port[0], FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {    //IPv4
-        $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
-    } else {
-        return FALSE;
-    }
-    if (!isset($ip_port[1])) {        //没有写端口则指定为80
-        $ip_port[1] = '80';
-    }
-    $ok = socket_connect($socket, $ip_port[0], $ip_port[1]);
-//        var_dump( socket_strerror( socket_last_error($socket) ) );
-    socket_close($socket);
-//        var_dump($ok);
-    return $ok;
+function ping($ip) {
+  $ip_port = explode(':', $ip);
+  if (filter_var($ip_port[0], FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {        //IPv6
+    $socket = socket_create(AF_INET6, SOCK_STREAM, SOL_TCP);
+  } elseif (filter_var($ip_port[0], FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {    //IPv4
+    $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+  } else {
+    return FALSE;
+  }
+  if (!isset($ip_port[1])) {        //没有写端口则指定为80
+    $ip_port[1] = '80';
+  }
+  $ok = socket_connect($socket, $ip_port[0], $ip_port[1]);
+  //        var_dump( socket_strerror( socket_last_error($socket) ) );
+  socket_close($socket);
+  //        var_dump($ok);
+  return $ok;
 }
 
 //随机返回一个 User-Agent
-function get_random_user_agent()
-{
-    $agentArr = [
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36'
-    ];
-    $i = array_rand($agentArr);
-    return $agentArr[$i];
+function get_random_user_agent() {
+  $agentArr = [
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36'
+  ];
+  $i = array_rand($agentArr);
+  return $agentArr[$i];
 }
 
-function is_time_out($message)
-{
-    $isTimeOut = strpos($message, 'Connection timed out') > -1;
-    if ($isTimeOut) {
-        return true;
-    }
-    $isServerBusy = strpos($message, '500 Internal Server Error') > -1;
-    if ($isServerBusy) {
-        return true;
-    }
-    return false;
+function is_time_out($message) {
+  $isTimeOut = strpos($message, 'Connection timed out') > -1;
+  if ($isTimeOut) {
+    return true;
+  }
+  $isServerBusy = strpos($message, '500 Internal Server Error') > -1;
+  if ($isServerBusy) {
+    return true;
+  }
+  return false;
 }
 
 /**
@@ -524,24 +498,23 @@ function is_time_out($message)
  * @param $url
  * @return mixed
  */
-function get_real_url($url)
-{
-    stream_context_set_default([
-        'ssl' => [
-            'verify_peer' => false,
-            'verify_peer_name' => false,
-        ],
-    ]);
-    $header = get_headers($url, 1);
-    if (strpos($header[0], '301') || strpos($header[0], '302')) {
-        if (is_array($header['Location'])) {
-            return $header['Location'][0];
-        } else {
-            return $header['Location'];
-        }
+function get_real_url($url) {
+  stream_context_set_default([
+    'ssl' => [
+      'verify_peer' => false,
+      'verify_peer_name' => false,
+    ],
+  ]);
+  $header = get_headers($url, 1);
+  if (strpos($header[0], '301') || strpos($header[0], '302')) {
+    if (is_array($header['Location'])) {
+      return $header['Location'][0];
     } else {
-        return $url;
+      return $header['Location'];
     }
+  } else {
+    return $url;
+  }
 }
 
 /**
@@ -550,35 +523,33 @@ function get_real_url($url)
  * @param $fromUrl
  * @return string
  */
-function get_full_url($path, $fromUrl)
-{
-    if (strpos($path, 'http') !== false) {
-        return $path;
-    }
-    $urlArr = parse_url($fromUrl);
-    if (strpos($path, $urlArr['host']) === false) {
-        if (strpos($path, '/') !== 0) {
-            $path = '/' . $path;
-        }
-        return "{$urlArr['scheme']}://{$urlArr['host']}{$path}";
-    }
+function get_full_url($path, $fromUrl) {
+  if (strpos($path, 'http') !== false) {
     return $path;
+  }
+  $urlArr = parse_url($fromUrl);
+  if (strpos($path, $urlArr['host']) === false) {
+    if (strpos($path, '/') !== 0) {
+      $path = '/' . $path;
+    }
+    return "{$urlArr['scheme']}://{$urlArr['host']}{$path}";
+  }
+  return $path;
 }
 
-function format_ranger_array($string)
-{
-    $res = preg_split("/[,，]+/u", $string);
-    $arr = [];
-    foreach ($res as $v) {
-        if (strpos($v, '-')) {
-            $tmp = explode('-', $v);
-            for ($i = $tmp[0]; $i <= $tmp[1]; $i++) {
-                $arr[] = intval($i);
-            }
-        } else {
-            $arr[] = intval($v);
-        }
+function format_ranger_array($string) {
+  $res = preg_split("/[,，]+/u", $string);
+  $arr = [];
+  foreach ($res as $v) {
+    if (strpos($v, '-')) {
+      $tmp = explode('-', $v);
+      for ($i = $tmp[0]; $i <= $tmp[1]; $i++) {
+        $arr[] = intval($i);
+      }
+    } else {
+      $arr[] = intval($v);
     }
-    sort($arr);
-    return array_unique($arr);
+  }
+  sort($arr);
+  return array_unique($arr);
 }

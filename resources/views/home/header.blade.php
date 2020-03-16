@@ -8,13 +8,14 @@
             <a href="{!! wapurl() !!}" target="_blank">手机版</a> |
             {{--<a href="javascript:void(0);">积分规则</a> |--}}
             {{--<a href="javascript:void(0);" rel="nofollow">放到桌面</a> |--}}
-            <a href="javascript:void(0);" onclick="AddFavorite('{{ $SET['title'] }}',location.href)" target="_self" rel="nofollow">收藏本站</a>
+            <a href="javascript:void(0);" onclick="AddFavorite('{{ $SET['title']??'' }}',location.href)"
+               target="_self" rel="nofollow">收藏本站</a>
         </div>
     </div>
 </div>
 <div class="wrapper">
     <div class="logo">
-        <a href="/">{{ $SET['title'] }}</a>
+        <a href="/">{{ $SET['title']??'' }}</a>
     </div>
     <div class="seach">
 
@@ -24,7 +25,7 @@
     <div class="main">
         <ul class="nav_l">
             <li><a href="/">首页</a></li>
-            @foreach($categorys as $v)
+            @foreach($categories??[] as $v)
                 <li><a href="{!! bookurl($v['id']) !!}">{{ $v['name'] }}</a></li>
             @endforeach
         </ul>

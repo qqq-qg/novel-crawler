@@ -13,10 +13,10 @@
     <script type="text/javascript" src="{!! staticPath('/js/jquery.min.js') !!}"></script>
     <script type="text/javascript" src="{!! staticPath('/js/jquery.lazyload.min.js') !!}"></script>
     <script>
-        UA = navigator.userAgent.toLowerCase();
-        if ((UA.indexOf("iphone") != -1 || UA.indexOf("mobile") != -1 || UA.indexOf("android") != -1 || UA.indexOf("windows ce") != -1 || UA.indexOf("ipod") != -1) && UA.indexOf("ipod") == -1) {
-            location.href = '{!! wapurl($catid) !!}';
-        }
+    UA = navigator.userAgent.toLowerCase();
+    if ((UA.indexOf("iphone") != -1 || UA.indexOf("mobile") != -1 || UA.indexOf("android") != -1 || UA.indexOf("windows ce") != -1 || UA.indexOf("ipod") != -1) && UA.indexOf("ipod") == -1) {
+      location.href = '{!! wapurl($catid) !!}';
+    }
     </script>
 </head>
 <body>
@@ -25,9 +25,9 @@
 
 <div class="yd_ad">
     {{--<script type="text/javascript">--}}
-        {{--var sogou_ad_id=828243;--}}
-        {{--var sogou_ad_height=90;--}}
-        {{--var sogou_ad_width=960;--}}
+    {{--var sogou_ad_id=828243;--}}
+    {{--var sogou_ad_height=90;--}}
+    {{--var sogou_ad_width=960;--}}
     {{--</script>--}}
     {{--<script type='text/javascript' src='http://images.sohu.com/cs/jsfile/js/c.js'></script>--}}
 
@@ -48,7 +48,8 @@
             </dt>
             <dd>
                 <h3>
-                    <a href="{!! bookurl($v['catid'],$v['id']) !!}" title="{{ $v['title'] }}">{{ mb_substr($v['title'],0,7) }}</a>
+                    <a href="{!! bookurl($v['catid'],$v['id']) !!}"
+                       title="{{ $v['title'] }}">{{ mb_substr($v['title'],0,7) }}</a>
                 </h3>
                 <span>{{ mb_substr($v['author'],0,5) }}</span>
                 <p>    {{ mb_substr($v['introduce'],0,50) }} …</p>
@@ -56,13 +57,6 @@
         </dl>
     @endforeach
 </div>
-
-{{--<div class="yd_ad">--}}
-    {{--<script type="text/javascript">--}}
-        {{--var cpro_id = "u2964255";--}}
-    {{--</script>--}}
-    {{--<script type="text/javascript" src="http://cpro.baidustatic.com/cpro/ui/c.js"></script>--}}
-{{--</div>--}}
 
 <div class="booklist"><h1>{{ $CAT['name'] }}</h1>
     <ul>
@@ -78,12 +72,12 @@
         @foreach($newLists as $v)
             <li>
             <span class="sm">
-                <a href="{!! bookurl($v['catid'],$v['id']) !!}"><b>{{ mb_substr($v['title'],0,15,'utf-8') }}</b></a>
+                <a href="{!! bookurl($v['cate_id'],$v['id']) !!}"><b>{{ mb_substr($v['title'],0,15,'utf-8') }}</b></a>
             </span>
                 <span class="zj">
-                <a href="{!! bookurl($v['catid'],$v['id'],'lastest') !!}">{{ $v['zhangjie'] ? mb_substr($v['zhangjie'],0,20,'utf-8') : '&nbsp;' }}</a>
+                <a href="{!! bookurl($v['cate_id'],$v['id'],'lastest') !!}">{{ $v['last_chapter_title'] ? mb_substr($v['last_chapter_title'],0,20,'utf-8') : '' }}</a>
             </span>
-                <span class="zz">{{ $v['author'] ? mb_substr($v['author'],0,5) : '&nbsp;' }}</span>
+                <span class="zz">{{ $v['author'] ? mb_substr($v['author'],0,5) : '' }}</span>
                 <span class="zs">{{ $v['wordcount'] }}字</span>
                 <span class="sj">{{ date('y-m-d',strtotime($v['updated_at'])) }}</span>
                 <span class="zt">连载中</span>
@@ -102,14 +96,16 @@
 @include('home.footer')
 
 <script>
-    $(function(){
-        $("img.lazy").lazyload({
-            event : "sporty"
-        });
-        $(window).bind("load", function() {
-            var timeout = setTimeout(function() { $("img.lazy").trigger("sporty"); }, 800);
-        });
-    });
+$(function() {
+  $("img.lazy").lazyload({
+    event: "sporty"
+  });
+  $(window).bind("load", function() {
+    var timeout = setTimeout(function() {
+      $("img.lazy").trigger("sporty");
+    }, 800);
+  });
+});
 </script>
 </body>
 </html>

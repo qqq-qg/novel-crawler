@@ -3,8 +3,10 @@
 <head>
     <meta charset="utf-8">
     <title>{{ $book['title'] }},{{ $book['title'] }}最新章节,{{ $book['title'] }}无弹窗,{{ $SET['title'] }}</title>
-    <meta name="keywords" content="{{ $book['title'] }},{{ $book['title'] }}最新章节,{{ $book['title'] }}无弹窗,{{ $SET['title'] }}">
-    <meta name="description" content="{{ $SET['title'] }}为您提供{{ $book['title'] }}最新章节，{{ $book['title'] }}无弹窗。更多{{ $book['title'] }}小说尽在{{ $SET['title'] }}，好看记得告诉您的朋友哦！">
+    <meta name="keywords"
+          content="{{ $book['title'] }},{{ $book['title'] }}最新章节,{{ $book['title'] }}无弹窗,{{ $SET['title'] }}">
+    <meta name="description"
+          content="{{ $SET['title'] }}为您提供{{ $book['title'] }}最新章节，{{ $book['title'] }}无弹窗。更多{{ $book['title'] }}小说尽在{{ $SET['title'] }}，好看记得告诉您的朋友哦！">
     <meta http-equiv="Cache-Control" content="no-siteapp">
     <meta http-equiv="Cache-Control" content="no-transform">
     <meta http-equiv="mobile-agent" content="format=html5; url={!! wapurl($catid,$id) !!}">
@@ -28,15 +30,15 @@
     <script type="text/javascript" src="{!! staticPath('/js/jquery.min.js') !!}"></script>
     <script type="text/javascript" src="{!! staticPath('/js/jquery.lazyload.min.js') !!}"></script>
     <script>
-        UA = navigator.userAgent.toLowerCase();
-        if ((UA.indexOf("iphone") != -1 || UA.indexOf("mobile") != -1 || UA.indexOf("android") != -1 || UA.indexOf("windows ce") != -1 || UA.indexOf("ipod") != -1) && UA.indexOf("ipod") == -1) {
-            location.href = '{!! wapurl($catid,$id) !!}';
-        }
+    UA = navigator.userAgent.toLowerCase();
+    if ((UA.indexOf("iphone") != -1 || UA.indexOf("mobile") != -1 || UA.indexOf("android") != -1 || UA.indexOf("windows ce") != -1 || UA.indexOf("ipod") != -1) && UA.indexOf("ipod") == -1) {
+      location.href = '{!! wapurl($catid,$id) !!}';
+    }
 
-        function share() {
-            document.writeln('<div class="bdsharebuttonbox"><a href="#" class="bds_more" data-cmd="more"></a><a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a><a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a><a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a><a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a><a href="#" class="bds_isohu" data-cmd="isohu" title="分享到我的搜狐"></a><a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a><a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a><a href="#" class="bds_tieba" data-cmd="tieba" title="分享到百度贴吧"></a><a href="#" class="bds_copy" data-cmd="copy" title="分享到复制网址"></a></div>');
-            document.writeln('<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"24"},"share":{},"image":{"viewList":["weixin","sqq","qzone","tsina","isohu","tqq","renren","tieba","copy"],"viewText":"分享到：","viewSize":"24"}};with(document)0[(getElementsByTagName(\'head\')[0]||body).appendChild(createElement(\'script\')).src=\'http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion=\'+~(-new Date()/36e5)];<\/script>');
-        }
+    function share() {
+      document.writeln('<div class="bdsharebuttonbox"><a href="#" class="bds_more" data-cmd="more"></a><a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a><a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a><a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a><a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a><a href="#" class="bds_isohu" data-cmd="isohu" title="分享到我的搜狐"></a><a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a><a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a><a href="#" class="bds_tieba" data-cmd="tieba" title="分享到百度贴吧"></a><a href="#" class="bds_copy" data-cmd="copy" title="分享到复制网址"></a></div>');
+      document.writeln('<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"24"},"share":{},"image":{"viewList":["weixin","sqq","qzone","tsina","isohu","tqq","renren","tieba","copy"],"viewText":"分享到：","viewSize":"24"}};with(document)0[(getElementsByTagName(\'head\')[0]||body).appendChild(createElement(\'script\')).src=\'http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion=\'+~(-new Date()/36e5)];<\/script>');
+    }
     </script>
 </head>
 <body>
@@ -45,14 +47,15 @@
 
 <div class="yd_ad">
     {{--<script type="text/javascript">--}}
-        {{--var sogou_ad_id=828243;--}}
-        {{--var sogou_ad_height=90;--}}
-        {{--var sogou_ad_width=960;--}}
+    {{--var sogou_ad_id=828243;--}}
+    {{--var sogou_ad_height=90;--}}
+    {{--var sogou_ad_width=960;--}}
     {{--</script>--}}
     {{--<script type='text/javascript' src='http://images.sohu.com/cs/jsfile/js/c.js'></script>--}}
 </div>
 <div class="place">
-    当前位置：<a href="/">{{ $SET['title'] }}</a> > <a href="{!! bookurl($catid) !!}">{{ $CAT['name'] }}</a> > {{ $book['title'] }}
+    当前位置：<a href="/">{{ $SET['title'] }}</a> > <a href="{!! bookurl($catid) !!}">{{ $CAT['name'] }}</a>
+    > {{ $book['title'] }}
 </div>
 <div class="jieshao">
     <div class="lf">
@@ -70,14 +73,16 @@
                 <a href="{!! bookurl($catid,$id,'lastest') !!}">{{ $book['zhangjie'] }}</a>
             </em>
         </div>
-        <div><script>share();</script></div>
+        <div>
+            <script>share();</script>
+        </div>
         {{--<div class="info">--}}
-            {{--<a href="#footer" rel="nofollow">直达底部</a><a target="_blank" rel="nofollow">错误举报</a>投推荐票：--}}
+        {{--<a href="#footer" rel="nofollow">直达底部</a><a target="_blank" rel="nofollow">错误举报</a>投推荐票：--}}
         {{--</div>--}}
         {{--<input type="text" name="uservote_num" id="uservote_num" value="1" maxlength="3"--}}
-               {{--onchange="if(/\D/.test(this.value)){alert('只能输入数字');this.value='';}">--}}
+        {{--onchange="if(/\D/.test(this.value)){alert('只能输入数字');this.value='';}">--}}
         {{--<div class="vote">--}}
-            {{--<a id="a_uservote">确定</a>--}}
+        {{--<a id="a_uservote">确定</a>--}}
         {{--</div>--}}
 
         <div class="intro">
@@ -91,38 +96,29 @@
     </div>
 </div>
 
-{{--<div class="yd_ad">--}}
-    {{--<script type="text/javascript">--}}
-        {{--var cpro_id = "u2964255";--}}
-    {{--</script>--}}
-    {{--<script type="text/javascript" src="http://cpro.baidustatic.com/cpro/ui/c.js"></script>--}}
-{{--</div>--}}
-
 <div class="mulu">
     <ul>
         @foreach($lists as $v)
-            <li><a href="{!! bookurl($catid,$v['pid'],$v['id']) !!}">{{ $v['title'] }}</a></li>
+            <li><a href="{!! bookurl($catid,$v['books_id'],$v['id']) !!}">{{ $v['title'] }}</a></li>
         @endforeach
     </ul>
 </div>
 <div class="pages" style="text-align:center;">
     {!! $lists->render() !!}
 </div>
-<div class="yd_ad">
-
-</div>
-
 @include('home.footer')
 
 <script>
-    $(function(){
-        $("img.lazy").lazyload({
-            event : "sporty"
-        });
-        $(window).bind("load", function() {
-            var timeout = setTimeout(function() { $("img.lazy").trigger("sporty"); }, 800);
-        });
-    });
+$(function() {
+  $("img.lazy").lazyload({
+    event: "sporty"
+  });
+  $(window).bind("load", function() {
+    var timeout = setTimeout(function() {
+      $("img.lazy").trigger("sporty");
+    }, 800);
+  });
+});
 </script>
 </body>
 </html>

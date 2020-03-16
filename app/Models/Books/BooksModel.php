@@ -13,7 +13,7 @@ use App\Models\BaseModel;
  *
  * @property integer id
  * @property string title 标题
- * @property string category 分类
+ * @property int cate_id 分类ID
  * @property string introduce 简介
  * @property string thumb 缩略图
  * @property string last_chapter_title 最新章节
