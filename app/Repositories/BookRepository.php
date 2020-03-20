@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Jobs\SearchBooksJob;
 use App\Models\Books\BooksModel;
 use App\Models\Books\CategoryModel;
 
@@ -92,6 +93,13 @@ class BookRepository extends BaseRepository {
 
   public function deleteCategory($id) {
     return CategoryModel::query()->where('id', $id)->delete();
+  }
+
+  public function addSearchTask($title) {
+    if (empty($title)) {
+      return false;
+    }
+    return dispatch(new SearchBooksJob($title));
   }
 
 

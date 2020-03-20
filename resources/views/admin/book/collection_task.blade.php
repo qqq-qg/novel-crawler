@@ -5,6 +5,7 @@
         <tr>
             <td width="50">编号</td>
             <td align="left">名称</td>
+            <td align="left">分类</td>
             <td align="left">URL</td>
             <td align="left">规则名称</td>
             <td align="left">页数</td>
@@ -15,11 +16,12 @@
             @foreach($lists as $v)
                 <tr>
                     <td>{{ $v['id'] }}</td>
-                    <td align="left">{{ $v['title'] }}</td>
-                    <td align="left">{{ $v['from_url'] }}</td>
-                    <td align="left">{{ $v['rule_id'] }}</td>
-                    <td align="left">{{ $v['page_limit'] }}</td>
-                    <td align="left">{{ $v['task_code'] }}</td>
+                    <td align="left">{{ $v->title }}</td>
+                    <td align="left">{{ $v->category->name }}</td>
+                    <td align="left">{{ $v->from_url }}</td>
+                    <td align="left">{{ $v->rule->title }}</td>
+                    <td align="left">{{ $v->page_limit }}</td>
+                    <td align="left">{{ $v->task_code }}</td>
                     <td>
                         <button class="btn btn-sm btn-info" id="edit_{{ $v['id'] }}" data="{{ json_encode($v) }}"
                                 onclick="Edit({{ $v['id'] }})">编辑
@@ -39,25 +41,25 @@
     <button class="btn btn-success" data-toggle="modal" data-target="#createModal">添加任务</button>
     <script>
 
-        var deleteModal = '#deleteModal';
-        var createModal = '#createModal';
+    var deleteModal = '#deleteModal';
+    var createModal = '#createModal';
 
-        function Delete(id, name) {
-            name = name ? name : 'id';
-            $(deleteModal).find('input[name=' + name + ']').val(id);
-            $(deleteModal).modal('show');
-        }
+    function Delete(id, name) {
+      name = name ? name : 'id';
+      $(deleteModal).find('input[name=' + name + ']').val(id);
+      $(deleteModal).modal('show');
+    }
 
-        function Edit(id) {
-            var json = $('#edit_' + id).attr('data');
-            json = JSON.parse(json);
-            $.each(json, function (k, v) {
-                $(createModal).find('input[name=' + k + ']').val(v);
-                $(createModal).find('select[name=' + k + ']').val(v);
-            });
+    function Edit(id) {
+      var json = $('#edit_' + id).attr('data');
+      json = JSON.parse(json);
+      $.each(json, function(k, v) {
+        $(createModal).find('input[name=' + k + ']').val(v);
+        $(createModal).find('select[name=' + k + ']').val(v);
+      });
 
-            $(createModal).modal('show');
-        }
+      $(createModal).modal('show');
+    }
     </script>
 
     {{--delete--}}
@@ -83,6 +85,17 @@
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" name="title" value="{{ old('title') }}"
                                        placeholder="任务名称[必填]">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">分类</label>
+                            <div class="col-sm-10">
+                                <select name="cate_id" id="cate_id" class="form-control">
+                                    <option value="">--请选择规则--</option>
+                                    @foreach($categories??[] as $v)
+                                        <option value="{{$v['id']}}">{{$v['name']}}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                         <div class="form-group">

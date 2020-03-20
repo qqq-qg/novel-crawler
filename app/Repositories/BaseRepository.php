@@ -56,6 +56,9 @@ class BaseRepository {
    * @return mixed
    */
   public function update($data) {
+    $data = array_map(function ($val) {
+      return $val ?? '';
+    }, $data);
     $item = $this->find($data[$this->model->getKeyName()]);
     return $item->update($data);
   }
