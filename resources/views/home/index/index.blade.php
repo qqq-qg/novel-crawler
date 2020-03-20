@@ -90,7 +90,7 @@
                        title="{{ $v['title'] }}">{{ mb_substr($v['title'],0,7,'utf-8') }}</a>
                 </span>
                     <span class="zj">
-                    <a href="{!! bookurl($v['cate_id'],$v['id'],'lastest') !!}">{{ $v['last_chapter_title'] ? mb_substr($v['zhangjie'],0,20,'utf-8') : '&nbsp;' }}</a>
+                    <a href="{!! bookurl($v['cate_id'],$v['id'],'lastest') !!}">{{ $v['last_chapter_title'] ? mb_substr($v['last_chapter_title'],0,20,'utf-8') : '&nbsp;' }}</a>
                 </span>
                     <span class="zz">{{ $v['author'] ? mb_substr($v['author'],0,5) : '&nbsp;' }}</span>
                     <span class="sj">{{ date('m-d',strtotime($v['updated_at'])) }}</span>

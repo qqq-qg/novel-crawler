@@ -70,7 +70,7 @@
             <em>状态：连载中 </em>
             <em>更新时间：{{ date('m-d',strtotime($book['updated_at'])) }}</em>
             <em>最新章节：
-                <a href="{!! bookurl($catid,$id,'lastest') !!}">{{ $book['zhangjie'] }}</a>
+                <a href="{!! bookurl($catid,$id,'lastest') !!}">{{ $book['last_chapter_title'] }}</a>
             </em>
         </div>
         <div>
