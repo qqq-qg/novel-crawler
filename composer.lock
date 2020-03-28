@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "890992071ff591eaa885a4381ceb5fe2",
+    "content-hash": "4eb32329bce3eff530fc154183424a68",
     "packages": [
         {
             "name": "ares333/php-curl",
@@ -6390,22 +6390,29 @@
         },
         {
             "name": "nac/mg",
-            "version": "1.1",
+            "version": "1.1.2",
             "source": {
                 "type": "git",
                 "url": "ssh://gogs@106.12.127.29:22/git/laravel6-migrations-generator.git",
-                "reference": "aa2aa0a7ef567b658afa0fc538dae9c979a4aa14"
+                "reference": "0242142afc1407bad1b0cfefec85eeddfaf7e3ff"
             },
             "dist": {
                 "type": "tar",
-                "url": "https://api.nacrane.top/packages/dist/nac/mg/nac-mg-1.1-ed7bf1.tar",
-                "reference": "aa2aa0a7ef567b658afa0fc538dae9c979a4aa14",
-                "shasum": "ea490e67cc3c30bba268e47aa0c2c0144b61c445"
+                "url": "https://api.nacrane.top/packages/dist/nac/mg/nac-mg-1.1.2-5ca806.tar",
+                "reference": "0242142afc1407bad1b0cfefec85eeddfaf7e3ff",
+                "shasum": "a2b2d1d1e68024bc1fbf9c79f1968c51f11ce804"
             },
             "require": {
                 "illuminate/support": "^6.12.0"
             },
-            "type": "project",
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Nac\\Mg\\MigrationsGenServiceProvider"
+                    ]
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "Nac\\Mg\\": "src/"
@@ -6419,26 +6426,33 @@
                 "laravel",
                 "migrate"
             ],
-            "time": "2020-02-26T01:15:52+00:00"
+            "time": "2020-03-28T18:26:53+00:00"
         },
         {
             "name": "nac/mvc",
-            "version": "1.0.1",
+            "version": "1.0.3",
             "source": {
                 "type": "git",
                 "url": "ssh://gogs@106.12.127.29:22/git/laravel6-mvc-generator.git",
-                "reference": "640ccf2a3698c88365acd6e7d95f555d6fedda0f"
+                "reference": "c6c6f6979064379be2d56ad21aa764bdc3bf4c46"
             },
             "dist": {
                 "type": "tar",
-                "url": "https://api.nacrane.top/packages/dist/nac/mvc/nac-mvc-1.0.1-0300a0.tar",
-                "reference": "640ccf2a3698c88365acd6e7d95f555d6fedda0f",
-                "shasum": "2b8fa0293830de4c41410d7b2146d1c5b68fc36a"
+                "url": "https://api.nacrane.top/packages/dist/nac/mvc/nac-mvc-1.0.3-fb9c16.tar",
+                "reference": "c6c6f6979064379be2d56ad21aa764bdc3bf4c46",
+                "shasum": "4c0198d8103e16966ead579274d0880a4b98cba5"
             },
             "require": {
                 "illuminate/support": "^6.12.0"
             },
             "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Nac\\Mvc\\MvcGenServiceProvider"
+                    ]
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "Nac\\Mvc\\": "src/"
@@ -6452,7 +6466,7 @@
                 "laravel",
                 "mvc"
             ],
-            "time": "2020-03-28T09:49:22+00:00"
+            "time": "2020-03-28T18:12:42+00:00"
         },
         {
             "name": "nunomaduro/collision",

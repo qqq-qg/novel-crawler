@@ -178,8 +178,6 @@ return [
         // phpstorm 提示
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         Mews\Captcha\CaptchaServiceProvider::class,
-
-        Nac\Mg\MigrationsGenServiceProvider::class,
     ],
 
     /*

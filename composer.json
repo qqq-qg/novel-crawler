@@ -33,25 +33,17 @@
     "nunomaduro/collision": "^3.0",
     "phpunit/phpunit": "^8.0",
     "barryvdh/laravel-ide-helper": "^2.4",
-    "nac/mg": "^1.1",
-    "nac/mvc": "1.0.1"
+    "nac/mg": "1.1.2",
+    "nac/mvc": "1.0.3"
   },
   "config": {
     "optimize-autoloader": true,
     "preferred-install": "dist",
     "sort-packages": true
   },
-  "extra": {
-    "laravel": {
-      "providers": [
-        "Nac\\Mvc\\MvcGenServiceProvider"
-      ]
-    }
-  },
   "autoload": {
     "psr-4": {
-      "App\\": "app/",
-      "Nac\\Mvc\\": "nac/mvc/src"
+      "App\\": "app/"
     },
     "classmap": [
       "database/seeds",
