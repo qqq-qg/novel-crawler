@@ -33,8 +33,8 @@
     "nunomaduro/collision": "^3.0",
     "phpunit/phpunit": "^8.0",
     "barryvdh/laravel-ide-helper": "^2.4",
-    "nac/mg": "1.1.2",
-    "nac/mvc": "1.0.3"
+    "nac/mg": "^1.1.2",
+    "nac/mvc": "^1.1.2"
   },
   "config": {
     "optimize-autoloader": true,
