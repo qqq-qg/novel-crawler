@@ -66,7 +66,7 @@
     <div class="modal inmodal" id="createModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content animated flipInX">
-                <form action="/book/createCategory" method="POST" class="form-horizontal">
+                <form action="{{route('Book.createCategory')}}" method="POST" class="form-horizontal">
                     {!! csrf_field() !!}
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
@@ -101,7 +101,7 @@
     <div class="modal inmodal" id="updateModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content animated flipInX">
-                <form action="/book/createCategory" method="POST" class="form-horizontal">
+                <form action="{{route('Book.createCategory')}}" method="POST" class="form-horizontal">
                     {!! csrf_field() !!}
                     <input type="hidden" name="id" value="">
                     <div class="modal-header">

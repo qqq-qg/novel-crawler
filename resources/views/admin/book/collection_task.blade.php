@@ -69,7 +69,7 @@
     <div class="modal inmodal" id="createModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content animated flipIn&nbsp;X">
-                <form action="/book/createCollectionTask" method="POST" class="form-horizontal">
+                <form action="{{route('Book.createCollectionTask')}}" method="POST" class="form-horizontal">
                     {!! csrf_field() !!}
                     <input type="hidden" name="id" id="id">
                     <div class="modal-header">
