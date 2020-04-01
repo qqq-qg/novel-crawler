@@ -17,7 +17,7 @@
                 <tr>
                     <td>{{ $v['id'] }}</td>
                     <td align="left">{{ $v->title }}</td>
-                    <td align="left">{{ $v->category->name }}</td>
+                    <td align="left">{{ $v->category->name ?? '' }}</td>
                     <td align="left">{{ $v->from_url }}</td>
                     <td align="left">{{ $v->rule->title }}</td>
                     <td align="left">{{ $v->page_limit }}</td>
