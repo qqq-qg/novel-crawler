@@ -40,7 +40,7 @@ class NewBooksJob extends BaseJob
     $data = $ql
       ->range($this->bookRule->home->range)
       ->rules($this->bookRule->home->rules)
-      ->query()->getData()->first();
+      ->query()->getData()->toArray();
     $_bookData = [
       'title' => trim($data['title'] ?? ''),
       'words_count' => trim($data['words_count'] ?? ''),
@@ -80,7 +80,7 @@ class NewBooksJob extends BaseJob
     $data = $ql
       ->range($this->bookRule->chapterList->range)
       ->rules($this->bookRule->chapterList->rules)
-      ->query()->getData()->all();
+      ->query()->getData()->toArray();
 
     if (empty($data)) {
       return false;

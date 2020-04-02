@@ -51,7 +51,7 @@ class CollectionBookTask extends Command
       if ($data->isEmpty()) {
         continue;
       }
-      $homeUrlArr = $data->pluck('url')->all();
+      $homeUrlArr = $data->pluck('url')->toArray();
       //遍历每一本书
       foreach ($homeUrlArr as $homeUrl) {
         $homeUrl = get_full_url($homeUrl, $url);
@@ -59,6 +59,5 @@ class CollectionBookTask extends Command
       }
       break;
     }
-
   }
 }

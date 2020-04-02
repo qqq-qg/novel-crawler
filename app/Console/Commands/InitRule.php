@@ -46,19 +46,18 @@ class InitRule extends Command
           'url' => ['a', 'href']
         ], true, 2)
     ];
-    $bookRule->home = new QlRule(
-      'div.book-html-box div.book-info',
+    $bookRule->home = new QlRule('',
       [
         'title' => ['div.book-name', 'text'],
         'words_count' => ['div.nums>span>i:first', 'text'],
         'chapter_list_url' => ['a.all-catalog', 'href'],
       ]);
-    $bookRule->chapterList = new QlRule('',
+    $bookRule->chapterList = new QlRule('ul.chapter-list>li',
       [
-        'title' => ['ul.chapter-list>li>a', 'text'],
-        'from_url' => ['ul.chapter-list>li>a', 'href']
+        'title' => ['a', 'text'],
+        'from_url' => ['a', 'href']
       ]);
-    $bookRule->content = new QlRule('div.reader_box', [
+    $bookRule->content = new QlRule('', [
       'chapter_name' => [
         'div.title_txtbox', 'text'
       ],

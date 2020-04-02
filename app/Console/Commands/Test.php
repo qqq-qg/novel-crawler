@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Jobs\NewBooksJob;
 use App\Models\Books\CollectionRuleModel;
 use App\Repositories\CollectionRule\BookRule;
 use App\Repositories\Searcher\Plugin\FilterHeader;
@@ -18,6 +19,18 @@ class Test extends Command
 
   public function handle()
   {
+    $rule = CollectionRuleModel::query()->where('id', 1)->first();
+    /**
+     * @var BookRule $bookRule
+     */
+    $bookRule = unserialize($rule->rule_json);
+
+    (new NewBooksJob($bookRule ,'http://book.zongheng.com/book/502062.html',1,2))->handle();
+
+
+
+
+    dd(123);
     $rule = CollectionRuleModel::query()->where('id', 1)->first();
     /**
      * @var BookRule $bookRule

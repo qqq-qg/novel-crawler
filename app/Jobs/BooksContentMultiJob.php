@@ -60,7 +60,7 @@ class BooksContentMultiJob extends BaseJob
           $data = $ql
             ->range($this->bookRule->content->range)
             ->rules($this->bookRule->content->rules)
-            ->query()->getData()->first();
+            ->query()->getData()->toArray();
 
           $content = trim($data['content'] ?? '');
           if (!empty($this->bookRule->splitTag) && strpos($content, $this->bookRule->splitTag) > -1) {
