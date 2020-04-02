@@ -80,11 +80,13 @@ class CollectionRuleRepository extends BaseRepository
     $cPage = empty($data['category']['page']) ? 1 : intval($data['category']['page']);
     $rPage = empty($data['ranking']['page']) ? 1 : intval($data['ranking']['page']);
     $bookRule->bookList = [
-      'category' => new QlRule('', ['url' => $data['category']['url']], $cPage > 1, $cPage),
-      'ranking' => new QlRule('', ['url' => $data['ranking']['url']], $rPage > 1, $rPage)
+      'category' => new QlRule($data['category']['range'] ?? '',
+        ['url' => $data['category']['url']], $cPage > 1, $cPage),
+      'ranking' => new QlRule($data['ranking']['range'] ?? '',
+        ['url' => $data['ranking']['url']], $rPage > 1, $rPage)
     ];
     $bookRule->home = new QlRule('', $data['home'] ?? []);
-    $bookRule->chapterList = new QlRule('', $data['chapterList'] ?? []);
+    $bookRule->chapterList = new QlRule($data['chapterList']['range'] ?? '', $data['chapterList'] ?? []);
     $bookRule->content = new QlRule('', $data['content'] ?? []);
     $bookRule->splitTag = $data['splitTag'] ?? '';
     $replaceTags = [];

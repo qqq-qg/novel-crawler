@@ -36,14 +36,14 @@ class InitRule extends Command
     $bookRule = new BookRule();
     $bookRule->host = 'www.zongheng.com';
     $bookRule->bookList = [
-      'category' => new QlRule('',
+      'category' => new QlRule('ul.main_con>li',
         [
-          'url' => ['ul.main_con>li span.bookname>a', 'href']
+          'url' => ['span.bookname>a', 'href']
         ], true, 2),
 
-      'ranking' => new QlRule('',
+      'ranking' => new QlRule('div.rankpage_box>rank_d_list',
         [
-          'url' => ['div.rank_d_list>div.rank_d_book_img>a', 'href']
+          'url' => ['a', 'href']
         ], true, 2)
     ];
     $bookRule->home = new QlRule(

@@ -33,7 +33,7 @@ class BookRequestRepository
     $data = $ql
       ->range($this->bookRule->bookList['category']->range)
       ->rules($this->bookRule->bookList['category']->rules)
-      ->query()->getData()->all();
+      ->query()->getData()->toArray();
     foreach ($data as $key => $homeUrl) {
       $data[$key]['url'] = get_full_url($homeUrl['url'], $url);
     }
@@ -50,7 +50,7 @@ class BookRequestRepository
     $data = $ql
       ->range($this->bookRule->bookList['ranking']->range)
       ->rules($this->bookRule->bookList['ranking']->rules)
-      ->query()->getData()->all();
+      ->query()->getData()->toArray();
     foreach ($data as $key => $homeUrl) {
       $data[$key]['url'] = get_full_url($homeUrl['url'], $url);
     }
@@ -67,7 +67,7 @@ class BookRequestRepository
     $data = $ql
       ->range($this->bookRule->home->range)
       ->rules($this->bookRule->home->rules)
-      ->query()->getData()->first();
+      ->query()->getData()->toArray();
     $_bookData = [
       'title' => trim($data['title'] ?? ''),
       'words_count' => trim($data['words_count'] ?? ''),
@@ -111,7 +111,7 @@ class BookRequestRepository
     $data = $ql
       ->range($this->bookRule->content->range)
       ->rules($this->bookRule->content->rules)
-      ->query()->getData()->first();
+      ->query()->getData()->toArray();
     $content = trim($data['content'] ?? '');
     if (!empty($this->bookRule->splitTag) && strpos($content, $this->bookRule->splitTag) > -1) {
       $content = explode($this->bookRule->splitTag, $content)[0];
