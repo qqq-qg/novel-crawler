@@ -11,15 +11,15 @@ use Nesk\Rialto\Data\JsFunction;
 
 class Test extends Command
 {
-    protected $signature = 'test';
+  protected $signature = 'test';
 
-    protected $description = '';
+  protected $description = '';
 
-    public function handle()
-    {
-        $repo = new ChromeSearcherRepository(1);
-        $data = $repo->search('行走于神话的巫');
-        dd($data);
+  public function handle()
+  {
+    $repo = new ChromeSearcherRepository(1);
+    $data = $repo->search('行走于神话的巫');
+    dd($data);
 //        $redis = app("redis.connection");
 //        $val = $redis->get("name");
 //        dd($val);
@@ -30,13 +30,18 @@ class Test extends Command
 //            event(new BooksFetchContentEvent($book->id));
 //        }
 //        die;
-        $puppeteer = new Puppeteer();
-        $browser = $puppeteer->launch(['headless' => false]);
 
-        $page = $browser->newPage();
-        $page->goto('https://www.baidu.com');
-        // Get the "viewport" of the page, as reported by the page.
-        $dimensions = $page->evaluate(JsFunction::createWithBody("
+  }
+
+  private function Puppeteer()
+  {
+    $puppeteer = new Puppeteer();
+    $browser = $puppeteer->launch(['headless' => false]);
+
+    $page = $browser->newPage();
+    $page->goto('https://www.baidu.com');
+    // Get the "viewport" of the page, as reported by the page.
+    $dimensions = $page->evaluate(JsFunction::createWithBody("
     return {
         width: document.documentElement.clientWidth,
         height: document.documentElement.clientHeight,
@@ -44,8 +49,8 @@ class Test extends Command
     };
 "));
 
-        printf('Dimensions: %s', print_r($dimensions, true));
+    printf('Dimensions: %s', print_r($dimensions, true));
 
-        $browser->close();
-    }
+    $browser->close();
+  }
 }

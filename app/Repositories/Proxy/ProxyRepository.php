@@ -4,8 +4,8 @@ namespace App\Repositories\Proxy;
 
 abstract class ProxyRepository
 {
-    protected $originUrl = '';
-    protected $rules = [];
+  protected $originUrl = '';
+  protected $rules = [];
 
-    abstract function getProxyPool($pageNumber = 1);
+  abstract function getProxyPool($pageNumber = 1);
 }

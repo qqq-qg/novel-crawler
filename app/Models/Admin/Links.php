@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Links extends Model
 {
-    protected $fillable = [
-        'title',
-        'linkurl',
-        'listorder',
-        'status',
-    ];
+  protected $fillable = [
+    'title',
+    'linkurl',
+    'listorder',
+    'status',
+  ];
 }

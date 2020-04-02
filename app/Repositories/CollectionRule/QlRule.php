@@ -16,20 +16,20 @@ namespace App\Repositories\CollectionRule;
  */
 Class QlRule
 {
-    public function __construct($range = '', array $rules = [], $nextPage = false, $page = 0)
-    {
-        $this->range = $range;
-        $this->rules = $rules;
-        $this->nextPage = $nextPage;
-        $this->page = $page;
-    }
+  public function __construct($range = '', array $rules = [], $nextPage = false, $page = 0)
+  {
+    $this->range = $range;
+    $this->rules = $rules;
+    $this->nextPage = $nextPage;
+    $this->page = $page;
+  }
 
-    public function toArray()
-    {
-        return [
-            'range' => $this->range,
-            'rules' => $this->rules,
-            'page' => $this->page,
-        ];
-    }
+  public function toArray()
+  {
+    return [
+      'range' => $this->range,
+      'rules' => $this->rules,
+      'page' => $this->page,
+    ];
+  }
 }

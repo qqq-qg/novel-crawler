@@ -7,8 +7,10 @@ use App\Repositories\BookRepository;
 use App\Repositories\SettingRepository;
 use Illuminate\Http\Request;
 
-class BaseController extends Controller {
-  public function __construct(Request $request, SettingRepository $settingRepository, BookRepository $bookRepository) {
+class BaseController extends Controller
+{
+  public function __construct(Request $request, SettingRepository $settingRepository, BookRepository $bookRepository)
+  {
     //通用数据
     if (!\Request::ajax() && \Request::isMethod('get')) {
       //System Setting

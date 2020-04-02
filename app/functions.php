@@ -4,7 +4,8 @@
  * @param $template
  * @return mixed
  */
-function admin_view($template) {
+function admin_view($template)
+{
   $params = func_get_args();//获取函数传入的参数列表 数组
   $params[0] = 'admin.' . $params[0];
   return call_user_func_array('view', $params);//调用回调函数，并把一个数组参数作为回调函数的参数
@@ -15,7 +16,8 @@ function admin_view($template) {
  * @param $template
  * @return mixed
  */
-function home_view($template) {
+function home_view($template)
+{
   $params = func_get_args();//获取函数传入的参数列表 数组
   $params[0] = 'home.' . $params[0];
   return call_user_func_array('view', $params);//调用回调函数，并把一个数组参数作为回调函数的参数
@@ -26,7 +28,8 @@ function home_view($template) {
  * @param $template
  * @return mixed
  */
-function wap_view($template) {
+function wap_view($template)
+{
   $params = func_get_args();//获取函数传入的参数列表 数组
   $params[0] = 'wap.' . $params[0];
   return call_user_func_array('view', $params);//调用回调函数，并把一个数组参数作为回调函数的参数
@@ -37,7 +40,8 @@ function wap_view($template) {
  * @param $mobile
  * @return int
  */
-function is_mobile($mobile) {
+function is_mobile($mobile)
+{
   return preg_match('/1[3|4|5|7|8]{1}\d{9}/', $mobile);
 }
 
@@ -46,7 +50,8 @@ function is_mobile($mobile) {
  * @param $email
  * @return int
  */
-function is_email($email) {
+function is_email($email)
+{
   return preg_match('/^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$/', $email);
 }
 
@@ -55,7 +60,8 @@ function is_email($email) {
  * @param $thumb
  * @return string
  */
-function upload_base64_thumb($thumb) {
+function upload_base64_thumb($thumb)
+{
   if (empty($thumb)) return '';
   if (strpos($thumb, 'data:image') === false) return $thumb;
   $filepath = '/uploads/thumbs/' . date('Ym') . '/';//缩略图按月划分
@@ -86,7 +92,8 @@ function upload_base64_thumb($thumb) {
  * @param string $dir
  * @return string
  */
-function save_remote_thumb($thumb, $dir = 'books') {
+function save_remote_thumb($thumb, $dir = 'books')
+{
   if (empty($thumb)) return '';
 
   $filepath = '/uploads/' . $dir . '/' . date('Ym/d') . '/';//缩略图按月划分
@@ -120,7 +127,8 @@ function save_remote_thumb($thumb, $dir = 'books') {
  * @param $file
  * @return mixed
  */
-function makeQiNiuKey($file) {
+function makeQiNiuKey($file)
+{
   //$file = str_replace( array('/' , '\\') , DIRECTORY_SEPARATOR , $file );
   $rule = array(
     public_path() . '/uploads/books/',
@@ -136,7 +144,8 @@ function makeQiNiuKey($file) {
  * @param $key
  * @return string
  */
-function uploadToQiniu($file, $key = '') {
+function uploadToQiniu($file, $key = '')
+{
   if (empty($file)) return false;
   if (empty(env('IMG_URL'))) {
     return str_replace(public_path(), '', $file);
@@ -157,7 +166,8 @@ function uploadToQiniu($file, $key = '') {
  * validate.js
  * @return string
  */
-function jquery_validate_js() {
+function jquery_validate_js()
+{
   return <<<php
     <script src="/skin/js/plugins/validate/jquery.validate.min.js"></script>
     <script src="/skin/js/plugins/validate/messages_zh.min.js"></script>
@@ -168,7 +178,8 @@ php;
  * 生成jquery.validate的默认设置
  * @return string
  */
-function jquery_validate_default() {
+function jquery_validate_default()
+{
   $js = <<<php
     $.validator.setDefaults({
         highlight: function(a) {
@@ -198,7 +209,8 @@ php;
  * @param $obj
  * @return mixed
  */
-function obj2arr($obj) {
+function obj2arr($obj)
+{
   if (is_object($obj)) {
     return json_decode(json_encode($obj), true);
   }
@@ -210,7 +222,8 @@ function obj2arr($obj) {
  * @param $route
  * @return string
  */
-function route2url($route = '') {
+function route2url($route = '')
+{
   if (empty($route)) return '/';
   try {
     return route($route);
@@ -226,7 +239,8 @@ function route2url($route = '') {
  * @param string $extends
  * @return bool
  */
-function seditor($content = '', $name = 'content', $editor = 'ueditor', $extends = '') {
+function seditor($content = '', $name = 'content', $editor = 'ueditor', $extends = '')
+{
 
   if ($editor == 'kindeditor') {
     $url = "/plugins/editor/kindeditor/kindeditor.js";
@@ -260,7 +274,8 @@ function seditor($content = '', $name = 'content', $editor = 'ueditor', $extends
  * @param string $img
  * @return string
  */
-function imgurl($img = '') {
+function imgurl($img = '')
+{
   if (!$img) {
     return '/skin/manager/images/nopic.png';
   }
@@ -272,7 +287,8 @@ function imgurl($img = '') {
  * @param string $img
  * @return string
  */
-function bookimg($img = '') {
+function bookimg($img = '')
+{
   if (!$img) {
     return asset('/skin/default/images/nocover.jpg');
   }
@@ -294,7 +310,8 @@ function bookimg($img = '') {
  * @param int $aid
  * @return string
  */
-function bookurl($catid, $id = 0, $aid = 0) {
+function bookurl($catid, $id = 0, $aid = 0)
+{
   if ($aid) {
     if (is_numeric($aid)) {
       return route('BookContent', [
@@ -332,7 +349,8 @@ function bookurl($catid, $id = 0, $aid = 0) {
  * @param int $aid
  * @return mixed
  */
-function wapurl($catid = 0, $id = 0, $aid = 0) {
+function wapurl($catid = 0, $id = 0, $aid = 0)
+{
   $baseUrl = env('WAP_URL');
   if (!$catid) return $baseUrl;
   $url = bookurl($catid, $id, $aid);
@@ -344,7 +362,8 @@ function wapurl($catid = 0, $id = 0, $aid = 0) {
  * 日志记录
  * @param $message
  */
-function logwrite($message) {
+function logwrite($message)
+{
   if (is_array($message) || is_object($message)) {
     \Log::debug("\n" . var_export($message, true));
   } else {
@@ -359,7 +378,8 @@ function logwrite($message) {
  * @return mixed
  * @throws Exception
  */
-function request_spider($url, $spider = 'baidu') {
+function request_spider($url, $spider = 'baidu')
+{
   switch ($spider) {
     case 'baidu':
       $ip = '220.181.108.' . rand(1, 255);
@@ -396,7 +416,8 @@ function request_spider($url, $spider = 'baidu') {
  * @param $image
  * @return bool
  */
-function isImage($image) {
+function isImage($image)
+{
   $info = @getimagesize($image);
   if (!$info) return false;
   //$ext = image_type_to_extension($info[2]);
@@ -408,7 +429,8 @@ function isImage($image) {
  * @param $file
  * @return string
  */
-function staticPath($file) {
+function staticPath($file)
+{
   $staticPath = env('STATIC_URL');
   if (!empty($staticPath)) {
     return $staticPath . $file;
@@ -422,7 +444,8 @@ function staticPath($file) {
  * @param string $type
  * @return mixed
  */
-function post_url_to_baidu($url, $type = 'pc') {
+function post_url_to_baidu($url, $type = 'pc')
+{
   if (is_array($url)) {
     $url = implode("\n", $url);
   }
@@ -448,12 +471,14 @@ function post_url_to_baidu($url, $type = 'pc') {
  * 移动端域名
  * @return mixed
  */
-function wap_domain() {
+function wap_domain()
+{
   return str_replace(['http://', 'https://'], '', env('WAP_URL'));
 }
 
 //ping一个IP地址，能不能通
-function ping($ip) {
+function ping($ip)
+{
   $ip_port = explode(':', $ip);
   if (filter_var($ip_port[0], FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {        //IPv6
     $socket = socket_create(AF_INET6, SOCK_STREAM, SOL_TCP);
@@ -473,7 +498,8 @@ function ping($ip) {
 }
 
 //随机返回一个 User-Agent
-function get_random_user_agent() {
+function get_random_user_agent()
+{
   $agentArr = [
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36'
   ];
@@ -481,7 +507,8 @@ function get_random_user_agent() {
   return $agentArr[$i];
 }
 
-function is_time_out($message) {
+function is_time_out($message)
+{
   $isTimeOut = strpos($message, 'Connection timed out') > -1;
   if ($isTimeOut) {
     return true;
@@ -498,7 +525,8 @@ function is_time_out($message) {
  * @param $url
  * @return mixed
  */
-function get_real_url($url) {
+function get_real_url($url)
+{
   stream_context_set_default([
     'ssl' => [
       'verify_peer' => false,
@@ -523,7 +551,8 @@ function get_real_url($url) {
  * @param $fromUrl
  * @return string
  */
-function get_full_url($path, $fromUrl) {
+function get_full_url($path, $fromUrl)
+{
   if (strpos($path, 'http') !== false) {
     return $path;
   }
@@ -537,7 +566,8 @@ function get_full_url($path, $fromUrl) {
   return $path;
 }
 
-function format_ranger_array($string) {
+function format_ranger_array($string)
+{
   $res = preg_split("/[,，]+/u", $string);
   $arr = [];
   foreach ($res as $v) {

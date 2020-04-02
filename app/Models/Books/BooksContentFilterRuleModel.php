@@ -21,5 +21,5 @@ use App\Models\BaseModel;
  */
 class BooksContentFilterRuleModel extends BaseModel
 {
-    protected $table = 'books_content_filter_rule';
+  protected $table = 'books_content_filter_rule';
 }

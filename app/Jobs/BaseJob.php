@@ -10,30 +10,30 @@ use Illuminate\Queue\SerializesModels;
 
 class BaseJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+  use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    /**
-     * Create a new job instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
+  /**
+   * Create a new job instance.
+   *
+   * @return void
+   */
+  public function __construct()
+  {
+    //
+  }
 
-    /**
-     * Execute the job.
-     *
-     * @return void
-     */
-    public function handle()
-    {
-        //
-    }
+  /**
+   * Execute the job.
+   *
+   * @return void
+   */
+  public function handle()
+  {
+    //
+  }
 
-    public function middleware()
-    {
-        return [new JobMiddleware()];
-    }
+  public function middleware()
+  {
+    return [new JobMiddleware()];
+  }
 }

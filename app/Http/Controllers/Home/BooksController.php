@@ -7,7 +7,8 @@ use App\Repositories\BookChapterRepository;
 use App\Repositories\BookRepository;
 use Illuminate\Support\Facades\DB;
 
-class BooksController extends BaseController {
+class BooksController extends BaseController
+{
 
   /**
    * 栏目列表
@@ -15,7 +16,8 @@ class BooksController extends BaseController {
    * @param $catid
    * @return mixed
    */
-  public function getIndex(BookRepository $repository, $catid) {
+  public function getIndex(BookRepository $repository, $catid)
+  {
     //封面推荐
     $ftLists = \Cache::remember('catid.' . $catid . '.ftLists', 600, function () use ($repository, $catid) {
       return $repository->ftlists(['cate_id' => $catid], 'hits DESC', 6)->toArray();
@@ -37,7 +39,8 @@ class BooksController extends BaseController {
    * @param $id
    * @return mixed
    */
-  public function getLists(BookRepository $bookRepository, BookChapterRepository $bookChapterRepository, $catid, $id) {
+  public function getLists(BookRepository $bookRepository, BookChapterRepository $bookChapterRepository, $catid, $id)
+  {
     $book = $bookRepository->find($id);
     $lists = $bookChapterRepository->lists(['books_id' => $id], 'chapter_index ASC', 1000);
     $lastDetail = $bookChapterRepository->lastDetail($id);
@@ -55,7 +58,8 @@ class BooksController extends BaseController {
    * @param $aid
    * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|mixed
    */
-  public function getContent(BookRepository $bookRepository, BookChapterRepository $bookChapterRepository, $catid, $id, $aid) {
+  public function getContent(BookRepository $bookRepository, BookChapterRepository $bookChapterRepository, $catid, $id, $aid)
+  {
 
     $book = $bookRepository->find($id);
     $detail = $bookChapterRepository->find($aid);

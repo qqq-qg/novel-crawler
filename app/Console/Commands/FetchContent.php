@@ -8,19 +8,19 @@ use Illuminate\Console\Command;
 
 class FetchContent extends Command
 {
-    protected $signature = 'book:fix {id?}';
+  protected $signature = 'book:fix {id?}';
 
-    protected $description = '搜索任务，启动队列';
+  protected $description = '搜索任务，启动队列';
 
-    public function handle()
-    {
-        $ids = format_ranger_array($this->argument('id'));
-        if ($ids) {
-            $booksIdArr = BooksModel::query()->whereIn('id', $ids)->pluck('id')->toArray();
-        } else {
-            $booksIdArr = BooksModel::query()->pluck('id')->toArray();
-        }
-
-        event(new BooksFetchContentEvent($booksIdArr));
+  public function handle()
+  {
+    $ids = format_ranger_array($this->argument('id'));
+    if ($ids) {
+      $booksIdArr = BooksModel::query()->whereIn('id', $ids)->pluck('id')->toArray();
+    } else {
+      $booksIdArr = BooksModel::query()->pluck('id')->toArray();
     }
+
+    event(new BooksFetchContentEvent($booksIdArr));
+  }
 }

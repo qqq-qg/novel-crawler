@@ -6,8 +6,10 @@ use App\Jobs\SearchBooksJob;
 use App\Models\Books\BooksModel;
 use App\Models\Books\CategoryModel;
 
-class BookRepository extends BaseRepository {
-  public function __construct() {
+class BookRepository extends BaseRepository
+{
+  public function __construct()
+  {
     parent::__construct(new BooksModel());
   }
 
@@ -19,7 +21,8 @@ class BookRepository extends BaseRepository {
    * @param bool $page
    * @return array|\Illuminate\Contracts\Pagination\LengthAwarePaginator|static[]
    */
-  public function lists($condition = [], $order = 'id DESC', $pagesize = 10, $page = true) {
+  public function lists($condition = [], $order = 'id DESC', $pagesize = 10, $page = true)
+  {
     $lists = $this->model::query()->where(array_merge(['status' => 1], $condition));
     if (strpos($order, ',') !== false) {
       foreach (explode(',', $order) as $v) {
@@ -45,7 +48,8 @@ class BookRepository extends BaseRepository {
    * @param bool $page
    * @return array|\Illuminate\Contracts\Pagination\LengthAwarePaginator|static[]
    */
-  public function ftlists($condition = [], $order = 'id DESC', $pagesize = 10, $page = false) {
+  public function ftlists($condition = [], $order = 'id DESC', $pagesize = 10, $page = false)
+  {
     $order = $order ? explode(' ', $order) : ['id', 'DESC'];
     $lists = $this->model::query()->where('thumb', '<>', '')->where(array_merge(['status' => 1], $condition))->orderBy($order[0], $order[1]);
     if ($page) {
@@ -60,7 +64,8 @@ class BookRepository extends BaseRepository {
    * @param null $status
    * @return array|mixed
    */
-  public static function sourceLists($status = null) {
+  public static function sourceLists($status = null)
+  {
     $source = config('book.source');
     if ($status === null) {
       return $source;
@@ -76,11 +81,13 @@ class BookRepository extends BaseRepository {
     return $source;
   }
 
-  public function getCategories() {
+  public function getCategories()
+  {
     return CategoryModel::query()->orderBy('listorder', 'asc')->get()->keyBy('id')->toArray();
   }
 
-  public function createCategory($data) {
+  public function createCategory($data)
+  {
     if (!empty($data['id'])) {
       $model = CategoryModel::query()->findOrNew($data['id']);
     } else {
@@ -91,11 +98,13 @@ class BookRepository extends BaseRepository {
     return $model->save();
   }
 
-  public function deleteCategory($id) {
+  public function deleteCategory($id)
+  {
     return CategoryModel::query()->where('id', $id)->delete();
   }
 
-  public function addSearchTask($title) {
+  public function addSearchTask($title)
+  {
     if (empty($title)) {
       return false;
     }
@@ -103,19 +112,23 @@ class BookRepository extends BaseRepository {
   }
 
 
-  public function dailyInsertCount() {
+  public function dailyInsertCount()
+  {
     return $this->model::query()->where('created_at', '>', date('Y-m-d 00:00:00'))->count();
   }
 
-  public function dailyUpdateCount() {
+  public function dailyUpdateCount()
+  {
     return $this->model::query()->where('updated_at', '>', date('Y-m-d 00:00:00'))->count();
   }
 
-  public function monthInsertCount() {
+  public function monthInsertCount()
+  {
     return $this->model::query()->where('created_at', '>', date('Y-m-01 00:00:00'))->count();
   }
 
-  public function monthUpdateCount() {
+  public function monthUpdateCount()
+  {
     return $this->model::query()->where('updated_at', '>', date('Y-m-01 00:00:00'))->count();
   }
 }

@@ -7,11 +7,11 @@ use Illuminate\Queue\SerializesModels;
 
 class BooksUpdateEvent
 {
-    use SerializesModels;
-    public $book;
+  use SerializesModels;
+  public $book;
 
-    public function __construct(BooksModel $book)
-    {
-        $this->book = $book;
-    }
+  public function __construct(BooksModel $book)
+  {
+    $this->book = $book;
+  }
 }

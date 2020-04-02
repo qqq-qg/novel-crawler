@@ -7,14 +7,14 @@ use Illuminate\Console\Command;
 
 class SearcherBookTask extends Command
 {
-    protected $signature = 'book:search {title}';
+  protected $signature = 'book:search {title}';
 
-    protected $description = '搜索任务，启动队列';
+  protected $description = '搜索任务，启动队列';
 
-    public function handle()
-    {
-        $title = $this->argument('title');
-        dispatch(new SearchBooksJob($title));
-        echo "{$title} 已加入搜索任务队列!";
-    }
+  public function handle()
+  {
+    $title = $this->argument('title');
+    dispatch(new SearchBooksJob($title));
+    echo "{$title} 已加入搜索任务队列!";
+  }
 }

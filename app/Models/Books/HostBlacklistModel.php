@@ -18,10 +18,10 @@ use App\Models\BaseModel;
  */
 class HostBlacklistModel extends BaseModel
 {
-    protected $table = 'books_host_blacklist';
+  protected $table = 'books_host_blacklist';
 
-    public static function getALlEnableHost()
-    {
-        return HostBlacklistModel::query()->where('status', HostBlacklistModel::ENABLE_STATUS)->pluck('host')->toArray();
-    }
+  public static function getALlEnableHost()
+  {
+    return HostBlacklistModel::query()->where('status', HostBlacklistModel::ENABLE_STATUS)->pluck('host')->toArray();
+  }
 }

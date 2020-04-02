@@ -7,8 +7,10 @@ use App\Repositories\Books\BookRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
-class IndexController extends Controller {
-  public function index(Request $request, BookRepository $bookRepository) {
+class IndexController extends Controller
+{
+  public function index(Request $request, BookRepository $bookRepository)
+  {
     try {
       $data = $bookRepository->lists();
       return view('wap/index', ['data' => $data]);
@@ -17,7 +19,8 @@ class IndexController extends Controller {
     }
   }
 
-  public function readBook(Request $request, BookRepository $bookRepository) {
+  public function readBook(Request $request, BookRepository $bookRepository)
+  {
     try {
       $id = $request->get('id', 0);
       $data = $bookRepository->getBook($id);
@@ -27,7 +30,8 @@ class IndexController extends Controller {
     }
   }
 
-  public function getBookContent(Request $request, BookRepository $bookRepository) {
+  public function getBookContent(Request $request, BookRepository $bookRepository)
+  {
     try {
       $id = $request->get('id', 0);
       $chapterIndex = $request->get('chapter_index', null);
@@ -38,7 +42,8 @@ class IndexController extends Controller {
     }
   }
 
-  public function getChapterGroup(Request $request, BookRepository $bookRepository) {
+  public function getChapterGroup(Request $request, BookRepository $bookRepository)
+  {
     try {
       $id = $request->get('id', 0);
       $chapterIndex = $request->get('chapter_index', 1);

@@ -4,7 +4,8 @@ namespace App\Repositories;
 
 use Illuminate\Database\Eloquent\Model;
 
-class BaseRepository {
+class BaseRepository
+{
   /**
    * @var Model $model
    */
@@ -15,11 +16,13 @@ class BaseRepository {
    * BaseRepository constructor.
    * @param Model $model
    */
-  public function __construct(Model $model) {
+  public function __construct(Model $model)
+  {
     $this->model = $model;
   }
 
-  public function listBy($where, $page = true) {
+  public function listBy($where, $page = true)
+  {
     return $page ? $this->model::query()->where($where)
       ->paginate(self::$pageSize) : $this->model::query()->where($where)->get();
   }
@@ -28,7 +31,8 @@ class BaseRepository {
    * @param $id
    * @return mixed
    */
-  public function find($id) {
+  public function find($id)
+  {
     return $this->model::query()->find($id);
   }
 
@@ -37,7 +41,8 @@ class BaseRepository {
    * @param $value
    * @return mixed
    */
-  public function findBy($field, $value) {
+  public function findBy($field, $value)
+  {
     return $this->model::query()->where($field, $value)->first();
   }
 
@@ -46,7 +51,8 @@ class BaseRepository {
    * @param array $data
    * @return mixed
    */
-  public function create($data) {
+  public function create($data)
+  {
     return $this->model::query()->create($data);
   }
 
@@ -55,7 +61,8 @@ class BaseRepository {
    * @param array $data
    * @return mixed
    */
-  public function update($data) {
+  public function update($data)
+  {
     $data = array_map(function ($val) {
       return $val ?? '';
     }, $data);
@@ -68,11 +75,13 @@ class BaseRepository {
    * @param $id
    * @return int
    */
-  public function delete($id) {
+  public function delete($id)
+  {
     return $this->model->destroy($id);
   }
 
-  public function count() {
+  public function count()
+  {
     return $this->model::query()->count();
   }
 }

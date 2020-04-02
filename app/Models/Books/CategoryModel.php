@@ -19,5 +19,5 @@ use App\Models\BaseModel;
  */
 class CategoryModel extends BaseModel
 {
-    protected $table = 'category';
+  protected $table = 'category';
 }

@@ -15,12 +15,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
 
-class BookController extends BaseController {
+class BookController extends BaseController
+{
   /**
    * @param BookRepository $repository
    * @return mixed
    */
-  public function getIndex(BookRepository $repository) {
+  public function getIndex(BookRepository $repository)
+  {
     $lists = $repository->lists();
     $categories = $repository->getCategories();
     $data = [
@@ -36,7 +38,8 @@ class BookController extends BaseController {
    * @return mixed
    * @Date: 2020/02/02 21:29
    */
-  public function getCategories(BookRepository $repository) {
+  public function getCategories(BookRepository $repository)
+  {
     $lists = $repository->getCategories();
     $data = [
       'lists' => $lists,
@@ -51,7 +54,8 @@ class BookController extends BaseController {
    * @return mixed
    * @Date: 2020/02/02 21:29
    */
-  public function createCategory(CreateCategoryRequest $request, BookRepository $repository) {
+  public function createCategory(CreateCategoryRequest $request, BookRepository $repository)
+  {
     $result = $repository->createCategory($request->all());
     if ($result) {
       return redirect()->route('Book.getCategories');
@@ -67,7 +71,8 @@ class BookController extends BaseController {
    * @return \Illuminate\Http\RedirectResponse
    * @Date: 2020/02/02 21:50
    */
-  public function deleteCategory(Request $request, BookRepository $repository) {
+  public function deleteCategory(Request $request, BookRepository $repository)
+  {
     $result = $repository->deleteCategory($request->get('id'));
     if ($result) {
       return redirect()->route('Book.getCategories');
@@ -83,7 +88,8 @@ class BookController extends BaseController {
    * @return mixed
    * @Date: 2020/02/02 22:37
    */
-  public function collectionRule(Request $request, CollectionRuleRepository $repository) {
+  public function collectionRule(Request $request, CollectionRuleRepository $repository)
+  {
     $lists = $repository->collectionRule($request->all());
     $data = [
       'lists' => $lists,
@@ -97,7 +103,8 @@ class BookController extends BaseController {
    * @return mixed
    * @Date: 2020/02/06 10:27
    */
-  public function getCreateCollectionRule(Request $request, CollectionRuleRepository $repository) {
+  public function getCreateCollectionRule(Request $request, CollectionRuleRepository $repository)
+  {
     $id = $request->get('id', '');
     $data = [];
     if (!empty($id)) {
@@ -112,7 +119,8 @@ class BookController extends BaseController {
    * @return \Illuminate\Http\RedirectResponse
    * @Date: 2020/02/06 10:28
    */
-  public function createCollectionRule(Request $request, CollectionRuleRepository $repository) {
+  public function createCollectionRule(Request $request, CollectionRuleRepository $repository)
+  {
     $result = $repository->createCollectionRule($request->all());
     if ($result) {
       return redirect()->route('Book.collectionRule');
@@ -127,7 +135,8 @@ class BookController extends BaseController {
    * @return \Illuminate\Http\RedirectResponse
    * @Date: 2020/02/06 10:28
    */
-  public function deleteCollectionRule(Request $request, CollectionRuleRepository $repository) {
+  public function deleteCollectionRule(Request $request, CollectionRuleRepository $repository)
+  {
     $result = $repository->deleteCollectionRule($request->get('id'));
     if ($result) {
       return redirect()->route('Book.collectionRule');
@@ -142,7 +151,8 @@ class BookController extends BaseController {
    * @return \Illuminate\Http\JsonResponse
    * @Date: 2020/02/06 10:28
    */
-  public function testCollectionRule(Request $request, CollectionRuleRepository $repository) {
+  public function testCollectionRule(Request $request, CollectionRuleRepository $repository)
+  {
     try {
       $data = $repository->testCollectionRule($request->all());
       return Response::json(['code' => 0, 'data' => $data]);
@@ -157,7 +167,8 @@ class BookController extends BaseController {
    * @return mixed
    * @Date: 2020/02/06 10:28
    */
-  public function collectionTask(Request $request, CollectionRuleRepository $repository, BookRepository $bookRepository) {
+  public function collectionTask(Request $request, CollectionRuleRepository $repository, BookRepository $bookRepository)
+  {
     $lists = $repository->collectionTask($request->all());
     $data = [
       'lists' => $lists,
@@ -173,7 +184,8 @@ class BookController extends BaseController {
    * @return \Illuminate\Http\RedirectResponse
    * @Date: 2020/02/06 10:28
    */
-  public function createCollectionTask(CollectionTaskRequest $request, CollectionRuleRepository $repository) {
+  public function createCollectionTask(CollectionTaskRequest $request, CollectionRuleRepository $repository)
+  {
     $result = $repository->createCollectionTask($request->all());
     if ($result) {
       return redirect()->route('Book.collectionTask');
@@ -188,7 +200,8 @@ class BookController extends BaseController {
    * @return \Illuminate\Http\RedirectResponse
    * @Date: 2020/02/06 11:08
    */
-  public function deleteCollectionTask(Request $request, CollectionRuleRepository $repository) {
+  public function deleteCollectionTask(Request $request, CollectionRuleRepository $repository)
+  {
     $result = $repository->deleteCollectionTask($request->get('id'));
     if ($result) {
       return redirect()->route('Book.collectionTask');
@@ -204,7 +217,8 @@ class BookController extends BaseController {
    * @param BookRepository $repository
    * @return $this|\Illuminate\Http\RedirectResponse
    */
-  public function postUpdate(Request $request, BookRepository $repository) {
+  public function postUpdate(Request $request, BookRepository $repository)
+  {
     $result = $repository->update($request->all());
     if ($result) {
       return redirect()->route('Book.getIndex')->with('Message', '修改成功');
@@ -219,7 +233,8 @@ class BookController extends BaseController {
    * @param BookRepository $repository
    * @return $this|\Illuminate\Http\RedirectResponse
    */
-  public function getDelete(Request $request, BookRepository $repository) {
+  public function getDelete(Request $request, BookRepository $repository)
+  {
     $result = $repository->delete($request::input('id'));
     if ($result) {
       return redirect()->route('Book.getIndex')->with('Message', '删除成功');
@@ -235,7 +250,8 @@ class BookController extends BaseController {
    * @param BookChapterRepository $repository
    * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
    */
-  public function getChapters(Request $request, BookChapterRepository $repository) {
+  public function getChapters(Request $request, BookChapterRepository $repository)
+  {
     $condition = [
       'books_id' => $request->get('id')
     ];
@@ -250,7 +266,8 @@ class BookController extends BaseController {
    * @param BookChapterRepository $bookChapterRepository
    * @return \Illuminate\Http\RedirectResponse
    */
-  public function updateQueue(Request $request, BookRepository $repository, BookChapterRepository $bookChapterRepository) {
+  public function updateQueue(Request $request, BookRepository $repository, BookChapterRepository $bookChapterRepository)
+  {
     $type = $request->updateType;
     $number = intval($request->book_number) < 1 ? 10 : abs(intval($request->book_number));
     $chapterNumber = intval($request->chapter_number) < 1 ? 50 : abs(intval($request->chapter_number));
@@ -286,7 +303,8 @@ class BookController extends BaseController {
    * @param BookRepository $repository
    * @return int
    */
-  public function updateChapters(Request $request, BookRepository $repository) {
+  public function updateChapters(Request $request, BookRepository $repository)
+  {
     $id = $request->id;
     $number = intval($request->number);
     $book = $repository->find($id);
@@ -301,7 +319,8 @@ class BookController extends BaseController {
    * @param BookChapterRepository $repository
    * @return mixed
    */
-  public function chapterContent(Request $request, BookChapterRepository $repository) {
+  public function chapterContent(Request $request, BookChapterRepository $repository)
+  {
     return $repository->getContent($request->pid, $request->id);
   }
 
@@ -311,7 +330,8 @@ class BookController extends BaseController {
    * @param BookChapterRepository $repository
    * @return mixed
    */
-  public function updateChapter(Request $request, BookChapterRepository $repository) {
+  public function updateChapter(Request $request, BookChapterRepository $repository)
+  {
     $item = $repository->find($request->id);
     if ($request->isMethod('get')) {
       $item->content = $repository->getContent($item->pid, $item->id);
@@ -333,7 +353,8 @@ class BookController extends BaseController {
    * @param BookChapterRepository $bookChapterRepository
    * @return $this|\Illuminate\Http\RedirectResponse
    */
-  public function deleteChapter(Request $request, BookChapterRepository $bookChapterRepository) {
+  public function deleteChapter(Request $request, BookChapterRepository $bookChapterRepository)
+  {
     $detail = $bookChapterRepository->find($request->id);
     $result = $detail->delete();
     if ($result) {
@@ -350,7 +371,8 @@ class BookController extends BaseController {
    * @param Request $request
    * @return mixed
    */
-  public function createQueue(Request $request, BookRepository $repository) {
+  public function createQueue(Request $request, BookRepository $repository)
+  {
     $rst = $repository->addSearchTask($request->post('title', ''));
     if ($rst) {
       return redirect()->route('Book.getIndex')->with('Message', '添加采集队列成功');
@@ -363,7 +385,8 @@ class BookController extends BaseController {
    * 获取当前队列数量
    * @return int
    */
-  public function queueNumber() {
+  public function queueNumber()
+  {
     if (config('queue.default') == 'database') {
       return DB::table('jobs')->count();
     } else {

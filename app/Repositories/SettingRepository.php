@@ -4,13 +4,16 @@ namespace App\Repositories;
 
 use App\Models\Admin\Setting;
 
-class SettingRepository extends BaseRepository {
-  public function __construct(Setting $model) {
+class SettingRepository extends BaseRepository
+{
+  public function __construct(Setting $model)
+  {
     parent::__construct($model);
   }
 
 
-  public function lists() {
+  public function lists()
+  {
     return $this->model::query()->get()->toArray();
   }
 
@@ -19,7 +22,8 @@ class SettingRepository extends BaseRepository {
    * @param $data
    * @return \Illuminate\Database\Eloquent\Model
    */
-  public function create($data) {
+  public function create($data)
+  {
     return $this->model::query()->updateOrCreate(['item' => $data['item']], $data);
   }
 
@@ -28,7 +32,8 @@ class SettingRepository extends BaseRepository {
    * @param $data
    * @return bool
    */
-  public function update($data) {
+  public function update($data)
+  {
     foreach ($data as $k => $v) {
       $r = $this->model::query()->find($k);
       if (!$r) {

@@ -6,9 +6,11 @@ use App\Repositories\BookRepository;
 use App\Repositories\LinkRepository;
 
 
-class IndexController extends BaseController {
+class IndexController extends BaseController
+{
 
-  public function getIndex(BookRepository $bookRepository, LinkRepository $linkRepository) {
+  public function getIndex(BookRepository $bookRepository, LinkRepository $linkRepository)
+  {
     $categories = $bookRepository->getCategories();
 
     //最近更新
@@ -69,7 +71,8 @@ class IndexController extends BaseController {
    * @param $categories
    * @return array
    */
-  protected function setCateName($data, $categories) {
+  protected function setCateName($data, $categories)
+  {
     foreach ($data as $k => $v) {
       $data[$k]['catname'] = $categories[$v['cate_id']]['name'] ?? '';
     }

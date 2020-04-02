@@ -19,41 +19,41 @@ namespace App\Repositories\CollectionRule;
  */
 Class BookRule
 {
-    const CHARSET_UTF8 = 'utf-8';
-    const CHARSET_GBK = 'gbk';
+  const CHARSET_UTF8 = 'utf-8';
+  const CHARSET_GBK = 'gbk';
 
-    public $host = '';
-    public $charset = '';
-    public $splitTag = '';
-    public $replaceTags = [];
+  public $host = '';
+  public $charset = '';
+  public $splitTag = '';
+  public $replaceTags = [];
 
-    public function __construct($host = '', $charset = '')
-    {
-        $this->host = $host;
-        $this->charset = $charset;
+  public function __construct($host = '', $charset = '')
+  {
+    $this->host = $host;
+    $this->charset = $charset;
+  }
+
+  public function toArray()
+  {
+    return [
+      'host' => $this->host,
+      'charset' => $this->charset,
+      'bookList' => array_map(function (QlRule $rule) {
+        return $rule->toArray();
+      }, $this->bookList),
+      'home' => $this->home->toArray(),
+      'chapterList' => $this->chapterList->toArray(),
+      'content' => $this->content->toArray(),
+      'splitTag' => $this->splitTag,
+      'replaceTags' => $this->replaceTags,
+    ];
+  }
+
+  public function needEncoding()
+  {
+    if (empty($this->charset) || $this->charset == self::CHARSET_UTF8) {
+      return false;
     }
-
-    public function toArray()
-    {
-        return [
-            'host' => $this->host,
-            'charset' => $this->charset,
-            'bookList' => array_map(function (QlRule $rule) {
-                return $rule->toArray();
-            }, $this->bookList),
-            'home' => $this->home->toArray(),
-            'chapterList' => $this->chapterList->toArray(),
-            'content' => $this->content->toArray(),
-            'splitTag' => $this->splitTag,
-            'replaceTags' => $this->replaceTags,
-        ];
-    }
-
-    public function needEncoding()
-    {
-        if (empty($this->charset) || $this->charset == self::CHARSET_UTF8) {
-            return false;
-        }
-        return true;
-    }
+    return true;
+  }
 }

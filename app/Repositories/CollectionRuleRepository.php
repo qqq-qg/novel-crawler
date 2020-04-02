@@ -7,8 +7,10 @@ use App\Models\Books\CollectionTaskModel;
 use App\Repositories\CollectionRule\BookRule;
 use App\Repositories\CollectionRule\QlRule;
 
-class CollectionRuleRepository extends BaseRepository {
-  public function __construct() {
+class CollectionRuleRepository extends BaseRepository
+{
+  public function __construct()
+  {
     parent::__construct(new CollectionRuleModel());
   }
 
@@ -17,7 +19,8 @@ class CollectionRuleRepository extends BaseRepository {
    * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
    * @Date: 2020/02/03 17:06
    */
-  public function collectionRule($keyword) {
+  public function collectionRule($keyword)
+  {
     $query = CollectionRuleModel::query()
       ->where('status', CollectionRuleModel::ENABLE_STATUS)
       ->orderBy('id', 'desc');
@@ -33,7 +36,8 @@ class CollectionRuleRepository extends BaseRepository {
    * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|null|object
    * @Date: 2020/02/03 17:09
    */
-  public function getCollectionRuleById($id) {
+  public function getCollectionRuleById($id)
+  {
     $model = CollectionRuleModel::query()->where('id', $id)->first();
     $model->rule_json = unserialize($model['rule_json'])->toArray();
     return $model;
@@ -45,7 +49,8 @@ class CollectionRuleRepository extends BaseRepository {
    * @return bool
    * @Date: 2020/02/03 17:06
    */
-  public function createCollectionRule($data) {
+  public function createCollectionRule($data)
+  {
     if (!empty($data['id'])) {
       $model = CollectionRuleModel::query()->findOrNew($data['id']);
     } else {
@@ -66,7 +71,8 @@ class CollectionRuleRepository extends BaseRepository {
    * @return BookRule
    * @Date: 2020/02/04 1:50
    */
-  private function getBookRule($data) {
+  private function getBookRule($data)
+  {
     $bookRule = new BookRule();
     $bookRule->host = $data['host'] ?? '';
     $bookRule->charset = $data['charset'] ?? '';
@@ -97,7 +103,8 @@ class CollectionRuleRepository extends BaseRepository {
    * @return mixed
    * @Date: 2020/02/03 17:06
    */
-  public function deleteCollectionRule($id) {
+  public function deleteCollectionRule($id)
+  {
     return CollectionRuleModel::query()->where('id', $id)->delete();
   }
 
@@ -106,7 +113,8 @@ class CollectionRuleRepository extends BaseRepository {
    * @return array
    * @Date: 2020/02/04 14:17
    */
-  public function testCollectionRule($data) {
+  public function testCollectionRule($data)
+  {
     $bookRule = $this->getBookRule($data);
     $requestRepository = new BookRequestRepository($bookRule);
     return $this->tryRequestCollection($requestRepository, $data['test_type'], $data['test_url']);
@@ -120,7 +128,8 @@ class CollectionRuleRepository extends BaseRepository {
    * @return array
    * @Date: 2020/02/04 23:13
    */
-  private function tryRequestCollection(BookRequestRepository $requestRepository, $type, $url, $tries = 3) {
+  private function tryRequestCollection(BookRequestRepository $requestRepository, $type, $url, $tries = 3)
+  {
     try {
       if ($type == 'home') {
         $result = $requestRepository->getHome($url);
@@ -153,7 +162,8 @@ class CollectionRuleRepository extends BaseRepository {
    * @return array
    * @Date: 2020/02/06 10:43
    */
-  public function getRules() {
+  public function getRules()
+  {
     $result = CollectionRuleModel::query()
       ->select(['id', 'title'])
       ->where('status', CollectionRuleModel::ENABLE_STATUS)
@@ -162,7 +172,8 @@ class CollectionRuleRepository extends BaseRepository {
     return $result;
   }
 
-  public function collectionTask($keyword) {
+  public function collectionTask($keyword)
+  {
     $query = CollectionTaskModel::query()
       ->where('status', CollectionTaskModel::ENABLE_STATUS)
       ->with('rule')
@@ -171,7 +182,8 @@ class CollectionRuleRepository extends BaseRepository {
     return $query->paginate(static::$pageSize);
   }
 
-  public function createCollectionTask($data) {
+  public function createCollectionTask($data)
+  {
     if (!empty($data['id'])) {
       $model = CollectionTaskModel::query()->findOrNew($data['id']);
     } else {
@@ -187,7 +199,8 @@ class CollectionRuleRepository extends BaseRepository {
     return $model->save();
   }
 
-  public function deleteCollectionTask($id) {
+  public function deleteCollectionTask($id)
+  {
     return CollectionTaskModel::query()->where('id', $id)->delete();
   }
 }

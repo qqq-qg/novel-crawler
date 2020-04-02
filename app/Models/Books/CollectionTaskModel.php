@@ -25,10 +25,12 @@ use App\Models\BaseModel;
  * @property string created_at
  * @property string updated_at
  */
-class CollectionTaskModel extends BaseModel {
+class CollectionTaskModel extends BaseModel
+{
   protected $table = 'collection_task';
 
-  public function getTasks($id = null) {
+  public function getTasks($id = null)
+  {
     $query = static::query()
       ->with('rule')
       ->where('status', CollectionTaskModel::ENABLE_STATUS);
@@ -38,11 +40,13 @@ class CollectionTaskModel extends BaseModel {
     return $query->get();
   }
 
-  public function rule() {
+  public function rule()
+  {
     return $this->hasOne(CollectionRuleModel::class, 'id', 'rule_id');
   }
 
-  public function category() {
+  public function category()
+  {
     return $this->hasOne(CategoryModel::class, 'id', 'cate_id');
   }
 }

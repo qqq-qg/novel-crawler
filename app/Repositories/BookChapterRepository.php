@@ -4,8 +4,10 @@ namespace App\Repositories;
 
 use App\Models\Books\BooksChapterModel;
 
-class BookChapterRepository extends BaseRepository {
-  public function __construct(BooksChapterModel $model) {
+class BookChapterRepository extends BaseRepository
+{
+  public function __construct(BooksChapterModel $model)
+  {
     parent::__construct($model);
   }
 
@@ -15,7 +17,8 @@ class BookChapterRepository extends BaseRepository {
    * @param int $pagesize
    * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
    */
-  public function lists($condition = [], $order = 'id DESC', $pagesize = 20) {
+  public function lists($condition = [], $order = 'id DESC', $pagesize = 20)
+  {
     $fields = ['id', 'books_id', 'chapter_index', 'title', 'created_at', 'updated_at'];
     $order = $order ? explode(' ', $order) : ['id', 'DESC'];
     return $this->model::query()->select($fields)
@@ -28,7 +31,8 @@ class BookChapterRepository extends BaseRepository {
    * @param $pid
    * @return string
    */
-  protected function getContentPath($pid) {
+  protected function getContentPath($pid)
+  {
     return public_path("uploads/contents/{$pid}/");
   }
 
@@ -37,7 +41,8 @@ class BookChapterRepository extends BaseRepository {
    * @param $id
    * @return string
    */
-  public function getContent($pid, $id) {
+  public function getContent($pid, $id)
+  {
     $bookDir = $this->getContentPath($pid);
     $search = [
       '推荐一个淘宝天猫内部折扣优惠券的微信公众号:guoertejia每天人工筛选上百款特价商品。打开微信添加微信公众号:guoertejia 省不少辛苦钱。'
@@ -57,7 +62,8 @@ class BookChapterRepository extends BaseRepository {
    * @param $content
    * @return int
    */
-  function setContent($pid, $id, $content) {
+  function setContent($pid, $id, $content)
+  {
     $bookDir = $this->getContentPath($pid);
     if (!\File::isDirectory($bookDir)) {
       \File::makeDirectory($bookDir, 0777, true);
@@ -71,7 +77,8 @@ class BookChapterRepository extends BaseRepository {
    * @param $id
    * @return bool
    */
-  function deleteContent($pid, $id) {
+  function deleteContent($pid, $id)
+  {
     $bookDir = $this->getContentPath($pid);
     $path = $bookDir . "{$id}.txt";
 
@@ -81,7 +88,8 @@ class BookChapterRepository extends BaseRepository {
     return false;
   }
 
-  public function updateDetail($data) {
+  public function updateDetail($data)
+  {
     $item = $this->find($data['id']);
     if (!$item) return false;
     $item->title = $data['title'];
@@ -94,7 +102,8 @@ class BookChapterRepository extends BaseRepository {
    * @param $aid
    * @return mixed|static
    */
-  public function nextPage($pid, $aid) {
+  public function nextPage($pid, $aid)
+  {
     return $this->model::query()->select('id')
       ->where('books_id', $pid)
       ->where('id', '>', $aid)
@@ -107,7 +116,8 @@ class BookChapterRepository extends BaseRepository {
    * @param $aid
    * @return mixed|static
    */
-  public function prevPage($pid, $aid) {
+  public function prevPage($pid, $aid)
+  {
     return $this->model::query()->select('id')
       ->where('books_id', $pid)
       ->where('id', '<', $aid)
@@ -119,7 +129,8 @@ class BookChapterRepository extends BaseRepository {
    * @param $pid
    * @return mixed|static
    */
-  public function lastDetail($pid) {
+  public function lastDetail($pid)
+  {
     return $this->model::query()->select()
       ->where('books_id', $pid)
       ->orderBy('chapter_index', 'DESC')
@@ -130,7 +141,8 @@ class BookChapterRepository extends BaseRepository {
    * 今日新增
    * @return int
    */
-  public function dailyInsertCount() {
+  public function dailyInsertCount()
+  {
     return $this->model::query()->where('created_at', '>', date('Y-m-d 00:00:00'))->count();
   }
 }
