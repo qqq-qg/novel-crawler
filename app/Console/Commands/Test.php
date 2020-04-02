@@ -2,12 +2,13 @@
 
 namespace App\Console\Commands;
 
-use App\Events\BooksFetchContentEvent;
-use App\Models\Books\BooksModel;
-use App\Repositories\Searcher\ChromeSearcherRepository;
+use App\Models\Books\CollectionRuleModel;
+use App\Repositories\CollectionRule\BookRule;
+use App\Repositories\Searcher\Plugin\FilterHeader;
 use Illuminate\Console\Command;
 use Nesk\Puphpeteer\Puppeteer;
 use Nesk\Rialto\Data\JsFunction;
+use QL\QueryList;
 
 class Test extends Command
 {
@@ -17,20 +18,27 @@ class Test extends Command
 
   public function handle()
   {
-    $repo = new ChromeSearcherRepository(1);
-    $data = $repo->search('行走于神话的巫');
+    $rule = CollectionRuleModel::query()->where('id', 1)->first();
+    /**
+     * @var BookRule $bookRule
+     */
+    $bookRule = unserialize($rule->rule_json);
+    $url = 'http://book.zongheng.com/store/c3/c1031/b0/u0/p1/v0/s9/t0/u0/i0/ALL.html';
+    $ql = QueryList::get($url);
+    if ($bookRule->needEncoding()) {
+      $ql->use(FilterHeader::class)->filterHeader();
+      $ql->encoding(BookRule::CHARSET_UTF8);
+    }
+    $bookRule->bookList['category']->rules = [
+      'url'=>['span.bookname>a','href']
+    ];
+    $bookRule->bookList['category']->range = 'ul.main_con li';
+    print_r($bookRule->bookList['category']->rules);
+    $data = $ql
+      ->range($bookRule->bookList['category']->range)
+      ->rules($bookRule->bookList['category']->rules)
+      ->query()->getData();
     dd($data);
-//        $redis = app("redis.connection");
-//        $val = $redis->get("name");
-//        dd($val);
-//        $booksArr = BooksModel::query()
-//            ->where(['status' => BooksModel::ENABLE_STATUS, 'update_status' => BooksModel::UPT_STATUS_LOADING])
-//            ->get();
-//        foreach ($booksArr as $book) {
-//            event(new BooksFetchContentEvent($book->id));
-//        }
-//        die;
-
   }
 
   private function Puppeteer()
