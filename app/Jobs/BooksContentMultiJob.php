@@ -41,6 +41,7 @@ class BooksContentMultiJob extends BaseJob
 //    $curlOpt = $this->getCurlProxyOpt();
     $againUrl = [];
     $ql = QueryList::use(CurlMulti::class);
+    $ql->range($this->bookRule->content->range)->rules($this->bookRule->content->rules);
     $ql->curlMulti($this->urls)
       ->success(function (QueryList $ql, CurlMulti $curl, $r) {
         try {
@@ -61,11 +62,7 @@ class BooksContentMultiJob extends BaseJob
               $ql->setHtml($html);
             }
           }
-          $data = $ql
-            ->range($this->bookRule->content->range)
-            ->rules($this->bookRule->content->rules)
-            ->query()->getData()->toArray();
-
+          $data = $ql->queryData();
           $content = trim($data['content'] ?? '');
           if (!empty($this->bookRule->splitTag) && strpos($content, $this->bookRule->splitTag) > -1) {
             $content = explode($this->bookRule->splitTag, $content)[0];

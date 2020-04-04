@@ -53,7 +53,9 @@ class BooksContentFuzzyJob extends BaseJob
           $urlHash = md5(trim($qlUrl));
           /* @var BooksChapterModel $chapterModel */
           $chapterModel = BooksChapterModel::query()->where('from_hash', $urlHash)->first();
-          $chapterModel->increment('fetch_times', 1);
+          if ($chapterModel) {
+            $chapterModel->increment('fetch_times', 1);
+          }
           $content = (new TryAnalysisContent('', $ql))->handle();
           if (empty($content)) {
             return false;
