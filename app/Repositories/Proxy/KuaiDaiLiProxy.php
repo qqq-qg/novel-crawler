@@ -6,16 +6,17 @@ use QL\QueryList;
 
 class KuaiDaiLiProxy extends ProxyRepository
 {
-  public $originUrl = 'https://www.kuaidaili.com/free/inha/{$page}/';
-  public $rules = [
+  protected $originUrl = 'https://www.kuaidaili.com/free/inha/{$page}/';
+  protected $range = 'table.table>tbody>tr';
+  protected $rules = [
     'ip' => [
-      "table.table>tbody>tr>td[data-title='IP']", 'text'
+      "td[data-title='IP']", 'text'
     ],
     'port' => [
-      "table.table>tbody>tr>td[data-title='PORT']", 'text'
+      "td[data-title='PORT']", 'text'
     ],
     'http' => [
-      "table.table>tbody>tr>td[data-title='类型']", 'text'
+      "td[data-title='类型']", 'text'
     ],
   ];
 
@@ -27,8 +28,9 @@ class KuaiDaiLiProxy extends ProxyRepository
       for ($i = 1; $i <= $pageNumber; $i++) {
         $url = str_replace('{$page}', $i, $this->originUrl);
         $data = QueryList::get($url)
+          ->range($this->range)
           ->rules($this->rules)
-          ->query()->getData()->all();
+          ->query()->getData()->toArray();
         foreach ($data as $datum) {
           $pools [] = join(':', [
             strtolower(trim($datum['http'])),

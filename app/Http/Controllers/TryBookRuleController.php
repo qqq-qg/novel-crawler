@@ -60,12 +60,12 @@ class TryBookRuleController extends Controller
         ->setHtml($html)
         ->range($this->bookRule->bookList['category']->range)
         ->rules($this->bookRule->bookList['category']->rules)
-        ->query()->getData()->all();
+        ->query()->getData()->toArray();
     } else {
       $data = QueryList::get($url)
         ->range($this->bookRule->bookList['category']->range)
         ->rules($this->bookRule->bookList['category']->rules)
-        ->query()->getData()->all();
+        ->query()->getData()->toArray();
     }
     if (empty($data)) {
       dd(1);
@@ -81,12 +81,12 @@ class TryBookRuleController extends Controller
         ->setHtml($html)
         ->range($this->bookRule->home->range)
         ->rules($this->bookRule->home->rules)
-        ->query()->getData()->first();
+        ->query()->getData()->toArray();
     } else {
       $data = QueryList::get($url)
         ->range($this->bookRule->home->range)
         ->rules($this->bookRule->home->rules)
-        ->query()->getData()->first();
+        ->query()->getData()->toArray();
     }
     if (empty($data)) {
       dd(1);
@@ -108,12 +108,12 @@ class TryBookRuleController extends Controller
         ->setHtml($html)
         ->range($this->bookRule->chapterList->range)
         ->rules($this->bookRule->chapterList->rules)
-        ->query()->getData()->all();
+        ->query()->getData()->toArray();
     } else {
       $data = QueryList::get($chapterListUrl)
         ->range($this->bookRule->chapterList->range)
         ->rules($this->bookRule->chapterList->rules)
-        ->query()->getData()->all();
+        ->query()->getData()->toArray();
     }
 
     if (empty($data)) {
@@ -137,12 +137,12 @@ class TryBookRuleController extends Controller
             ->setHtml($html)
             ->range($this->bookRule->content->range)
             ->rules($this->bookRule->content->rules)
-            ->query()->getData()->first();
+            ->query()->getData()->toArray();
         } else {
           $data = $ql
             ->range($this->bookRule->content->range)
             ->rules($this->bookRule->content->rules)
-            ->query()->getData()->first();
+            ->query()->getData()->toArray();
         }
 
         if (empty($data)) {
@@ -204,12 +204,12 @@ class TryBookRuleController extends Controller
         ->setHtml($html)
         ->range($this->bookRule->bookList['ranking']->range)
         ->rules($this->bookRule->bookList['ranking']->rules)
-        ->query()->getData()->all();
+        ->query()->getData()->toArray();
     } else {
       $data = QueryList::get($url)
         ->range($this->bookRule->bookList['ranking']->range)
         ->rules($this->bookRule->bookList['ranking']->rules)
-        ->query()->getData()->all();
+        ->query()->getData()->toArray();
     }
     if (empty($data)) {
       dd(1);
@@ -225,12 +225,12 @@ class TryBookRuleController extends Controller
         ->setHtml($html)
         ->range($this->bookRule->home->range)
         ->rules($this->bookRule->home->rules)
-        ->query()->getData()->first();
+        ->query()->getData()->toArray();
     } else {
       $data = QueryList::get($url)
         ->range($this->bookRule->home->range)
         ->rules($this->bookRule->home->rules)
-        ->query()->getData()->first();
+        ->query()->getData()->toArray();
     }
     if (empty($data)) {
       dd(1);
@@ -252,12 +252,12 @@ class TryBookRuleController extends Controller
         ->setHtml($html)
         ->range($this->bookRule->chapterList->range)
         ->rules($this->bookRule->chapterList->rules)
-        ->query()->getData()->all();
+        ->query()->getData()->toArray();
     } else {
       $data = QueryList::get($chapterListUrl)
         ->range($this->bookRule->chapterList->range)
         ->rules($this->bookRule->chapterList->rules)
-        ->query()->getData()->all();
+        ->query()->getData()->toArray();
     }
 
     if (empty($data)) {
@@ -281,12 +281,12 @@ class TryBookRuleController extends Controller
             ->setHtml($html)
             ->range($this->bookRule->content->range)
             ->rules($this->bookRule->content->rules)
-            ->query()->getData()->first();
+            ->query()->getData()->toArray();
         } else {
           $data = $ql
             ->range($this->bookRule->content->range)
             ->rules($this->bookRule->content->rules)
-            ->query()->getData()->first();
+            ->query()->getData()->toArray();
         }
 
         if (empty($data)) {
@@ -346,12 +346,12 @@ class TryBookRuleController extends Controller
                 $data = QueryList::get($url)->filterHtmlHeader()
                     ->range($this->bookRule->bookList['category']->range)
                     ->rules($this->bookRule->bookList['category']->rules)
-                    ->query()->getData()->all();
+                    ->query()->getData()->toArray();
             } else {
                 $data = QueryList::get($url)
                     ->range($this->bookRule->bookList['category']->range)
                     ->rules($this->bookRule->bookList['category']->rules)
-                    ->query()->getData()->all();
+                    ->query()->getData()->toArray();
             }
             if (empty($data)) {
                 dd(1);
@@ -367,7 +367,7 @@ class TryBookRuleController extends Controller
     $data = $ql
       ->range($this->bookRule->home->range)
       ->rules($this->bookRule->home->rules)
-      ->query()->getData()->first();
+      ->query()->getData()->toArray();
     if (empty($data)) {
       dd(1);
     }
@@ -408,7 +408,7 @@ class TryBookRuleController extends Controller
         $data = $ql
           ->range($this->bookRule->content->range)
           ->rules($this->bookRule->content->rules)
-          ->query()->getData()->first();
+          ->query()->getData()->toArray();
         if (empty($data)) {
           dd(3);
         }

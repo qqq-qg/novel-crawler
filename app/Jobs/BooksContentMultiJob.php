@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Models\Books\BooksChapterModel;
 use App\Models\Books\BooksContentModel;
 use App\Repositories\CollectionRule\BookRule;
+use App\Repositories\Proxy\KuaiDaiLiProxy;
 use App\Repositories\Searcher\Plugin\CurlMulti;
 use App\Repositories\Searcher\Plugin\FilterHeader;
 use QL\QueryList;
@@ -37,6 +38,7 @@ class BooksContentMultiJob extends BaseJob
 
   public function handle()
   {
+//    $curlOpt = $this->getCurlProxyOpt();
     $againUrl = [];
     $ql = QueryList::use(CurlMulti::class);
     $ql->curlMulti($this->urls)
@@ -45,7 +47,9 @@ class BooksContentMultiJob extends BaseJob
           $qlUrl = $r['info']['url'];
           $urlHash = md5(trim($qlUrl));
           $chapterModel = BooksChapterModel::query()->where('from_hash', $urlHash)->first();
-          $chapterModel->increment('fetch_times', 1);
+          if ($chapterModel) {
+            $chapterModel->increment('fetch_times', 1);
+          }
           if ($this->bookRule->needEncoding()) {
             $ql->use(FilterHeader::class)->filterHeader();
             $ql->encoding(BookRule::CHARSET_UTF8);
@@ -89,10 +93,23 @@ class BooksContentMultiJob extends BaseJob
       ->start([
         'maxThread' => 30,
         'maxTry' => 1,
+//        'opt' => $curlOpt,
       ]);
 
     if ($this->tryAgain && !empty($againUrl)) {
       dispatch(new BooksContentMultiJob($this->bookRule, $againUrl, false));
     }
+  }
+
+  private function getCurlProxyOpt()
+  {
+    $proxy = (new KuaiDaiLiProxy())->getProxyPool();
+    $proxyInfo = explode(':', str_replace('//', '', $proxy));
+    return [
+      CURLOPT_PROXYAUTH => CURLAUTH_BASIC,//代理认证模式
+      CURLOPT_PROXYTYPE => CURLPROXY_HTTP,//使用http代理模式
+      CURLOPT_PROXY => $proxyInfo[1],//代理服务器地址
+      CURLOPT_PROXYPORT => $proxyInfo[2],//代理服务器端口
+    ];
   }
 }

@@ -88,7 +88,7 @@ class BookRequestRepository
     $data = $ql
       ->range($this->bookRule->chapterList->range)
       ->rules($this->bookRule->chapterList->rules)
-      ->query()->getData()->all();
+      ->query()->getData()->toArray();
     foreach ($data as $k => $item) {
       $from_url = trim($item['from_url']);
       $from_url = get_full_url($from_url, $chapterListUrl);
