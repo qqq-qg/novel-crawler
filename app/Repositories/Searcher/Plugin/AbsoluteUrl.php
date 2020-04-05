@@ -2,7 +2,6 @@
 
 namespace App\Repositories\Searcher\Plugin;
 
-use phpUri;
 use QL\Contracts\PluginContract;
 use QL\QueryList;
 
