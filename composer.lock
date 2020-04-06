@@ -1059,23 +1059,17 @@
         },
         {
             "name": "jaeger/querylist",
-            "version": "V4.2.2",
+            "version": "4.2.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/jae-jae/QueryList.git",
-                "reference": "c16826a5730e70bf9789efaa93bff139aa958d9e"
+                "url": "ssh://gogs@106.12.127.29:22/git/querylist.git",
+                "reference": "02fe4b5b13809ea4639cb4954852505916b81589"
             },
             "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/jae-jae/QueryList/zipball/c16826a5730e70bf9789efaa93bff139aa958d9e",
-                "reference": "c16826a5730e70bf9789efaa93bff139aa958d9e",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
+                "type": "tar",
+                "url": "https://api.nacrane.top/packages/dist/jaeger/querylist/jaeger-querylist-4.2.2-dbedec.tar",
+                "reference": "02fe4b5b13809ea4639cb4954852505916b81589",
+                "shasum": "e30bd153e7b9665fdf1a32ebe9c093a678f1e823"
             },
             "require": {
                 "ext-dom": "*",
@@ -1094,7 +1088,11 @@
                     "QL\\": "src"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "Tests\\": "tests/"
+                }
+            },
             "license": [
                 "MIT"
             ],
@@ -1111,7 +1109,7 @@
                 "phpQuery",
                 "spider"
             ],
-            "time": "2020-03-23T10:15:04+00:00"
+            "time": "2020-04-06T07:03:51+00:00"
         },
         {
             "name": "jaeger/querylist-puppeteer",
