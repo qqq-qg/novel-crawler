@@ -2,10 +2,18 @@
 
 namespace App\Repositories\Searcher;
 
+use App\Repositories\Searcher\Plugin\BaiduSearcher;
 use Illuminate\Support\Collection;
 use QL\Ext\Chrome;
 use QL\QueryList;
 
+/**
+ * puppeteer 搜索
+ * Class ChromeSearcherRepository
+ * @author Nacrane
+ * @Date: 2020/04/08 14:54
+ * @package App\Repositories\Searcher
+ */
 class ChromeSearcherRepository implements SearcherRepositoryInterface
 {
   private static $tries = 1;
@@ -50,25 +58,22 @@ class ChromeSearcherRepository implements SearcherRepositoryInterface
     $queryString = http_build_query($queryData);
 
     $result = $ql->chrome(function ($page, $browser) use ($queryString) {
-      $page->goto('https://www.baidu.com/s?' . $queryString);
+      $page->goto(BaiduSearcher::API . '?' . $queryString);
       $html = $page->content();
-//            sleep(100);
       $browser->close();
-      // 返回值一定要是页面的HTML内容
-      return $html;
+      return $html;// 返回值一定要是页面的HTML内容
     }, [
       'headless' => true, // 启动可视化Chrome浏览器,方便调试
-//            'devtools' => true, // 打开浏览器的开发者工具
+      //'devtools' => true, // 打开浏览器的开发者工具
       'args' => ['--no-sandbox', '--disable-setuid-sandbox']
     ])
-      ->rules([
-        'title' => ['h3', 'text'],
-        'link' => ['h3>a', 'href']
-      ])->query()->getData();
+      ->range(BaiduSearcher::RANGE)
+      ->rules(BaiduSearcher::RULES)
+      ->query()->getData();
     if (!($result instanceof Collection)) {
       throw new \Exception('Connection timed out');
     }
-    $data = $result->all();
+    $data = $result->toArray();
     foreach ($data as $k => $datum) {
       try {
         $data[$k]['link'] = get_real_url($datum['link']);

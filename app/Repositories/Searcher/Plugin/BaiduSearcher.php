@@ -16,7 +16,7 @@ class BaiduSearcher implements PluginContract
     'title' => ['h3', 'text'],
     'link' => ['h3>a', 'href']
   ];
-  const RANGE = '.result';
+  const RANGE = '#content_left>.result';
 
   public function __construct(QueryList $ql, $pageNumber)
   {
@@ -28,7 +28,7 @@ class BaiduSearcher implements PluginContract
   {
     $name = $opt[0] ?? 'baidu';
     $queryList->bind($name, function ($pageNumber = 10) {
-      return new Baidu($this, $pageNumber);
+      return new BaiduSearcher($this, $pageNumber);
     });
   }
 
@@ -94,5 +94,4 @@ class BaiduSearcher implements PluginContract
       return $url;
     }
   }
-
 }

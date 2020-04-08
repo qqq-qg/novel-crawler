@@ -28,7 +28,7 @@ class GoogleSearcher implements PluginContract
   {
     $name = $opt[0] ?? 'google';
     $queryList->bind($name, function ($pageNumber = 10) {
-      return new Google($this, $pageNumber);
+      return new GoogleSearcher($this, $pageNumber);
     });
   }
 
