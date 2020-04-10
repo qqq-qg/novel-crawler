@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bfdf9f2bc560a2edc0ca93841eb9836d",
+    "content-hash": "76e454efde4473e0e0e5b015a0ebf0cc",
     "packages": [
         {
             "name": "ares333/php-curl",
@@ -1710,6 +1710,46 @@
                 "psr-3"
             ],
             "time": "2019-12-20T14:22:59+00:00"
+        },
+        {
+            "name": "nac/mvc",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "ssh://gogs@106.12.127.29:22/git/laravel6-mvc-generator.git",
+                "reference": "51c1142baee556773350fc65d04ed3bc7b5bed2e"
+            },
+            "dist": {
+                "type": "tar",
+                "url": "https://api.nacrane.top/packages/dist/nac/mvc/nac-mvc-1.0.0-e2f504.tar",
+                "reference": "51c1142baee556773350fc65d04ed3bc7b5bed2e",
+                "shasum": "c80ad8c4da24212abf53a1285e3faf5e12190290"
+            },
+            "require": {
+                "illuminate/support": "^6.12.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Nac\\Mvc\\MvcGenServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Nac\\Mvc\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "The Laravel Framework.",
+            "keywords": [
+                "laravel",
+                "mvc"
+            ],
+            "time": "2020-04-10T09:05:42+00:00"
         },
         {
             "name": "nesbot/carbon",
@@ -5896,79 +5936,6 @@
                 "object graph"
             ],
             "time": "2020-01-17T21:11:47+00:00"
-        },
-        {
-            "name": "nac/mg",
-            "version": "1.1.2",
-            "source": {
-                "type": "git",
-                "url": "ssh://gogs@106.12.127.29:22/git/laravel6-migrations-generator.git",
-                "reference": "0242142afc1407bad1b0cfefec85eeddfaf7e3ff"
-            },
-            "dist": {
-                "type": "tar",
-                "url": "https://api.nacrane.top/packages/dist/nac/mg/nac-mg-1.1.2-5ca806.tar",
-                "reference": "0242142afc1407bad1b0cfefec85eeddfaf7e3ff",
-                "shasum": "17edb3a39aad321d408e86a41722803eb90b90de"
-            },
-            "require": {
-                "illuminate/support": "^6.12.0"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Nac\\Mg\\MigrationsGenServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Nac\\Mg\\": "src/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "description": "The Laravel Framework.",
-            "keywords": [
-                "laravel",
-                "migrate"
-            ],
-            "time": "2020-03-28T18:26:53+00:00"
-        },
-        {
-            "name": "nac/mvc",
-            "version": "1.0.0",
-            "source": {
-                "type": "git",
-                "url": "ssh://gogs@106.12.127.29:22/git/laravel6-mvc-generator.git",
-                "reference": "5e222cabf1ceefda6ff1eb6ecf7fef681e214ac6"
-            },
-            "dist": {
-                "type": "tar",
-                "url": "https://api.nacrane.top/packages/dist/nac/mvc/nac-mvc-1.0.0-e3c7be.tar",
-                "reference": "5e222cabf1ceefda6ff1eb6ecf7fef681e214ac6",
-                "shasum": "84c5730a090b570c8f84a8d0ddc83cfe5bec8d07"
-            },
-            "require": {
-                "illuminate/support": "^6.12.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Nac\\Mvc\\": "src/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "description": "The Laravel Framework.",
-            "keywords": [
-                "laravel",
-                "mvc"
-            ],
-            "time": "2020-04-10T05:33:55+00:00"
         },
         {
             "name": "nunomaduro/collision",
