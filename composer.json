@@ -10,7 +10,7 @@
   "repositories": [
     {
       "type": "composer",
-      "url": "https://api.nacrane.top/packages"
+      "url": "http://106.12.127.29:7000"
     }
   ],
   "require": {
@@ -24,19 +24,19 @@
     "mews/captcha": "^3.0"
   },
   "require-dev": {
+    "barryvdh/laravel-ide-helper": "^2.4",
     "facade/ignition": "^1.4",
     "fzaninotto/faker": "^1.4",
     "mockery/mockery": "^1.0",
+    "nac/mvc": "*",
     "nunomaduro/collision": "^3.0",
-    "phpunit/phpunit": "^8.0",
-    "barryvdh/laravel-ide-helper": "^2.4",
-    "nac/mg": "*",
-    "nac/mvc": "*"
+    "phpunit/phpunit": "^8.0"
   },
   "config": {
     "optimize-autoloader": true,
     "preferred-install": "dist",
-    "sort-packages": true
+    "sort-packages": true,
+    "secure-http": false
   },
   "autoload": {
     "psr-4": {
