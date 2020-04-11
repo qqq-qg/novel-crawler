@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "989309ab7dc84e256d8d3b1b9ee09fce",
+    "content-hash": "76e454efde4473e0e0e5b015a0ebf0cc",
     "packages": [
         {
             "name": "ares333/php-curl",
@@ -1062,13 +1062,13 @@
             "version": "4.2.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/jae-jae/QueryList.git",
-                "reference": "c16826a5730e70bf9789efaa93bff139aa958d9e"
+                "url": "ssh://gogs@106.12.127.29:22/git/querylist.git",
+                "reference": "02fe4b5b13809ea4639cb4954852505916b81589"
             },
             "dist": {
                 "type": "tar",
                 "url": "https://api.nacrane.top/packages/dist/jaeger/querylist/jaeger-querylist-4.2.2-dbedec.tar",
-                "reference": "c16826a5730e70bf9789efaa93bff139aa958d9e",
+                "reference": "02fe4b5b13809ea4639cb4954852505916b81589",
                 "shasum": "e30bd153e7b9665fdf1a32ebe9c093a678f1e823"
             },
             "require": {
@@ -1712,6 +1712,46 @@
             "time": "2019-12-20T14:22:59+00:00"
         },
         {
+            "name": "nac/mvc",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "ssh://gogs@106.12.127.29:22/git/laravel6-mvc-generator.git",
+                "reference": "51c1142baee556773350fc65d04ed3bc7b5bed2e"
+            },
+            "dist": {
+                "type": "tar",
+                "url": "https://api.nacrane.top/packages/dist/nac/mvc/nac-mvc-1.0.0-e2f504.tar",
+                "reference": "51c1142baee556773350fc65d04ed3bc7b5bed2e",
+                "shasum": "c80ad8c4da24212abf53a1285e3faf5e12190290"
+            },
+            "require": {
+                "illuminate/support": "^6.12.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Nac\\Mvc\\MvcGenServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Nac\\Mvc\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "The Laravel Framework.",
+            "keywords": [
+                "laravel",
+                "mvc"
+            ],
+            "time": "2020-04-10T09:05:42+00:00"
+        },
+        {
             "name": "nesbot/carbon",
             "version": "2.32.2",
             "source": {
@@ -1911,16 +1951,16 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v4.4.0",
+            "version": "v4.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "bd43ec7152eaaab3bd8c6d0aa95ceeb1df8ee120"
+                "reference": "9a9981c347c5c49d6dfe5cf826bb882b824080dc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/bd43ec7152eaaab3bd8c6d0aa95ceeb1df8ee120",
-                "reference": "bd43ec7152eaaab3bd8c6d0aa95ceeb1df8ee120",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/9a9981c347c5c49d6dfe5cf826bb882b824080dc",
+                "reference": "9a9981c347c5c49d6dfe5cf826bb882b824080dc",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -1965,7 +2005,7 @@
                 "parser",
                 "php"
             ],
-            "time": "2020-04-10T16:34:50+00:00"
+            "time": "2019-11-08T13:50:10+00:00"
         },
         {
             "name": "opis/closure",
@@ -4637,16 +4677,16 @@
         },
         {
             "name": "composer/composer",
-            "version": "1.10.5",
+            "version": "1.10.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "7a4d5b6aa30d2118af27c04f5e897b57156ccfa9"
+                "reference": "1efa6850b4a1740980346ac3582edf7dfb7899ee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/7a4d5b6aa30d2118af27c04f5e897b57156ccfa9",
-                "reference": "7a4d5b6aa30d2118af27c04f5e897b57156ccfa9",
+                "url": "https://api.github.com/repos/composer/composer/zipball/1efa6850b4a1740980346ac3582edf7dfb7899ee",
+                "reference": "1efa6850b4a1740980346ac3582edf7dfb7899ee",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -4719,7 +4759,7 @@
                 "dependency",
                 "package"
             ],
-            "time": "2020-04-10T09:44:22+00:00"
+            "time": "2020-04-09T15:05:50+00:00"
         },
         {
             "name": "composer/semver",
@@ -5896,46 +5936,6 @@
                 "object graph"
             ],
             "time": "2020-01-17T21:11:47+00:00"
-        },
-        {
-            "name": "nac/mvc",
-            "version": "1.0.0",
-            "source": {
-                "type": "git",
-                "url": "ssh://gogs@106.12.127.29:22/git/laravel6-mvc-generator.git",
-                "reference": "51c1142baee556773350fc65d04ed3bc7b5bed2e"
-            },
-            "dist": {
-                "type": "tar",
-                "url": "http://106.12.127.29:7000/dist/nac/mvc/nac-mvc-1.0.0-e2f504.tar",
-                "reference": "51c1142baee556773350fc65d04ed3bc7b5bed2e",
-                "shasum": "f524b6c61f329f3430aee3598c9148d3dc744160"
-            },
-            "require": {
-                "illuminate/support": "^6.12.0"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Nac\\Mvc\\MvcGenServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Nac\\Mvc\\": "src/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "description": "The Laravel Framework.",
-            "keywords": [
-                "laravel",
-                "mvc"
-            ],
-            "time": "2020-04-10T09:05:42+00:00"
         },
         {
             "name": "nunomaduro/collision",
