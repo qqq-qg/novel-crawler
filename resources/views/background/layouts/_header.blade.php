@@ -9,29 +9,29 @@
   <!-- 头部区域（可配合layui已有的水平导航） -->
   <ul class="layui-nav layui-layout-left">
     <li class="layui-nav-item layadmin-flexible" lay-unselect="">
-      <a href="javascript:;" layadmin-event="flexible" title="侧边伸缩">
-        <i class="layui-icon layui-icon-spread-left"></i>
+      <a href="javascript:;" data-event="flexible" title="侧边伸缩">
+        <i class="layui-icon layui-icon-shrink-right" id="LAY_app_flexible"></i>
       </a>
     </li>
     <li class="layui-nav-item layui-hide-xs" lay-unselect="">
-      <a href="http://www.layui.com/admin/" target="_blank" title="前台">
+      <a href="http://www.ql.com" target="_blank" title="前台">
         <i class="layui-icon layui-icon-website"></i>
       </a>
     </li>
     <li class="layui-nav-item" lay-unselect="">
-      <a href="javascript:;" layadmin-event="refresh" title="刷新">
+      <a href="javascript:;" data-event="refresh" title="刷新">
         <i class="layui-icon layui-icon-refresh-3"></i>
       </a>
     </li>
     <li class="layui-nav-item layui-hide-xs" lay-unselect="">
       <input type="text" placeholder="搜索..." autocomplete="off" class="layui-input layui-input-search"
-             layadmin-event="serach" lay-action="template/search.html?keywords=">
+             data-event="serach" lay-action="template/search.html?keywords=">
     </li>
   </ul>
 
   <ul class="layui-nav layui-layout-right" lay-filter="layadmin-layout-right">
     <li class="layui-nav-item" lay-unselect="">
-      <a lay-href="app/message/index.html" layadmin-event="message" lay-text="消息中心">
+      <a lay-href="app/message/index.html" data-event="message" lay-text="消息中心">
         <i class="layui-icon layui-icon-notice"></i>
 
         <!-- 如果有新消息，则显示小圆点 -->
@@ -39,17 +39,7 @@
       </a>
     </li>
     <li class="layui-nav-item layui-hide-xs" lay-unselect="">
-      <a href="javascript:;" layadmin-event="theme">
-        <i class="layui-icon layui-icon-theme"></i>
-      </a>
-    </li>
-    <li class="layui-nav-item layui-hide-xs" lay-unselect="">
-      <a href="javascript:;" layadmin-event="note">
-        <i class="layui-icon layui-icon-note"></i>
-      </a>
-    </li>
-    <li class="layui-nav-item layui-hide-xs" lay-unselect="">
-      <a href="javascript:;" layadmin-event="fullscreen">
+      <a href="javascript:;" data-event="fullscreen">
         <i class="layui-icon layui-icon-screen-full"></i>
       </a>
     </li>
@@ -61,14 +51,11 @@
         <dd><a lay-href="set/user/info.html">基本资料</a></dd>
         <dd><a lay-href="set/user/password.html">修改密码</a></dd>
         <hr>
-        <dd layadmin-event="logout" style="text-align: center;"><a>退出</a></dd>
+        <dd data-event="logout" style="text-align: center;"><a>退出</a></dd>
       </dl>
     </li>
     <li class="layui-nav-item layui-hide-xs" lay-unselect="">
-      <a href="javascript:;" layadmin-event="about"><i class="layui-icon layui-icon-more-vertical"></i></a>
-    </li>
-    <li class="layui-nav-item layui-show-xs-inline-block layui-hide-sm" lay-unselect="">
-      <a href="javascript:;" layadmin-event="more"><i class="layui-icon layui-icon-more-vertical"></i></a>
+      <a href="javascript:;" data-event="about"><i class="layui-icon layui-icon-more-vertical"></i></a>
     </li>
   </ul>
 </div>
@@ -80,40 +67,59 @@
       <span>后台管理系统</span>
     </div>
 
-    <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu">
+    <ul class="layui-nav layui-nav-tree" id="LAY-system-side-menu"
+        lay-filter="layadmin-system-side-menu" lay-shrink="all">
       <li class="layui-nav-item">
         <a href="#">
-          <i class="layui-icon layui-icon-home"></i>
-          前台首页
+          <i class="layui-icon layui-icon-home" lay-tips="前台首页"></i>
+          <cite>前台首页</cite>
         </a>
       </li>
-      <li class="layui-nav-item layui-nav-itemed">
-        <a class="" href="javascript:;">
-          <i class="layui-icon layui-icon-template-1"></i>
-          小说管理
+      <li class="layui-nav-item">
+        <a href="javascript:;">
+          <i class="layui-icon layui-icon-template-1" lay-tips="小说管理"></i>
+          <cite>小说管理</cite>
         </a>
         <dl class="layui-nav-child">
-          <dd><a href="javascript:;" class="open-iframe" data-url="/books">小说列表</a></dd>
-          <dd><a href="javascript:;" class="open-iframe" data-url="/categories">分类列表</a></dd>
+          <dd>
+            <a href="javascript:;" class="open-iframe" data-url="/books">
+              <cite>小说列表</cite>
+            </a>
+          </dd>
+          <dd>
+            <a href="javascript:;" class="open-iframe" data-url="/categories">
+              <cite>分类列表</cite>
+            </a>
+          </dd>
           <dd>
             <a href="javascript:;">
-              <i class="layui-icon layui-icon-set"></i>
-              配置
+              <i class="layui-icon layui-icon-set" lay-tips="配置"></i>
+              <cite>配置</cite>
             </a>
             <dl class="layui-nav-child">
-              <dd><a href="javascript:;" class="open-iframe" data-url="/rules">采集规则</a></dd>
-              <dd><a href="javascript:;" class="open-iframe" data-url="/tasks">采集任务</a></dd>
+              <dd>
+                <a href="javascript:;" class="open-iframe" data-url="/rules">
+                  <cite>采集规则</cite>
+                </a>
+              </dd>
+              <dd>
+                <a href="javascript:;" class="open-iframe" data-url="/tasks">
+                  <cite>采集任务</cite>
+                </a>
+              </dd>
             </dl>
           </dd>
         </dl>
       </li>
       <li class="layui-nav-item">
         <a href="javascript:;">
-          <i class="layui-icon layui-icon-username"></i>
-          用户管理
+          <i class="layui-icon layui-icon-username" lay-tips="用户管理"></i>
+          <cite>用户管理</cite>
         </a>
         <dl class="layui-nav-child">
-          <dd><a href="javascript:;" class="open-iframe" data-url="/users">管理列表</a></dd>
+          <dd><a href="javascript:;" class="open-iframe" data-url="/users">
+              <cite>管理列表</cite></a>
+          </dd>
         </dl>
       </li>
     </ul>
@@ -122,8 +128,8 @@
 
 <!-- 页面标签 -->
 <div class="layadmin-pagetabs" id="LAY_app_tabs">
-  <div class="layui-icon layadmin-tabs-control layui-icon-prev" layadmin-event="leftPage"></div>
-  <div class="layui-icon layadmin-tabs-control layui-icon-next" layadmin-event="rightPage"></div>
+  <div class="layui-icon layadmin-tabs-control layui-icon-prev" data-event="leftPage"></div>
+  <div class="layui-icon layadmin-tabs-control layui-icon-next" data-event="rightPage"></div>
   <div class="layui-icon layadmin-tabs-control layui-icon-down">
     <ul class="layui-nav layadmin-tabs-select" lay-filter="layadmin-pagetabs-nav">
       <li class="layui-nav-item" lay-unselect="">
