@@ -1,13 +1,15 @@
-<?php namespace App\Repositories\Background;
+<?php
 
-use App\Models\Background\BooksChapterModel;
+namespace App\Repositories\Background;
+
+use App\Models\Background\SettingModel;
 use Illuminate\Database\Eloquent\Builder;
 
-class BooksChapterRepository
+class SettingRepository
 {
   public function index($search)
   {
-    $paginate = $this->searchQuery(BooksChapterModel::query(), $search)->paginate($search['pageSize'] ?? 15);
+    $paginate = $this->searchQuery(SettingModel::query(), $search)->paginate($search['pageSize'] ?? 15);
     foreach ($paginate->items() as $k => $item) {
       //todo
     }
@@ -25,12 +27,12 @@ class BooksChapterRepository
   public function store($data)
   {
     if (empty($data['id'])) {
-      $companyModel = BooksChapterModel::query()->create($data);
+      $companyModel = SettingModel::query()->create($data);
       if (!$companyModel->id) {
         throw new \Exception("新增保存失败");
       }
     } else {
-      $companyModel = BooksChapterModel::query()->where('id', $data['id'])->first();
+      $companyModel = SettingModel::query()->where('id', $data['id'])->first();
       $rst = $companyModel->update($data);
       if (!$rst) {
         throw new \Exception("更新保存失败");
@@ -41,12 +43,12 @@ class BooksChapterRepository
 
   public function show($id)
   {
-    return BooksChapterModel::query()->find($id);
+    return SettingModel::query()->find($id);
   }
 
   public function destroy($id)
   {
-    $rst = BooksChapterModel::query()->where('id', $id)->delete();
+    $rst = SettingModel::query()->where('id', $id)->delete();
     if (!$rst) {
       throw new \Exception("删除失败");
     }

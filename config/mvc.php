@@ -4,7 +4,7 @@ return [
 
     'repository_root_path' => 'Repositories',//base on app path
     'repository_suffix' => 'Repository',
-    'repository_extend_class' => 'App\\Repositories\\BaseRepository',
+    'repository_extend_class' => '',
 
     'model_root_path' => 'Models',//base on app path
     'model_suffix' => 'Model',
