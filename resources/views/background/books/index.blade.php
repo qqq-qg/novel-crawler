@@ -2,92 +2,20 @@
 @section('content')
   <div class="layui-fluid">
     <div class="layui-card">
-      <div class="layui-form layui-card-header layuiadmin-card-header-auto">
-        <div class="layui-form-item">
-          <div class="layui-inline">
-            <label class="layui-form-label">文章ID</label>
-            <div class="layui-input-inline">
-              <input type="text" name="id" placeholder="请输入" autocomplete="off" class="layui-input">
-            </div>
-          </div>
-          <div class="layui-inline">
-            <label class="layui-form-label">作者</label>
-            <div class="layui-input-inline">
-              <input type="text" name="author" placeholder="请输入" autocomplete="off" class="layui-input">
-            </div>
-          </div>
-          <div class="layui-inline">
-            <label class="layui-form-label">标题</label>
-            <div class="layui-input-inline">
-              <input type="text" name="title" placeholder="请输入" autocomplete="off" class="layui-input">
-            </div>
-          </div>
-          <div class="layui-inline">
-            <label class="layui-form-label">文章标签</label>
-            <div class="layui-input-inline">
-              <select name="label">
-                <option value="">请选择标签</option>
-                <option value="0">美食</option>
-                <option value="1">新闻</option>
-                <option value="2">八卦</option>
-                <option value="3">体育</option>
-                <option value="4">音乐</option>
-              </select>
-            </div>
-          </div>
-          <div class="layui-inline">
-            <button class="layui-btn layui-btn-sm layui-btn-normal" lay-submit lay-filter="LAY-app-contlist-search">
-              <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
-            </button>
-          </div>
-        </div>
-      </div>
-
       <div class="layui-card-body">
-        <div style="padding-bottom: 10px;">
+        <table lay-even id="list-data" lay-filter="list-data" lay-size="sm"></table>
+        <div id="lay-page"></div>
+        <script type="text/html" id="toolbar">
           <div class="layui-btn-container">
-            <div class="layui-btn-group">
-              <button class="layui-btn layui-btn-sm" data-type="add">添加</button>
-              <button class="layui-btn layui-btn-sm" data-type="batchdel">删除</button>
-            </div>
+            <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
+            <button class="layui-btn layui-btn-sm" lay-event="delete">删除</button>
           </div>
-        </div>
-        <table lay-filter="data-list">
-          <thead>
-          <tr>
-            <th lay-data="{field:'username', width:100}">昵称</th>
-            <th lay-data="{field:'experience', width:80, sort:true}">积分</th>
-            <th lay-data="{field:'sign'}">签名</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr>
-            <td>贤心1</td>
-            <td>66</td>
-            <td>人生就像是一场修行a</td>
-          </tr>
-          <tr>
-            <td>贤心2</td>
-            <td>88</td>
-            <td>人生就像是一场修行b</td>
-          </tr>
-          <tr>
-            <td>贤心3</td>
-            <td>33</td>
-            <td>人生就像是一场修行c</td>
-          </tr>
-          </tbody>
-        </table>
-
-        {{--        <script type="text/html" id="buttonTpl">--}}
-        {{--          <button class="layui-btn layui-btn-xs">已发布</button>--}}
-        {{--          <button class="layui-btn layui-btn-primary layui-btn-xs">待修改</button>--}}
-        {{--        </script>--}}
-        {{--        <script type="text/html" id="table-content-list">--}}
-        {{--          <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>--}}
-        {{--          <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i--}}
-        {{--              class="layui-icon layui-icon-delete"></i>删除</a>--}}
-        {{--        </script>--}}
+        </script>
+        <script type="text/html" id="bar">
+          <a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
+          <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+          <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">删除</a>
+        </script>
       </div>
     </div>
   </div>
@@ -97,31 +25,103 @@
   <script>
     layui.use('table', function () {
       var table = layui.table;
+      var laypage = layui.laypage;
 
-      table.init('data-list', {
-        height: 315
-        ,limit: 10
-        , page: true
+      var paginate = @json($paginate);
+      var keyword = @json($search??[]);
+
+      table.render({
+        elem: '#list-data'
+        , toolbar: '#toolbar'
+        , height: 460
+        , data: paginate.data
+        , limit: paginate.per_page
+        , page: false
+        , cols: [[
+          {field: 'id', title: '选择', width: 60, type: 'checkbox'}
+          , {field: 'id', title: 'ID', width: 60, hide: true}
+          , {field: 'category_name', title: '分类名称', width: 100}
+          , {field: 'title', title: '标题', width: 100}
+          , {field: 'thumb', title: '图片', width: 100}
+          , {field: 'last_chapter_title', title: '最新', width: 100}
+          , {field: 'author', title: '作者', width: 100}
+          , {field: 'wordcount', title: '字数', width: 60}
+          , {field: 'follow', title: '关注人数', width: 60}
+          , {field: 'hits', title: '浏览量', width: 60}
+          , {field: 'created_at', title: '添加时间'}
+          , {field: 'created_at', title: '更新时间'}
+          , {field: 'updated_at', title: '更新时间'}
+          , {fixed: 'right', align: 'center', toolbar: '#bar'}
+        ]]
       });
-      //第一个实例
-      // table.render({
-      //   elem: '#demo'
-      //   , height: 312
-      //   , url: '/demo/table/user/' //数据接口
-      //   , page: true //开启分页
-      //   , cols: [[ //表头
-      //     { field: 'id', title: 'ID', width: 80, sort: true, fixed: 'left'}
-      //     , {field: 'username', title: '用户名', width: 80}
-      //     , {field: 'sex', title: '性别', width: 80, sort: true}
-      //     , {field: 'city', title: '城市', width: 80}
-      //     , {field: 'sign', title: '签名', width: 177}
-      //     , {field: 'experience', title: '积分', width: 80, sort: true}
-      //     , {field: 'score', title: '评分', width: 80, sort: true}
-      //     , {field: 'classify', title: '职业', width: 80}
-      //     , {field: 'wealth', title: '财富', width: 135, sort: true}
-      //   ]]
-      // });
+      laypage.render({
+        elem: 'lay-page'
+        , curr: paginate.current_page || 1
+        , limit: paginate.per_page
+        , count: paginate.total
+        , jump: function (obj, first) {
+          //首次不执行
+          if (!first) {
+            //do something
+            search(obj.curr);
+          }
+        }
+      });
+      table.on('toolbar(list-data)', function (obj) {
+        var checkStatus = table.checkStatus(obj.config.id);
+        console.log(checkStatus);
+        switch (obj.event) {
+          case 'add':
+            layer.msg('添加');
+            break;
+          case 'delete':
+            layer.msg('删除');
+            break;
+          case 'update':
+            layer.msg('编辑');
+            break;
+        }
+      });
+      table.on('checkbox(list-data)', function (obj) {
+        console.log(obj.checked); //当前是否选中状态
+        console.log(obj.data); //选中行的相关数据
+        console.log(obj.type); //如果触发的是全选，则为：all，如果触发的是单选，则为：one
+      });
+      //监听工具条
+      table.on('tool(list-data)', function (obj) { //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+        var data = obj.data; //获得当前行数据
+        var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+        var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
+        if (layEvent === 'detail') { //查看
+          //do somehing
+        } else if (layEvent === 'del') { //删除
+          layer.confirm('真的删除行么', function (index) {
+            obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+            layer.close(index);
+            //向服务端发送删除指令
+          });
+        } else if (layEvent === 'edit') { //编辑
+          //do something
 
+          //同步更新缓存对应的值
+          obj.update({
+            username: '123'
+            , title: 'xxx'
+          });
+        } else if (layEvent === 'LAYTABLE_TIPS') {
+          layer.alert('Hi，头部工具栏扩展的右侧图标。');
+        }
+      });
+
+      var search = function (page) {
+        let params = {};
+        params.page = page || paginate.current_page;
+        params.pageSize = paginate.per_page;
+        var paramString = Object.keys(params).map(function (key) {
+          return encodeURIComponent(key) + "=" + encodeURIComponent(params[key]);
+        }).join("&");
+        window.location.href = window.location.pathname + "?" + paramString;
+      };
     });
   </script>
 @endsection

@@ -10,10 +10,10 @@
   <link rel="stylesheet" href="/layui/css/layui.css" media="all">
   {{--  <link id="layuicss-layer" rel="stylesheet" href="/layui/css/modules/layer/default/layer.css" media="all">--}}
   <link id="layuicss-layuiAdmin" rel="stylesheet" href="/layui/style/admin.css" media="all">
-  {{--  <script src="/js/bootstrap.min.js"></script>--}}
+  <script src="/js/lodash.min.js"></script>
   @yield('style')
 </head>
-<body class="layui-layout-body">
+<body>
 <div id="LAY_app">
   <div class="layui-layout layui-layout-admin">
     @yield('content')

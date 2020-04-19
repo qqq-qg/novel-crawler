@@ -9,7 +9,7 @@ class SettingRepository
 {
   public function index($search)
   {
-    $paginate = $this->searchQuery(SettingModel::query(), $search)->paginate($search['pageSize'] ?? 15);
+    $paginate = $this->searchQuery(SettingModel::query(), $search)->paginate($search['pageSize'] ?? 10);
     foreach ($paginate->items() as $k => $item) {
       //todo
     }

@@ -9,7 +9,7 @@ class CollectionRuleRepository
 {
   public function index($search)
   {
-    $paginate = $this->searchQuery(CollectionRuleModel::query(), $search)->paginate($search['pageSize'] ?? 15);
+    $paginate = $this->searchQuery(CollectionRuleModel::query(), $search)->paginate($search['pageSize'] ?? 10);
     foreach ($paginate->items() as $k => $item) {
       //todo
     }

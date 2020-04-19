@@ -36,12 +36,10 @@
       '  </div>');
   };
   element.on("tab(" + p + ")", function (e) {
-    console.log('tab', e);
     P.tabsPage.index = e.index;
     S(e.index);
   });
   element.on("tabDelete(" + p + ")", function (e) {
-    console.log('tabDelete', e);
     $(a).find(b).eq(e.index || 0).remove();
     let id = $(z).find('li' + y).index();
     S(id || 0);

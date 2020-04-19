@@ -9,7 +9,7 @@ class LinkRepository
 {
   public function index($search)
   {
-    $paginate = $this->searchQuery(LinkModel::query(), $search)->paginate($search['pageSize'] ?? 15);
+    $paginate = $this->searchQuery(LinkModel::query(), $search)->paginate($search['pageSize'] ?? 10);
     foreach ($paginate->items() as $k => $item) {
       //todo
     }
