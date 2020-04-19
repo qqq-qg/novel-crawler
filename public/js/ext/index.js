@@ -6,7 +6,8 @@
     , r = $(window)
     , u = $("#LAY_app")
     , m = '#LAY-system-side-menu'
-    , z = "#LAY_app_tabsheader>li"
+    , z = "#LAY_app_tabsheader"
+    , a = "#LAY_app_body"
     , t = "layadmin-layout-tabs"
     , c = ".layui-tab-close"
     , C = "layadmin-side-shrink"
@@ -15,15 +16,36 @@
     , x = "layui-icon-spread-left"
     , g = "layui-icon-shrink-right"
     , v = "layadmin-side-spread-sm"
-    , b = "layadmin-tabsbody-item"
+    , p = "layadmin-layout-tabs"
+    , d = "layui-show"
+    , b = ".layui-tab-item"
   ;
   var get_lay_id = function () {
     let a = [];
-    $(z).each(function (i, o) {
+    $(z).find('li').each(function (i, o) {
       a.push($(o).attr('lay-id'));
     });
     return a;
   };
+  var S = function (index) {
+    $(a).find(b + '.' + d).removeClass(d);
+    $(a).find(b + ':eq(' + index + ')').addClass(d);
+  }, A = function (url) {
+    $(a).append('<div class="layui-tab-item">\n' +
+      '    <iframe src="' + url + '" frameborder="0" class="layadmin-iframe"></iframe>\n' +
+      '  </div>');
+  };
+  element.on("tab(" + p + ")", function (e) {
+    console.log('tab', e);
+    P.tabsPage.index = e.index;
+    S(e.index);
+  });
+  element.on("tabDelete(" + p + ")", function (e) {
+    console.log('tabDelete', e);
+    $(a).find(b).eq(e.index || 0).remove();
+    let id = $(z).find('li' + y).index();
+    S(id || 0);
+  });
 
   //一些事件监听
   o.on('click', "*[data-event]", function () {
@@ -46,27 +68,23 @@
     layer.close($(this).data("index"))
   });
 
+
   var P = {
     tabsPage: {},
-    tabsBody: function (e) {
-      return $(m).find("." + b).eq(e || 0)
-    },
-    tabsBodyChange: function (e, a) {
-      a = a || {}, P.tabsBody(e).addClass(d).siblings().removeClass(d), F.rollPage("auto", e), layui.event.call(this, 'index', "tabsPage({*})", {
-        url: a.url,
-        text: a.text
-      })
-    },
     closeThisTabs: function () {
-      let i = $(z).find(y).index();
-      $(z).eq(i).find(c).trigger("click");
+      $(z).find('li' + y).find(c).trigger("click");
     },
     closeOtherTabs: function (e) {
-      let i = $(z).find(y).index();
-      $(z + ':not(:eq(' + i + '))').find(c).trigger("click");
+      let id = $(z).find('li' + y).index();
+      let eles = $(z).find('li');
+      for (let i = eles.length; i > 0; i--) {
+        if (i !== id) {
+          obj.close($(eles[i]).attr('lay-id'))
+        }
+      }
     },
     closeAllTabs: function (e) {
-      $(z).find(c).trigger("click");
+      $(z).find('li:gt(0)').find(c).trigger("click");
     },
     screen: function () {
       var e = r.width();
@@ -101,7 +119,7 @@
       P.sideFlexible(i ? "spread" : null)
     },
     refresh: function () {
-      var e = ".layadmin-iframe", i = $("." + b).length;
+      var e = ".layadmin-iframe", i = $(b).length;
       P.tabsPage.index >= i && (P.tabsPage.index = i - 1);
       var t = P.tabsBody(P.tabsPage.index).find(e);
       if (t.length) {
@@ -179,10 +197,10 @@
   var obj = {
     open: function (url, title) {
       element.tabAdd(t, {
-        title: title
-        , content: '内容' + url
-        , id: url
+        title: title,
+        id: url
       });
+      A(url);
       obj.focus(url);
     },
     focus: function (url) {

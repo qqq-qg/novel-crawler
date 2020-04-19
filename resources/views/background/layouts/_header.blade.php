@@ -45,7 +45,7 @@
     </li>
     <li class="layui-nav-item" lay-unselect="">
       <a href="javascript:;">
-        <cite>贤心</cite>
+        <cite>Admin</cite>
         <span class="layui-nav-more"></span></a>
       <dl class="layui-nav-child layui-anim layui-anim-upbit">
         <dd><a lay-href="set/user/info.html">基本资料</a></dd>
@@ -82,12 +82,12 @@
         </a>
         <dl class="layui-nav-child">
           <dd>
-            <a href="javascript:;" class="open-iframe" data-url="/books">
+            <a href="javascript:;" class="open-iframe" data-url="<?php echo route('books.index');?>">
               <cite>小说列表</cite>
             </a>
           </dd>
           <dd>
-            <a href="javascript:;" class="open-iframe" data-url="/categories">
+            <a href="javascript:;" class="open-iframe" data-url="<?php echo route('categories.index');?>">
               <cite>分类列表</cite>
             </a>
           </dd>
@@ -98,12 +98,12 @@
             </a>
             <dl class="layui-nav-child">
               <dd>
-                <a href="javascript:;" class="open-iframe" data-url="/rules">
+                <a href="javascript:;" class="open-iframe" data-url="<?php echo route('rules.index');?>">
                   <cite>采集规则</cite>
                 </a>
               </dd>
               <dd>
-                <a href="javascript:;" class="open-iframe" data-url="/tasks">
+                <a href="javascript:;" class="open-iframe" data-url="<?php echo route('tasks.index');?>">
                   <cite>采集任务</cite>
                 </a>
               </dd>
@@ -117,7 +117,7 @@
           <cite>用户管理</cite>
         </a>
         <dl class="layui-nav-child">
-          <dd><a href="javascript:;" class="open-iframe" data-url="/users">
+          <dd><a href="javascript:;" class="open-iframe" data-url="<?php echo route('managers.index');?>">
               <cite>管理列表</cite></a>
           </dd>
         </dl>
@@ -148,8 +148,9 @@
         <i class="layui-icon layui-icon-home"></i><i class="layui-icon layui-unselect layui-tab-close">ဆ</i>
       </li>
     </ul>
-    <div class="layui-tab-content">
-      <div class="layui-tab-item layui-show">HOME</div>
-    </div>
   </div>
+</div>
+
+<div class="layui-tab-content layui-layout-admin layui-body" id="LAY_app_body">
+  <div class="layui-tab-item layui-show">HOME</div>
 </div>

@@ -16,7 +16,7 @@ class BooksController extends Controller {
   public function index(Request $request, BooksRepository $repository) {
     $search = $request->all();
     $paginate = $repository->index($search);
-    return view('books.index', [
+    return view('background.books.index', [
       'paginate' => $paginate,
       'search' => $search
     ]);

@@ -1,7 +1,6 @@
 @extends('background.layouts.app')
 @section('content')
   首页
-  <a href="#" id="aaa">aaaa</a>
 @endsection
 
 @section('script')
