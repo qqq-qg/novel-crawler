@@ -33,7 +33,7 @@
       table.render({
         elem: '#list-data'
         , toolbar: '#toolbar'
-        , height: 460
+        , height: 750
         , data: paginate.data
         , limit: paginate.per_page
         , page: false
@@ -41,17 +41,17 @@
           {field: 'id', title: '选择', width: 60, type: 'checkbox'}
           , {field: 'id', title: 'ID', width: 60, hide: true}
           , {field: 'category_name', title: '分类名称', width: 100}
-          , {field: 'title', title: '标题', width: 100}
+          , {field: 'title', title: '标题'}
           , {field: 'thumb', title: '图片', width: 100}
-          , {field: 'last_chapter_title', title: '最新', width: 100}
+          , {field: 'last_chapter_title', title: '最新', width: 120}
           , {field: 'author', title: '作者', width: 100}
-          , {field: 'wordcount', title: '字数', width: 60}
-          , {field: 'follow', title: '关注人数', width: 60}
-          , {field: 'hits', title: '浏览量', width: 60}
-          , {field: 'created_at', title: '添加时间'}
-          , {field: 'created_at', title: '更新时间'}
-          , {field: 'updated_at', title: '更新时间'}
-          , {fixed: 'right', align: 'center', toolbar: '#bar'}
+          , {field: 'wordcount', title: '字数', width: 80}
+          , {field: 'follow', title: '关注人数', width: 90}
+          , {field: 'hits', title: '浏览量', width: 80}
+          , {field: 'created_at', title: '添加时间', width: 160}
+          , {field: 'created_at', title: '更新时间', width: 160}
+          , {field: 'updated_at', title: '更新时间', width: 160}
+          , {fixed: 'right', title: '操作', width: 160, align: 'center', toolbar: '#bar'}
         ]]
       });
       laypage.render({
