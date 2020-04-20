@@ -1,11 +1,12 @@
 <?php namespace App\Http\Controllers\Background;
 
+use App\Http\Controllers\Controller;
 use App\Repositories\Background\BooksChapterRepository;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Response;
 
-class BooksChapterController extends Controller {
+class BooksChapterController extends Controller
+{
   /**
    * GET /bookschapter
    *
@@ -13,7 +14,8 @@ class BooksChapterController extends Controller {
    * @param BooksChapterRepository $repository
    * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
    */
-  public function index(Request $request, BooksChapterRepository $repository) {
+  public function index(Request $request, BooksChapterRepository $repository)
+  {
     $search = $request->all();
     $paginate = $repository->index($search);
     return view('bookschapter.index', [
@@ -27,7 +29,8 @@ class BooksChapterController extends Controller {
    *
    * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
    */
-  public function create() {
+  public function create()
+  {
     return view('bookschapter.create');
   }
 
@@ -35,7 +38,8 @@ class BooksChapterController extends Controller {
    * Store a newly created resource in storage.
    * POST /bookschapter
    */
-  public function store(Request $request, BooksChapterRepository $repository) {
+  public function store(Request $request, BooksChapterRepository $repository)
+  {
     try {
       $result = $repository->store($request->all());
       return Response::json(['code' => 0, 'message' => 'success', 'data' => $result]);
@@ -51,7 +55,8 @@ class BooksChapterController extends Controller {
    * @param $id
    * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
    */
-  public function show(BooksChapterRepository $repository, $id) {
+  public function show(BooksChapterRepository $repository, $id)
+  {
     $data = $repository->show($id);
     return view('bookschapter.create' . ['data' => $data]);
   }
@@ -63,7 +68,8 @@ class BooksChapterController extends Controller {
    * @param $id
    * @return \Illuminate\Http\JsonResponse
    */
-  public function edit(BooksChapterRepository $repository, $id) {
+  public function edit(BooksChapterRepository $repository, $id)
+  {
     try {
       $data = $repository->show($id);
       return Response::json(['code' => 0, 'message' => 'success', 'data' => $data]);
@@ -80,7 +86,8 @@ class BooksChapterController extends Controller {
    * @param $id
    * @return \Illuminate\Http\JsonResponse
    */
-  public function update(Request $request, BooksChapterRepository $repository, $id) {
+  public function update(Request $request, BooksChapterRepository $repository, $id)
+  {
     try {
       $result = $repository->store($request->all());
       return Response::json(['code' => 0, 'message' => 'success', 'data' => $result]);
@@ -96,7 +103,8 @@ class BooksChapterController extends Controller {
    * @param $id
    * @return \Illuminate\Http\JsonResponse
    */
-  public function destroy(BooksChapterRepository $repository, $id) {
+  public function destroy(BooksChapterRepository $repository, $id)
+  {
     try {
       $result = $repository->destroy($id);
       return Response::json(['code' => 0, 'message' => 'success', 'data' => $result]);

@@ -54,4 +54,9 @@ class CategoryRepository
     }
     return $rst;
   }
+
+  public function all()
+  {
+    return CategoryModel::query()->orderBy('listorder', 'asc')->get();
+  }
 }

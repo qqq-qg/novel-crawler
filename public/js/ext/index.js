@@ -206,7 +206,12 @@
     },
     close: function (url) {
       element.tabDelete(t, url);
-    }
+    },
+
+    screen: function () {
+      var e = r.width();
+      return e > 1200 ? 3 : e > 992 ? 2 : e > 768 ? 1 : 0
+    },
   };
   exports('index', obj);
 });

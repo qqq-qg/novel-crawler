@@ -1,11 +1,13 @@
 <?php namespace App\Http\Controllers\Background;
 
-use App\Repositories\Background\BooksRepository;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Repositories\Background\BooksRepository;
+use App\Repositories\Background\CategoryRepository;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
-class BooksController extends Controller {
+class BooksController extends Controller
+{
   /**
    * GET /books
    *
@@ -13,12 +15,14 @@ class BooksController extends Controller {
    * @param BooksRepository $repository
    * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
    */
-  public function index(Request $request, BooksRepository $repository) {
+  public function index(Request $request, BooksRepository $repository, CategoryRepository $categoryRepo)
+  {
     $search = $request->all();
     $paginate = $repository->index($search);
     return view('background.books.index', [
       'paginate' => $paginate,
-      'search' => $search
+      'categories' => $categoryRepo->all(),
+      'search' => $search,
     ]);
   }
 
@@ -27,15 +31,17 @@ class BooksController extends Controller {
    *
    * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
    */
-  public function create() {
-    return view('books.create');
+  public function create()
+  {
+    return view('background.books.create');
   }
 
   /**
    * Store a newly created resource in storage.
    * POST /books
    */
-  public function store(Request $request, BooksRepository $repository) {
+  public function store(Request $request, BooksRepository $repository)
+  {
     try {
       $result = $repository->store($request->all());
       return Response::json(['code' => 0, 'message' => 'success', 'data' => $result]);
@@ -51,9 +57,10 @@ class BooksController extends Controller {
    * @param $id
    * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
    */
-  public function show(BooksRepository $repository, $id) {
+  public function show(BooksRepository $repository, $id)
+  {
     $data = $repository->show($id);
-    return view('books.create' . ['data' => $data]);
+    return view('background.books.create' . ['data' => $data]);
   }
 
   /**
@@ -63,7 +70,8 @@ class BooksController extends Controller {
    * @param $id
    * @return \Illuminate\Http\JsonResponse
    */
-  public function edit(BooksRepository $repository, $id) {
+  public function edit(BooksRepository $repository, $id)
+  {
     try {
       $data = $repository->show($id);
       return Response::json(['code' => 0, 'message' => 'success', 'data' => $data]);
@@ -80,7 +88,8 @@ class BooksController extends Controller {
    * @param $id
    * @return \Illuminate\Http\JsonResponse
    */
-  public function update(Request $request, BooksRepository $repository, $id) {
+  public function update(Request $request, BooksRepository $repository, $id)
+  {
     try {
       $result = $repository->store($request->all());
       return Response::json(['code' => 0, 'message' => 'success', 'data' => $result]);
@@ -96,7 +105,8 @@ class BooksController extends Controller {
    * @param $id
    * @return \Illuminate\Http\JsonResponse
    */
-  public function destroy(BooksRepository $repository, $id) {
+  public function destroy(BooksRepository $repository, $id)
+  {
     try {
       $result = $repository->destroy($id);
       return Response::json(['code' => 0, 'message' => 'success', 'data' => $result]);

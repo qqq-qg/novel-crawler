@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Background;
 
+use App\Http\Controllers\Controller;
 use App\Repositories\Background\ManagerRepository;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Response;
 
 class ManagerController extends Controller
