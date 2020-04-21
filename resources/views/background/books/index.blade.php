@@ -5,11 +5,11 @@
       <div class="layui-card-body">
         <table lay-even id="list-data" lay-filter="list-data" lay-size="sm"></table>
         <div id="lay-page"></div>
-        <script type="text/html" id="toolbar">
-          <div class="layui-btn-container">
-            <button class="layui-btn layui-btn-sm" lay-event="delete">删除</button>
-          </div>
-        </script>
+        {{--        <script type="text/html" id="toolbar">--}}
+        {{--          <div class="layui-btn-container">--}}
+        {{--            <button class="layui-btn layui-btn-sm" lay-event="delete">删除</button>--}}
+        {{--          </div>--}}
+        {{--        </script>--}}
         <script type="text/html" id="bar">
           <a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
           <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
@@ -20,12 +20,13 @@
   </div>
 @endsection
 @section('outbody')
-  <div id="edit-dialog" class="dialog-template">
-    <form class="layui-form" action="" lay-filter="component-form-group">
+  <div id="create-dialog" class="dialog-template">
+    <form class="layui-form" action="" lay-filter="create-form">
+      <input type="hidden" name="id">
       <div class="layui-form-item">
         <label class="layui-form-label">分类</label>
         <div class="layui-input-block">
-          <select name="cat_id" lay-filter="categories">
+          <select name="cate_id" lay-filter="cate_id">
             <option value="">--分类--</option>
             @foreach($categories as $cate)
               <option value="{{$cate['id']}}">{{$cate['name']}}</option>
@@ -63,7 +64,7 @@
       <div class="layui-form-item">
         <div class="layui-input-block">
           <div class="layui-footer" style="left: 0;">
-            <button class="layui-btn" lay-submit="" lay-filter="component-form-demo1">立即提交</button>
+            <button class="layui-btn" lay-submit lay-filter="create-submit">立即提交</button>
             <button type="reset" class="layui-btn layui-btn-primary">重置</button>
           </div>
         </div>
@@ -77,11 +78,17 @@
       var $ = layui.jquery
         , table = layui.table
         , laypage = layui.laypage
+        , form = layui.form
         , admin = layui.index;
 
       var paginate = @json($paginate);
       var keyword = @json($search??[]);
-      var categories = @json($categories??[]);
+      var createUrl = '<?php echo route('books.update', ['book' => '_id_'])?>';
+      var detailUrl = '<?php echo route('books.show', ['book' => '_id_'])?>';
+      var deleteUrl = '<?php echo route('books.destroy', ['book' => '_id_'])?>';
+      var openCallback = () => {
+      };
+
       //渲染表格
       table.render({
         elem: '#list-data'
@@ -123,10 +130,18 @@
       //监听表格工具条
       table.on('toolbar(list-data)', function (obj) {
         var checkStatus = table.checkStatus(obj.config.id);
-        console.log(checkStatus);
         switch (obj.event) {
           case 'add':
             layer.msg('添加');
+            fillCreateForm({});
+            layer.open({
+              type: 1
+              , title: '新增小说'
+              , content: $('#create-dialog')
+              , shadeClose: true
+              , area: admin.screen() < 2 ? ['100%', '80%'] : ['650px', '500px']
+              , maxmin: true
+            });
             break;
           case 'delete':
             layer.msg('删除');
@@ -138,43 +153,96 @@
       });
       //监听复选框
       table.on('checkbox(list-data)', function (obj) {
-        console.log(obj.checked); //当前是否选中状态
-        console.log(obj.data); //选中行的相关数据
-        console.log(obj.type); //如果触发的是全选，则为：all，如果触发的是单选，则为：one
+        // console.log(obj.checked); //当前是否选中状态
+        // console.log(obj.data); //选中行的相关数据
+        // console.log(obj.type); //如果触发的是全选，则为：all，如果触发的是单选，则为：one
       });
       //监听行工具条
-      table.on('tool(list-data)', function (obj) { //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+      table.on('tool(list-data)', function (obj) {
         var data = obj.data; //获得当前行数据
         var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
         var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
-        if (layEvent === 'detail') { //查看
-          //do somehing
+        if (layEvent === 'detail') {
+          //todo detail
         } else if (layEvent === 'delete') { //删除
-          layer.confirm('真的删除行么', function (index) {
-            obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+          layer.confirm('我跟你讲，删掉就真的木有了！', function (index) {
+            obj.del();
             layer.close(index);
-            //向服务端发送删除指令
+            $.ajax({
+              url: deleteUrl.replace('_id_', data.id),
+              type: 'DELETE',
+              dataType: 'JSON',
+              success: (res) => {
+                if (res.code !== 0) {
+                  layer.msg('删除失败 ' + res.message, {icon: 5});
+                  return false;
+                }
+                layer.msg('删除成功');
+              },
+              error: (jqXHR, textStatus, errorMessage) => {
+                layer.msg('删除失败 ' + errorMessage, {icon: 5});
+              }
+            });
           });
         } else if (layEvent === 'edit') { //编辑
-          layer.open({
+          fillCreateForm(data);
+          let index = layer.open({
             type: 1
             , title: '编辑小说'
-            , content: $('#edit-dialog')
+            , content: $('#create-dialog')
             , shadeClose: true
             , area: admin.screen() < 2 ? ['100%', '80%'] : ['650px', '500px']
             , maxmin: true
           });
-
-          //同步更新缓存对应的值
-          obj.update({
-            username: '123'
-            , title: 'xxx'
-          });
+          openCallback = (param) => {
+            if (typeof param === 'object' && param.id == data.id) {
+              delete param.id;
+              obj.update(param);
+            }
+            setTimeout(() => {
+              layer.close(index);
+            }, 1500);
+          };
         } else if (layEvent === 'LAYTABLE_TIPS') {
           layer.alert('Hi，头部工具栏扩展的右侧图标。');
         }
       });
 
+      form.on('submit(create-submit)', function (data) {
+        if (data.field.id != '') {
+          $.ajax({
+            url: createUrl.replace('_id_', data.field.id),
+            type: 'put',
+            dataType: 'json',
+            data: data.field,
+            success: (res) => {
+              if (res.code !== 0) {
+                layer.msg('更新失败 ' + res.message, {icon: 5});
+                return false;
+              }
+
+              layer.msg('更新成功');
+              openCallback(data.field);
+            },
+            error: (jqXHR, textStatus, errorMessage) => {
+              layer.msg('更新失败 ' + errorMessage, {icon: 5});
+              openCallback();
+            }
+          });
+        }
+        return false;
+      });
+
+      var fillCreateForm = function (rowObj) {
+        form.val("create-form", {
+          id: rowObj.id || ''
+          , cate_id: (rowObj.cate_id || '') + ''
+          , title: rowObj.title || ''
+          , introduce: rowObj.introduce || ''
+          , last_chapter_title: rowObj.last_chapter_title || ''
+          , author: rowObj.author || ''
+        });
+      };
       var search = function (page) {
         let params = {};
         params.page = page || paginate.current_page;

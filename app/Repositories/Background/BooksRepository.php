@@ -8,8 +8,9 @@ class BooksRepository
   public function index($search)
   {
     $paginate = $this->searchQuery(BooksModel::query(), $search)->paginate($search['pageSize'] ?? 10);
+    /** @var BooksModel $item */
     foreach ($paginate->items() as $k => $item) {
-      //todo
+      $item->category_name = $item->getCategoryName();
     }
     return $paginate;
   }
@@ -24,6 +25,7 @@ class BooksRepository
 
   public function store($data)
   {
+    $data = transferNullValToStr($data);
     if (empty($data['id'])) {
       $companyModel = BooksModel::query()->create($data);
       if (!$companyModel->id) {
@@ -36,7 +38,7 @@ class BooksRepository
         throw new \Exception("更新保存失败");
       }
     }
-    return $companyModel;
+    return $companyModel->id;
   }
 
   public function show($id)
@@ -46,7 +48,7 @@ class BooksRepository
 
   public function destroy($id)
   {
-    $rst = BooksModel::query()->where('id', $id)->delete();
+    $rst = BooksModel::query()->where('id', explode(',', $id))->delete();
     if (!$rst) {
       throw new \Exception("删除失败");
     }

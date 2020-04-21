@@ -583,3 +583,15 @@ function format_ranger_array($string)
   sort($arr);
   return array_unique($arr);
 }
+
+function transferNullValToStr($data)
+{
+  foreach ($data as $k => $item) {
+    if (is_array($item)) {
+      $data[$k] = transferNullValToStr($item);
+    } else {
+      $data[$k] = $item ?? '';
+    }
+  }
+  return $data;
+}

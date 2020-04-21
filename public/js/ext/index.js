@@ -77,7 +77,7 @@
       let eles = $(z).find('li');
       for (let i = eles.length; i > 0; i--) {
         if (i !== id) {
-          obj.close($(eles[i]).attr('lay-id'))
+          obj.closeIframe($(eles[i]).attr('lay-id'))
         }
       }
     },
@@ -186,25 +186,22 @@
     let a = $(this);
     let u = a.data('url');
     if ($.inArray(u, get_lay_id()) === -1) {
-      obj.open(u, $.trim(a.text()));
+      obj.openIframe(u, $.trim(a.text()));
     } else {
-      obj.focus(u);
+      obj.focusIframe(u);
     }
   });
 
   var obj = {
-    open: function (url, title) {
-      element.tabAdd(t, {
-        title: title,
-        id: url
-      });
+    openIframe: function (url, title) {
+      element.tabAdd(t, {title: title, id: url});
       A(url);
-      obj.focus(url);
+      obj.focusIframe(url);
     },
-    focus: function (url) {
+    focusIframe: function (url) {
       element.tabChange(t, url);
     },
-    close: function (url) {
+    closeIframe: function (url) {
       element.tabDelete(t, url);
     },
 

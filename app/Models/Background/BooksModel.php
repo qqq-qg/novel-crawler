@@ -1,6 +1,7 @@
 <?php namespace App\Models\Background;
 
 use App\Models\BaseModel;
+
 /**
  * @property integer id
  * @property string title 标题
@@ -25,4 +26,14 @@ use App\Models\BaseModel;
 class BooksModel extends BaseModel
 {
   protected $table = 'books';
+
+  public function getCategoryName()
+  {
+    static $category = null;
+    if (is_null($category)) {
+      $res = CategoryModel::query()->select(['id', 'name'])->get()->toArray();
+      $category = array_column($res, 'name', 'id');
+    }
+    return $category[$this->cate_id] ?? '';
+  }
 }

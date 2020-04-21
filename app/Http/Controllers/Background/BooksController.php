@@ -60,7 +60,7 @@ class BooksController extends Controller
   public function show(BooksRepository $repository, $id)
   {
     $data = $repository->show($id);
-    return view('background.books.create' . ['data' => $data]);
+    return view('background.books.detail', ['data' => $data]);
   }
 
   /**
