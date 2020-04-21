@@ -82,7 +82,7 @@
       var paginate = @json($paginate);
       var keyword = @json($search??[]);
       var categories = @json($categories??[]);
-
+      //渲染表格
       table.render({
         elem: '#list-data'
         , toolbar: '#toolbar'
@@ -94,7 +94,7 @@
           {field: 'id', title: '选择', width: 60, type: 'checkbox'}
           , {field: 'id', title: 'ID', width: 60}
           , {field: 'category_name', title: '分类名称', width: 100}
-          , {field: 'title', title: '标题', width: 150}
+          , {field: 'title', title: '标题', cellMinWidth: 150}
           , {field: 'thumb', title: '图片', width: 100}
           , {field: 'last_chapter_title', title: '最新', width: 120}
           , {field: 'author', title: '作者', width: 80}
@@ -107,6 +107,7 @@
           , {fixed: 'right', title: '操作', width: 160, align: 'center', toolbar: '#bar'}
         ]]
       });
+      //渲染分页
       laypage.render({
         elem: 'lay-page'
         , curr: paginate.current_page || 1
@@ -119,6 +120,7 @@
           }
         }
       });
+      //监听表格工具条
       table.on('toolbar(list-data)', function (obj) {
         var checkStatus = table.checkStatus(obj.config.id);
         console.log(checkStatus);
@@ -134,12 +136,13 @@
             break;
         }
       });
+      //监听复选框
       table.on('checkbox(list-data)', function (obj) {
         console.log(obj.checked); //当前是否选中状态
         console.log(obj.data); //选中行的相关数据
         console.log(obj.type); //如果触发的是全选，则为：all，如果触发的是单选，则为：one
       });
-      //监听工具条
+      //监听行工具条
       table.on('tool(list-data)', function (obj) { //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
         var data = obj.data; //获得当前行数据
         var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
@@ -158,7 +161,7 @@
             , title: '编辑小说'
             , content: $('#edit-dialog')
             , shadeClose: true
-            , area: admin.screen() < 2 ? ['100%', '80%'] : ['650px', '400px']
+            , area: admin.screen() < 2 ? ['100%', '80%'] : ['650px', '500px']
             , maxmin: true
           });
 
@@ -171,17 +174,6 @@
           layer.alert('Hi，头部工具栏扩展的右侧图标。');
         }
       });
-
-
-      var dialog_edit = function () {
-        layer.open({
-          title: '编辑小说'
-          , type: 1
-          , shadeClose: true
-          , area: admin.screen() < 2 ? ['80%', '300px'] : ['700px', '500px']
-          , content: '<div style="padding: 20px;">放入任意HTML</div>'
-        });
-      };
 
       var search = function (page) {
         let params = {};
