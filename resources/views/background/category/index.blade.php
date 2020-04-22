@@ -5,13 +5,12 @@
       <div class="layui-card-body">
         <table lay-even id="list-data" lay-filter="list-data" lay-size="sm"></table>
         <div id="lay-page"></div>
-        {{--        <script type="text/html" id="toolbar">--}}
-        {{--          <div class="layui-btn-container">--}}
-        {{--            <button class="layui-btn layui-btn-sm" lay-event="delete">删除</button>--}}
-        {{--          </div>--}}
-        {{--        </script>--}}
+        <script type="text/html" id="toolbar">
+          <div class="layui-btn-container">
+            <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
+          </div>
+        </script>
         <script type="text/html" id="bar">
-          <a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
           <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
           <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delete">删除</a>
         </script>
@@ -24,41 +23,18 @@
     <form class="layui-form" action="" lay-filter="create-form">
       <input type="hidden" name="id">
       <div class="layui-form-item">
-        <label class="layui-form-label">分类</label>
+        <label class="layui-form-label">分类名称</label>
         <div class="layui-input-block">
-          <select name="cate_id" lay-filter="cate_id">
-            <option value="">--分类--</option>
-            @foreach($categories as $cate)
-              <option value="{{$cate['id']}}">{{$cate['name']}}</option>
-            @endforeach
-          </select>
-        </div>
-      </div>
-      <div class="layui-form-item">
-        <label class="layui-form-label">标题</label>
-        <div class="layui-input-block">
-          <input type="text" name="title" class="layui-input" autocomplete="off" placeholder="请输入标题 (必填)"
+          <input type="text" name="name" class="layui-input" autocomplete="off" placeholder="请输入标题 (必填)"
                  lay-verify="required">
         </div>
       </div>
-      <div class="layui-form-item layui-form-text">
-        <label class="layui-form-label">简介</label>
-        <div class="layui-input-block">
-          <textarea name="introduce" class="layui-textarea" placeholder="请输入简介"></textarea>
-        </div>
-      </div>
       <div class="layui-form-item">
-        <label class="layui-form-label">最新章节</label>
+        <label class="layui-form-label">排序</label>
         <div class="layui-input-block">
-          <input type="text" name="last_chapter_title" class="layui-input" placeholder="请输入最新章节" autocomplete="off"
-                 lay-verify="last_chapter_title">
-        </div>
-      </div>
-      <div class="layui-form-item">
-        <label class="layui-form-label">作者</label>
-        <div class="layui-input-block">
-          <input type="text" name="author" class="layui-input" autocomplete="off" placeholder="请输入作者"
-                 lay-verify="author">
+          <input type="number" name="listorder" class="layui-input"
+                 placeholder="请输入排序（数字越小越靠前）" autocomplete="off"
+                 lay-verify="number">
         </div>
       </div>
       <div class="layui-form-item">
@@ -82,13 +58,11 @@
         , admin = layui.index;
 
       var paginate = @json($paginate);
-      var keyword = @json($search??[]);
-      var createUrl = '<?php echo route('books.update', ['book' => '_id_'])?>';
-      var detailUrl = '<?php echo route('books.show', ['book' => '_id_'])?>';
-      var deleteUrl = '<?php echo route('books.destroy', ['book' => '_id_'])?>';
+      var createUrl = '<?php echo route('categories.update', ['category' => '_id_'])?>';
+      var detailUrl = '<?php echo route('categories.show', ['category' => '_id_'])?>';
+      var deleteUrl = '<?php echo route('categories.destroy', ['category' => '_id_'])?>';
       var openCallback = () => {
       };
-
       //渲染表格
       table.render({
         elem: '#list-data'
@@ -97,17 +71,9 @@
         , data: paginate.data
         , limit: paginate.per_page
         , page: false
-        , cols: [[
-          {field: 'id', title: '选择', width: 60, type: 'checkbox'}
-          , {field: 'id', title: 'ID', width: 60}
-          , {field: 'category_name', title: '分类名称', width: 100}
-          , {field: 'title', title: '标题', width: 150}
-          , {field: 'thumb', title: '图片', width: 100}
-          , {field: 'last_chapter_title', title: '最新', width: 120}
-          , {field: 'author', title: '作者', width: 80}
-          , {field: 'wordcount', title: '字数', width: 72}
-          , {field: 'follow', title: '关注人数', width: 86}
-          , {field: 'hits', title: '浏览量', width: 72}
+        , cols: [[{field: 'id', title: 'ID', width: 60}
+          , {field: 'name', title: '分类名称'}
+          , {field: 'listorder', title: '排序', width: 150}
           , {field: 'created_at', title: '添加时间', width: 160}
           , {field: 'updated_at', title: '更新时间', width: 160}
           , {fixed: 'right', title: '操作', width: 160, align: 'center', toolbar: '#bar'}
@@ -133,7 +99,7 @@
           case 'add':
             layer.msg('添加');
             fillCreateForm({});
-            openCreateDialog('新增小说');
+            openCreateDialog('新增分类');
             break;
           case 'delete':
             layer.msg('删除');
@@ -142,12 +108,6 @@
             layer.msg('编辑');
             break;
         }
-      });
-      //监听复选框
-      table.on('checkbox(list-data)', function (obj) {
-        // console.log(obj.checked); //当前是否选中状态
-        // console.log(obj.data); //选中行的相关数据
-        // console.log(obj.type); //如果触发的是全选，则为：all，如果触发的是单选，则为：one
       });
       //监听行工具条
       table.on('tool(list-data)', function (obj) {
@@ -178,7 +138,7 @@
           });
         } else if (layEvent === 'edit') { //编辑
           fillCreateForm(data);
-          let index = openCreateDialog('编辑小说');
+          let index = openCreateDialog('编辑分类');
           openCallback = (param) => {
             if (typeof param === 'object' && param.id == data.id) {
               delete param.id;
@@ -221,11 +181,8 @@
       var fillCreateForm = function (rowObj) {
         form.val("create-form", {
           id: rowObj.id || ''
-          , cate_id: (rowObj.cate_id || '') + ''
-          , title: rowObj.title || ''
-          , introduce: rowObj.introduce || ''
-          , last_chapter_title: rowObj.last_chapter_title || ''
-          , author: rowObj.author || ''
+          , name: rowObj.name
+          , listorder: rowObj.listorder || ''
         });
       };
       //打开弹窗
@@ -235,7 +192,7 @@
           , title: title
           , content: $('#create-dialog')
           , shadeClose: true
-          , area: admin.screen() < 2 ? ['100%', '80%'] : ['650px', '500px']
+          , area: admin.screen() < 2 ? ['100%', '80%'] : ['650px', '400px']
           , maxmin: true
         });
       };

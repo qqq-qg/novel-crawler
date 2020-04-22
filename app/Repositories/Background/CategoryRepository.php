@@ -21,7 +21,7 @@ class CategoryRepository
     if (!empty($search['status'])) {
       $query->where('status', $search['status']);
     }
-    return $query->orderByDesc('id');
+    return $query->orderBy('listorder');
   }
 
   public function store($data)
@@ -38,7 +38,7 @@ class CategoryRepository
         throw new \Exception("更新保存失败");
       }
     }
-    return $companyModel;
+    return $companyModel->id;
   }
 
   public function show($id)
@@ -48,7 +48,7 @@ class CategoryRepository
 
   public function destroy($id)
   {
-    $rst = CategoryModel::query()->where('id', $id)->delete();
+    $rst = CategoryModel::query()->whereIn('id', explode(',', $id))->delete();
     if (!$rst) {
       throw new \Exception("删除失败");
     }
