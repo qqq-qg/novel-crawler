@@ -8,9 +8,10 @@ class BooksRepository
   public function index($search)
   {
     $paginate = $this->searchQuery(BooksModel::query(), $search)->paginate($search['pageSize'] ?? 10);
+    $categoryService = new CategoryRepository();
     /** @var BooksModel $item */
     foreach ($paginate->items() as $k => $item) {
-      $item->category_name = $item->getCategoryName();
+      $item->category_name = $categoryService->getCategoryName($item->cate_id);
     }
     return $paginate;
   }

@@ -24,10 +24,16 @@
     <form class="layui-form" action="" lay-filter="create-form">
       <input type="hidden" name="id">
       <div class="layui-form-item">
+        <label class="layui-form-label">标题</label>
+        <div class="layui-input-block">
+          <input type="text" name="title" class="layui-input" autocomplete="off" placeholder="请输入标题 (必填)"
+                 lay-verify="required">
+        </div>
+      </div>
+      <div class="layui-form-item">
         <label class="layui-form-label">分类</label>
         <div class="layui-input-block">
           <select name="cate_id" lay-filter="cate_id">
-            <option value="">--分类--</option>
             @foreach($categories??[] as $cate)
               <option value="{{$cate['id']}}">{{$cate['name']}}</option>
             @endforeach
@@ -35,29 +41,26 @@
         </div>
       </div>
       <div class="layui-form-item">
-        <label class="layui-form-label">标题</label>
+        <label class="layui-form-label">采集规则</label>
         <div class="layui-input-block">
-          <input type="text" name="title" class="layui-input" autocomplete="off" placeholder="请输入标题 (必填)"
-                 lay-verify="required">
-        </div>
-      </div>
-      <div class="layui-form-item layui-form-text">
-        <label class="layui-form-label">简介</label>
-        <div class="layui-input-block">
-          <textarea name="introduce" class="layui-textarea" placeholder="请输入简介"></textarea>
+          <select name="rule_id" lay-filter="rule_id">
+            @foreach($rules??[] as $rule)
+              <option value="{{$rule['id']}}">{{$rule['name']}}</option>
+            @endforeach
+          </select>
         </div>
       </div>
       <div class="layui-form-item">
-        <label class="layui-form-label">最新章节</label>
+        <label class="layui-form-label">采集链接</label>
         <div class="layui-input-block">
-          <input type="text" name="last_chapter_title" class="layui-input" placeholder="请输入最新章节" autocomplete="off"
-                 lay-verify="last_chapter_title">
+          <input type="text" name="from_url" class="layui-input" placeholder="请输入采集链接" autocomplete="off"
+                 lay-verify="">
         </div>
       </div>
       <div class="layui-form-item">
-        <label class="layui-form-label">作者</label>
+        <label class="layui-form-label">采集页数</label>
         <div class="layui-input-block">
-          <input type="text" name="author" class="layui-input" autocomplete="off" placeholder="请输入作者"
+          <input type="text" name="page_limit" class="layui-input" autocomplete="off" placeholder="请输入采集页数"
                  lay-verify="author">
         </div>
       </div>
@@ -96,15 +99,14 @@
         , data: paginate.data
         , limit: paginate.per_page
         , page: false
-        , cols: [[{field: 'id', title: 'ID', width: 60}
-          , {field: 'category_name', title: '分类名称', width: 100}
+        , cols: [[{field: 'id', title: 'ID', width: 50}
           , {field: 'title', title: '标题', width: 150}
-          , {field: 'thumb', title: '图片', width: 100}
-          , {field: 'last_chapter_title', title: '最新', width: 120}
-          , {field: 'author', title: '作者', width: 80}
-          , {field: 'wordcount', title: '字数', width: 72}
-          , {field: 'follow', title: '关注人数', width: 86}
-          , {field: 'hits', title: '浏览量', width: 72}
+          , {field: 'category_name', title: '分类名称', width: 150}
+          , {field: 'from_url', title: '采集链接', width: 300}
+          , {field: 'rule_name', title: '规则名称', width: 120}
+          , {field: 'page_limit', title: '采集页数', width: 72}
+          , {field: 'task_code', title: '采集状态', width: 72}
+          , {field: 'retries', title: '尝试次数', width: 72}
           , {field: 'created_at', title: '添加时间', width: 160}
           , {field: 'updated_at', title: '更新时间', width: 160}
           , {fixed: 'right', title: '操作', width: 160, align: 'center', toolbar: '#bar'}
@@ -220,11 +222,13 @@
       var fillCreateForm = function (rowObj) {
         form.val("create-form", {
           id: rowObj.id || ''
-          , cate_id: (rowObj.cate_id || '') + ''
-          , title: rowObj.title || ''
-          , introduce: rowObj.introduce || ''
-          , last_chapter_title: rowObj.last_chapter_title || ''
-          , author: rowObj.author || ''
+          , title: rowObj.title
+          , category_name: rowObj.category_name || ''
+          , from_url: rowObj.from_url || ''
+          , rule_name: rowObj.rule_name || ''
+          , page_limit: rowObj.page_limit || ''
+          , task_code: rowObj.task_code || ''
+          , retries: rowObj.retries || ''
         });
       };
       //打开弹窗

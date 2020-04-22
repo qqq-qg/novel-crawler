@@ -154,7 +154,7 @@
         if (layEvent === 'detail') {
           let url = 'http://www.ql.com/background/rules';
           let title = '测试内部打开父级TAB';
-          parent.layui.index.openIframe(url, title);
+          parent.layui.index.openIframe(url,title);
         } else if (layEvent === 'delete') { //删除
           layer.confirm('我跟你讲，删掉就真的木有了！', function (index) {
             obj.del();

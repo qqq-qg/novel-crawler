@@ -59,4 +59,14 @@ class CategoryRepository
   {
     return CategoryModel::query()->orderBy('listorder', 'asc')->get();
   }
+
+  public function getCategoryName($categoryId)
+  {
+    static $category = null;
+    if (is_null($category)) {
+      $res = CategoryModel::query()->select(['id', 'name'])->get()->toArray();
+      $category = array_column($res, 'name', 'id');
+    }
+    return $category[$categoryId] ?? '';
+  }
 }

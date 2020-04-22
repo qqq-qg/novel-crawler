@@ -54,4 +54,14 @@ class CollectionRuleRepository
     }
     return $rst;
   }
+
+  public function getRuleName($ruleId)
+  {
+    static $rules = null;
+    if (is_null($rules)) {
+      $res = CollectionRuleModel::query()->select(['id', 'title'])->get()->toArray();
+      $rules = array_column($res, 'title', 'id');
+    }
+    return $rules[$ruleId] ?? '';
+  }
 }

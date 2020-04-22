@@ -10,8 +10,12 @@ class CollectionTaskRepository
   public function index($search)
   {
     $paginate = $this->searchQuery(CollectionTaskModel::query(), $search)->paginate($search['pageSize'] ?? 10);
+    $categoryService = new CategoryRepository();
+    $ruleService = new CollectionRuleRepository();
+    /** @var CollectionTaskModel $item */
     foreach ($paginate->items() as $k => $item) {
-      //todo
+      $item->category_name = $categoryService->getCategoryName($item->cate_id);
+      $item->rule_name = $ruleService->getRuleName($item->rule_id);
     }
     return $paginate;
   }

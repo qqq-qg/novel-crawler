@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Background;
 
 use App\Http\Controllers\Controller;
+use App\Repositories\Background\CategoryRepository;
 use App\Repositories\Background\CollectionTaskRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
@@ -16,12 +17,13 @@ class CollectionTaskController extends Controller
    * @param CollectionTaskRepository $repository
    * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
    */
-  public function index(Request $request, CollectionTaskRepository $repository)
+  public function index(Request $request, CollectionTaskRepository $repository,CategoryRepository $categoryRepo)
   {
     $search = $request->all();
     $paginate = $repository->index($search);
     return view('background.collection-task.index', [
       'paginate' => $paginate,
+      'categories' => $categoryRepo->all(),
       'search' => $search
     ]);
   }
