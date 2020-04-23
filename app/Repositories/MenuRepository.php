@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Models\Admin\Menu;
+use App\Models\AdminBak\Menu;
 
 class MenuRepository extends BaseRepository
 {

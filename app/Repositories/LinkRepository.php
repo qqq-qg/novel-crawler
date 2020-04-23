@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Models\Admin\Links;
+use App\Models\AdminBak\Links;
 
 class LinkRepository extends BaseRepository
 {

@@ -24,7 +24,7 @@ Route::group([], function () {
 // 后台路由
 Route::group([
   'prefix' => '/ad',
-  'namespace' => 'Admin',
+  'namespace' => 'AdminBak',
 ], function () {
   Route::get('login', 'AuthController@getLogin')->name('getAdminLogin');
   Route::post('login', 'AuthController@postLogin')->name('postAdminLogin');
@@ -135,7 +135,7 @@ Route::group([
   'namespace' => 'Home',
 ], function () {
   Route::get('/', 'IndexController@getIndex')->name('getHomeIndex');
-  
+
   Route::get('category/{catid}.html', 'BooksController@getIndex')
     ->where('catid', '\d+')
     ->name('BookCat');

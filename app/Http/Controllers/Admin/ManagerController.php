@@ -2,158 +2,115 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Repositories\ManagerRepository;
+use App\Http\Controllers\Controller;
+use App\Repositories\Admin\ManagerRepository;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Response;
 
-
-class ManagerController extends BaseController
+class ManagerController extends Controller
 {
   /**
+   * GET /managers
+   *
+   * @param Request $request
    * @param ManagerRepository $repository
-   * @return mixed
+   * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
    */
-  public function getIndex(ManagerRepository $repository)
+  public function index(Request $request, ManagerRepository $repository)
   {
-    $lists = $repository->lists();
-    $data = [
-      'lists' => $lists,
-    ];
-    return admin_view('manager.index', $data);
-  }
-
-  /**
-   * 创建用户
-   * @return mixed
-   */
-  public function getCreate()
-  {
-    return admin_view('manager.create');
-  }
-
-  /**
-   * 创建校验
-   * @param $data
-   * @return mixed
-   */
-  protected function validate_create($data)
-  {
-    return Validator::make($data, [
-      'username' => 'required|string|min:4|max:50|unique:managers',
-      'truename' => 'required|string',
-      'password' => 'required|string|min:4|max:255',
-      'email' => 'required|string|email|unique:managers',
+    $search = $request->all();
+    $paginate = $repository->index($search);
+    return view('admin.manager.index', [
+      'paginate' => $paginate,
+      'search' => $search
     ]);
   }
 
   /**
-   * 创建用户
+   * GET /managers/create
+   *
+   * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+   */
+  public function create()
+  {
+    return view('admin.manager.create');
+  }
+
+  /**
+   * POST /managers
+   *
    * @param Request $request
    * @param ManagerRepository $repository
-   * @return $this|\Illuminate\Http\RedirectResponse
-   * @throws ValidationException
+   * @return \Illuminate\Http\JsonResponse
    */
-  public function postCreate(Request $request, ManagerRepository $repository)
+  public function store(Request $request, ManagerRepository $repository)
   {
-    $data = $request->all();
-
-    $validator = $this->validate_create($data);
-    if ($validator->fails()) {
-      throw new ValidationException($validator);
-    }
-
-    $result = $repository->create($data);
-    if ($result) {
-      return redirect()->route('Manager.getIndex');
-    } else {
-      return back()->withErrors('创建失败')->withInput();
+    try {
+      $result = $repository->store($request->all());
+      return Response::json(['code' => 0, 'message' => 'success', 'data' => $result]);
+    } catch (\Exception $e) {
+      return Response::json(['code' => 500, 'message' => $e->getMessage(), 'data' => []]);
     }
   }
 
   /**
-   * 更新用户
+   * GET /managers/{id}
+   *
    * @param ManagerRepository $repository
    * @param $id
-   * @return mixed
+   * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
    */
-  public function getUpdate(ManagerRepository $repository, $id)
+  public function show(ManagerRepository $repository, $id)
   {
-    $data = $repository->find($id);
-    if (!$data) {
-      abort(404, '用户不存在');
-    }
-    return admin_view('manager.create', $data);
+    $data = $repository->show($id);
+    return view('admin.manager.detail' . ['data' => $data]);
   }
 
   /**
-   * 更新校验
-   * @param $data
-   * @param bool $repassword
-   * @return \Illuminate\Validation\Validator
+   * GET /managers/{id}/edit
+   *
+   * @param ManagerRepository $repository
+   * @param $id
+   * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
    */
-  protected function validate_update($data, $repassword = false)
+  public function edit(ManagerRepository $repository, $id)
   {
-    $validate_rule = [
-      'username' => 'required|string|min:4|max:50|unique:managers,username,' . $data['id'],
-      'truename' => 'required|string',
-      'password' => 'required|string|min:4|max:255',
-      'email' => 'required|string|email|unique:managers,email,' . $data['id'],
-    ];
-    if (false == $repassword) {
-      unset($validate_rule['password']);
-    }
-    return Validator::make($data, $validate_rule);
+    $data = $repository->show($id);
+    return view('admin.manager.create' . ['data' => $data]);
   }
 
   /**
-   * 更新用户
+   * PUT /managers/{id}
+   *
    * @param Request $request
    * @param ManagerRepository $repository
-   * @return $this|\Illuminate\Http\RedirectResponse
+   * @param $id
+   * @return \Illuminate\Http\JsonResponse
    */
-  public function postUpdate(Request $request, ManagerRepository $repository)
+  public function update(Request $request, ManagerRepository $repository, $id)
   {
-    $data = $request->all();
-    $repassword = $data['password'] ? true : false;
-    if (empty($data['password'])) unset($data['password']);
-    $validator = $this->validate_update($data, $repassword);
-
-    if ($validator->fails()) {
-      throw new ValidationException($validator);
-    }
-
-    $result = $repository->update($data);
-    if ($result) {
-      return redirect()->route('Manager.getIndex');
-    } else {
-      return back()->withErrors('更新失败')->withInput();
+    try {
+      $result = $repository->store($request->all());
+      return Response::json(['code' => 0, 'message' => 'success', 'data' => $result]);
+    } catch (\Exception $e) {
+      return Response::json(['code' => 500, 'message' => $e->getMessage(), 'data' => []]);
     }
   }
-
 
   /**
-   * 删除
-   * @param Request $request
+   * DELETE /managers/{id}
+   *
    * @param ManagerRepository $repository
-   * @return $this|\Illuminate\Http\RedirectResponse
+   * @param $id
+   * @return \Illuminate\Http\JsonResponse
    */
-  public function getDelete(Request $request, ManagerRepository $repository)
+  public function destroy(ManagerRepository $repository, $id)
   {
-    $user = $repository->find($request->id);
-    if (!$user) {
-      return redirect()->route('Manager.getIndex')->withErrors('用户不存在');
-    }
-    if ($user->id == 1) {
-      return redirect()->route('Manager.getIndex')->withErrors('内置管理员账户无法删除');
-    }
-
-    $result = $user->delete();
-    if ($result) {
-      return redirect()->route('Manager.getIndex')->with('Message', '删除成功');
-    } else {
-      return redirect()->route('Manager.getIndex')->withErrors('删除失败');
+    try {
+      $result = $repository->destroy($id);
+      return Response::json(['code' => 0, 'message' => 'success', 'data' => $result]);
+    } catch (\Exception $e) {
+      return Response::json(['code' => 500, 'message' => $e->getMessage(), 'data' => []]);
     }
   }
-
 }

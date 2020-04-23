@@ -23,7 +23,7 @@
             var current = 0;
             setInterval(function(){
                 current -= 1;
-                $('body').css("backgroundPosition", (direction == 'h') ? current+"px 0" : "0 " + current+"px");
+                $('body').css("adminPosition", (direction == 'h') ? current+"px 0" : "0 " + current+"px");
             }, scrollSpeed);
 
         });

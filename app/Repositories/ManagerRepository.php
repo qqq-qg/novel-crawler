@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Models\Admin\Manager;
+use App\Models\AdminBak\Manager;
 
 
 class ManagerRepository extends BaseRepository

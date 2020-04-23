@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Models\Admin\RoleAccess;
+use App\Models\AdminBak\RoleAccess;
 
 class RoleAccessRepository extends BaseRepository
 {

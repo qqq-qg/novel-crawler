@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Models\Admin\Setting;
+use App\Models\AdminBak\Setting;
 
 class SettingRepository extends BaseRepository
 {

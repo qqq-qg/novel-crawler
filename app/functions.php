@@ -150,7 +150,7 @@ function uploadToQiniu($file, $key = '')
   if (empty(env('IMG_URL'))) {
     return str_replace(public_path(), '', $file);
   }
-  $upload = new \App\Http\Controllers\Admin\UploadController();
+  $upload = new \App\Http\Controllers\AdminBak\UploadController();
   if (empty($key)) $key = makeQiNiuKey($file);
   //统一分隔符
   $thumb = str_replace(array('/', '\\'), DIRECTORY_SEPARATOR, $file);

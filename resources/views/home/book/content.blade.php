@@ -98,7 +98,7 @@
         </ul>
         <ul>
             <li>
-                <input type="text" class="textm" id="background" value="背景"/>
+                <input type="text" class="textm" id="admin" value="背景"/>
                 <input type="hidden" id="background2" value="#000"/>
                 <span class="btn" id="background1"></span>
             </li>

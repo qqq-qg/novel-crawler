@@ -80,8 +80,8 @@ class RouteServiceProvider extends ServiceProvider
 
     protected function mapAdminRoutes()
     {
-        Route::prefix('background')
+        Route::prefix('admin')
              ->namespace($this->namespace)
-             ->group(base_path('routes/background.php'));
+             ->group(base_path('routes/admin.php'));
     }
 }
