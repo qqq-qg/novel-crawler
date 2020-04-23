@@ -68,16 +68,14 @@ class CategoryController extends Controller
    *
    * @param CategoryRepository $repository
    * @param $id
-   * @return \Illuminate\Http\JsonResponse
+   * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+   * @author Nacrane
+   * @Date: 2020/04/23 17:23
    */
   public function edit(CategoryRepository $repository, $id)
   {
-    try {
-      $data = $repository->show($id);
-      return Response::json(['code' => 0, 'message' => 'success', 'data' => $data]);
-    } catch (\Exception $e) {
-      return Response::json(['code' => 500, 'message' => $e->getMessage(), 'data' => []]);
-    }
+    $data = $repository->show($id);
+    return view('background.category.create', ['data' => $data]);
   }
 
   /**

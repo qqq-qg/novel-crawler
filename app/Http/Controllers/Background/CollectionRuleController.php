@@ -60,7 +60,7 @@ class CollectionRuleController extends Controller
   public function show(CollectionRuleRepository $repository, $id)
   {
     $data = $repository->show($id);
-    return view('background.collection-rule.create' . ['data' => $data]);
+    return view('background.collection-rule.detail' . ['data' => $data]);
   }
 
   /**
@@ -68,16 +68,12 @@ class CollectionRuleController extends Controller
    *
    * @param CollectionRuleRepository $repository
    * @param $id
-   * @return \Illuminate\Http\JsonResponse
+   * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
    */
   public function edit(CollectionRuleRepository $repository, $id)
   {
-    try {
-      $data = $repository->show($id);
-      return Response::json(['code' => 0, 'message' => 'success', 'data' => $data]);
-    } catch (\Exception $e) {
-      return Response::json(['code' => 500, 'message' => $e->getMessage(), 'data' => []]);
-    }
+    $data = $repository->show($id);
+    return view('background.collection-rule.create' . ['data' => $data]);
   }
 
   /**

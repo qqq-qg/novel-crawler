@@ -60,7 +60,7 @@ class LinkController extends Controller
   public function show(LinkRepository $repository, $id)
   {
     $data = $repository->show($id);
-    return view('background.link.create' . ['data' => $data]);
+    return view('background.link.create', ['data' => $data]);
   }
 
   /**

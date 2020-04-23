@@ -60,7 +60,7 @@ class SettingController extends Controller
   public function show(SettingRepository $repository, $id)
   {
     $data = $repository->show($id);
-    return view('background.setting.create' . ['data' => $data]);
+    return view('background.setting.detail' . ['data' => $data]);
   }
 
   /**
@@ -68,16 +68,12 @@ class SettingController extends Controller
    *
    * @param SettingRepository $repository
    * @param $id
-   * @return \Illuminate\Http\JsonResponse
+   * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
    */
   public function edit(SettingRepository $repository, $id)
   {
-    try {
-      $data = $repository->show($id);
-      return Response::json(['code' => 0, 'message' => 'success', 'data' => $data]);
-    } catch (\Exception $e) {
-      return Response::json(['code' => 500, 'message' => $e->getMessage(), 'data' => []]);
-    }
+    $data = $repository->show($id);
+    return view('background.setting.create' . ['data' => $data]);
   }
 
   /**

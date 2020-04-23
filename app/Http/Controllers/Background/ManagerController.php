@@ -60,7 +60,7 @@ class ManagerController extends Controller
   public function show(ManagerRepository $repository, $id)
   {
     $data = $repository->show($id);
-    return view('background.manager.create' . ['data' => $data]);
+    return view('background.manager.detail' . ['data' => $data]);
   }
 
   /**
@@ -68,16 +68,12 @@ class ManagerController extends Controller
    *
    * @param ManagerRepository $repository
    * @param $id
-   * @return \Illuminate\Http\JsonResponse
+   * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
    */
   public function edit(ManagerRepository $repository, $id)
   {
-    try {
-      $data = $repository->show($id);
-      return Response::json(['code' => 0, 'message' => 'success', 'data' => $data]);
-    } catch (\Exception $e) {
-      return Response::json(['code' => 500, 'message' => $e->getMessage(), 'data' => []]);
-    }
+    $data = $repository->show($id);
+    return view('background.manager.create' . ['data' => $data]);
   }
 
   /**

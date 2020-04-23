@@ -60,7 +60,7 @@ class MenuController extends Controller
   public function show(MenuRepository $repository, $id)
   {
     $data = $repository->show($id);
-    return view('background.menu.create' . ['data' => $data]);
+    return view('background.menu.detail' . ['data' => $data]);
   }
 
   /**
@@ -68,16 +68,12 @@ class MenuController extends Controller
    *
    * @param MenuRepository $repository
    * @param $id
-   * @return \Illuminate\Http\JsonResponse
+   * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
    */
   public function edit(MenuRepository $repository, $id)
   {
-    try {
-      $data = $repository->show($id);
-      return Response::json(['code' => 0, 'message' => 'success', 'data' => $data]);
-    } catch (\Exception $e) {
-      return Response::json(['code' => 500, 'message' => $e->getMessage(), 'data' => []]);
-    }
+    $data = $repository->show($id);
+    return view('background.menu.create' . ['data' => $data]);
   }
 
   /**

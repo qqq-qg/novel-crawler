@@ -17,7 +17,7 @@ class CollectionTaskController extends Controller
    * @param CollectionTaskRepository $repository
    * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
    */
-  public function index(Request $request, CollectionTaskRepository $repository,CategoryRepository $categoryRepo)
+  public function index(Request $request, CollectionTaskRepository $repository, CategoryRepository $categoryRepo)
   {
     $search = $request->all();
     $paginate = $repository->index($search);
@@ -62,7 +62,7 @@ class CollectionTaskController extends Controller
   public function show(CollectionTaskRepository $repository, $id)
   {
     $data = $repository->show($id);
-    return view('background.collection-task.create' . ['data' => $data]);
+    return view('background.collection-task.detail' . ['data' => $data]);
   }
 
   /**
@@ -70,16 +70,12 @@ class CollectionTaskController extends Controller
    *
    * @param CollectionTaskRepository $repository
    * @param $id
-   * @return \Illuminate\Http\JsonResponse
+   * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
    */
   public function edit(CollectionTaskRepository $repository, $id)
   {
-    try {
-      $data = $repository->show($id);
-      return Response::json(['code' => 0, 'message' => 'success', 'data' => $data]);
-    } catch (\Exception $e) {
-      return Response::json(['code' => 500, 'message' => $e->getMessage(), 'data' => []]);
-    }
+    $data = $repository->show($id);
+    return view('background.collection-task.create' . ['data' => $data]);
   }
 
   /**
