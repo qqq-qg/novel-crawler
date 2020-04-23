@@ -11,7 +11,6 @@
           </div>
         </script>
         <script type="text/html" id="bar">
-          <a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
           <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
           <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delete">删除</a>
         </script>
@@ -27,6 +26,13 @@
         <label class="layui-form-label">用户名</label>
         <div class="layui-input-block">
           <input type="text" name="username" class="layui-input" autocomplete="off" placeholder="请输入标题 (必填)"
+                 lay-verify="required">
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">密码</label>
+        <div class="layui-input-block">
+          <input type="password" name="password" class="layui-input" autocomplete="off" placeholder="请输入密码"
                  lay-verify="required">
         </div>
       </div>
@@ -65,9 +71,9 @@
 
       var paginate = @json($paginate);
       var keyword = @json($search??[]);
-      var createUrl = '<?php echo route('books.update', ['book' => '_id_'])?>';
-      var detailUrl = '<?php echo route('books.show', ['book' => '_id_'])?>';
-      var deleteUrl = '<?php echo route('books.destroy', ['book' => '_id_'])?>';
+      var storeUrl = '<?php echo route('managers.store')?>';
+      var updateUrl = '<?php echo route('managers.update', ['manager' => '_id_'])?>';
+      var destroyUrl = '<?php echo route('managers.destroy', ['manager' => '_id_'])?>';
       var openCallback = () => {
       };
 
@@ -81,8 +87,8 @@
         , page: false
         , cols: [[{field: 'id', title: 'ID', width: 60}
           , {field: 'username', title: '用户名', width: 100}
-          , {field: 'truename', title: '真实姓名', width: 150}
-          , {field: 'email', title: '邮箱号码'}
+          , {field: 'truename', title: '真实姓名', width: 150, cellMinWidth: 150}
+          , {field: 'email', title: '邮箱号码', width: 200, cellMinWidth: 200}
           , {field: 'lastip', title: '上一次登录ip', width: 120}
           , {field: 'lasttime', title: '最后登录时间', width: 160}
           , {field: 'created_at', title: '添加时间', width: 160}
@@ -108,9 +114,14 @@
         var checkStatus = table.checkStatus(obj.config.id);
         switch (obj.event) {
           case 'add':
-            layer.msg('添加');
             fillCreateForm({});
-            openCreateDialog('新增小说');
+            let index = openCreateDialog('新增管理员');
+            openCallback = () => {
+              window.location.reload();
+              setTimeout(() => {
+                layer.close(index);
+              }, 1000);
+            };
             break;
           case 'delete':
             layer.msg('删除');
@@ -132,15 +143,13 @@
         var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
         var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
         if (layEvent === 'detail') {
-          let url = 'http://www.ql.com/admin/rules';
-          let title = '测试内部打开父级TAB';
-          parent.layui.index.openIframe(url, title);
+
         } else if (layEvent === 'delete') { //删除
           layer.confirm('我跟你讲，删掉就真的木有了！', function (index) {
             obj.del();
             layer.close(index);
             $.ajax({
-              url: deleteUrl.replace('_id_', data.id),
+              url: destroyUrl.replace('_id_', data.id),
               type: 'DELETE',
               dataType: 'JSON',
               success: (res) => {
@@ -156,8 +165,9 @@
             });
           });
         } else if (layEvent === 'edit') { //编辑
+          delete data.password;
           fillCreateForm(data);
-          let index = openCreateDialog('编辑小说');
+          let index = openCreateDialog('编辑管理员');
           openCallback = (param) => {
             if (typeof param === 'object' && param.id == data.id) {
               delete param.id;
@@ -165,17 +175,15 @@
             }
             setTimeout(() => {
               layer.close(index);
-            }, 1500);
+            }, 1000);
           };
-        } else if (layEvent === 'LAYTABLE_TIPS') {
-          layer.alert('Hi，头部工具栏扩展的右侧图标。');
         }
       });
       //监听提交操作
       form.on('submit(create-submit)', function (data) {
         if (data.field.id != '') {
           $.ajax({
-            url: createUrl.replace('_id_', data.field.id),
+            url: updateUrl.replace('_id_', data.field.id),
             type: 'put',
             dataType: 'json',
             data: data.field,
@@ -190,6 +198,25 @@
             },
             error: (jqXHR, textStatus, errorMessage) => {
               layer.msg('更新失败 ' + errorMessage, {icon: 5});
+              openCallback();
+            }
+          });
+        } else {
+          $.ajax({
+            url: storeUrl,
+            type: 'POST',
+            dataType: 'json',
+            data: data.field,
+            success: (res) => {
+              if (res.code !== 0) {
+                layer.msg('添加失败 ' + res.message, {icon: 5});
+                return false;
+              }
+              layer.msg('添加成功');
+              openCallback();
+            },
+            error: (jqXHR, textStatus, errorMessage) => {
+              layer.msg('添加失败 ' + errorMessage, {icon: 5});
               openCallback();
             }
           });

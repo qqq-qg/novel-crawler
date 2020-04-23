@@ -3,6 +3,7 @@
 namespace App\Repositories\Admin;
 
 use App\Models\Admin\ManagerModel;
+use Hash;
 use Illuminate\Database\Eloquent\Builder;
 
 class ManagerRepository
@@ -27,18 +28,22 @@ class ManagerRepository
   public function store($data)
   {
     if (empty($data['id'])) {
-      $companyModel = ManagerModel::query()->create($data);
-      if (!$companyModel->id) {
+      $data['password'] = Hash::make($data['password']);
+      $model = ManagerModel::query()->create($data);
+      if (!$model->id) {
         throw new \Exception("新增保存失败");
       }
     } else {
-      $companyModel = ManagerModel::query()->where('id', $data['id'])->first();
-      $rst = $companyModel->update($data);
+      $model = ManagerModel::query()->where('id', $data['id'])->first();
+      if (!empty($data['password'])) {
+        $data['password'] = Hash::make($data['password']);
+      }
+      $rst = $model->update($data);
       if (!$rst) {
         throw new \Exception("更新保存失败");
       }
     }
-    return $companyModel;
+    return $model;
   }
 
   public function show($id)

@@ -5,11 +5,11 @@
       <div class="layui-card-body">
         <table lay-even id="list-data" lay-filter="list-data" lay-size="sm"></table>
         <div id="lay-page"></div>
-        {{--        <script type="text/html" id="toolbar">--}}
-        {{--          <div class="layui-btn-container">--}}
-        {{--            <button class="layui-btn layui-btn-sm" lay-event="delete">删除</button>--}}
-        {{--          </div>--}}
-        {{--        </script>--}}
+        <script type="text/html" id="toolbar">
+          <div class="layui-btn-container">
+            <button class="layui-btn layui-btn-sm" lay-event="add">新增</button>
+          </div>
+        </script>
         <script type="text/html" id="bar">
           <a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
           <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
@@ -45,7 +45,7 @@
         <div class="layui-input-block">
           <select name="rule_id" lay-filter="rule_id">
             @foreach($rules??[] as $rule)
-              <option value="{{$rule['id']}}">{{$rule['name']}}</option>
+              <option value="{{$rule['id']}}">{{$rule['title']}}</option>
             @endforeach
           </select>
         </div>
@@ -85,9 +85,9 @@
 
       var paginate = @json($paginate);
       var keyword = @json($search??[]);
-      var createUrl = '<?php echo route('books.update', ['book' => '_id_'])?>';
-      var detailUrl = '<?php echo route('books.show', ['book' => '_id_'])?>';
-      var deleteUrl = '<?php echo route('books.destroy', ['book' => '_id_'])?>';
+      var storeUrl = '<?php echo route('tasks.store')?>';
+      var updateUrl = '<?php echo route('tasks.update', ['task' => '_id_'])?>';
+      var deleteUrl = '<?php echo route('tasks.destroy', ['task' => '_id_'])?>';
       var openCallback = () => {
       };
 
@@ -132,7 +132,13 @@
           case 'add':
             layer.msg('添加');
             fillCreateForm({});
-            openCreateDialog('新增小说');
+            let index = openCreateDialog('新增采集任务');
+            openCallback = () => {
+              window.location.reload();
+              setTimeout(() => {
+                layer.close(index);
+              }, 1000);
+            };
             break;
           case 'delete':
             layer.msg('删除');
@@ -154,9 +160,7 @@
         var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
         var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
         if (layEvent === 'detail') {
-          let url = 'http://www.ql.com/admin/rules';
-          let title = '测试内部打开父级TAB';
-          parent.layui.index.openIframe(url, title);
+          //todo
         } else if (layEvent === 'delete') { //删除
           layer.confirm('我跟你讲，删掉就真的木有了！', function (index) {
             obj.del();
@@ -179,7 +183,7 @@
           });
         } else if (layEvent === 'edit') { //编辑
           fillCreateForm(data);
-          let index = openCreateDialog('编辑小说');
+          let index = openCreateDialog('编辑采集任务');
           openCallback = (param) => {
             if (typeof param === 'object' && param.id == data.id) {
               delete param.id;
@@ -187,17 +191,15 @@
             }
             setTimeout(() => {
               layer.close(index);
-            }, 1500);
+            }, 1000);
           };
-        } else if (layEvent === 'LAYTABLE_TIPS') {
-          layer.alert('Hi，头部工具栏扩展的右侧图标。');
         }
       });
       //监听提交操作
       form.on('submit(create-submit)', function (data) {
         if (data.field.id != '') {
           $.ajax({
-            url: createUrl.replace('_id_', data.field.id),
+            url: updateUrl.replace('_id_', data.field.id),
             type: 'put',
             dataType: 'json',
             data: data.field,
@@ -215,6 +217,25 @@
               openCallback();
             }
           });
+        } else {
+          $.ajax({
+            url: storeUrl,
+            type: 'POST',
+            dataType: 'json',
+            data: data.field,
+            success: (res) => {
+              if (res.code !== 0) {
+                layer.msg('添加失败 ' + res.message, {icon: 5});
+                return false;
+              }
+              layer.msg('添加成功');
+              openCallback();
+            },
+            error: (jqXHR, textStatus, errorMessage) => {
+              layer.msg('添加失败 ' + errorMessage, {icon: 5});
+              openCallback();
+            }
+          });
         }
         return false;
       });
@@ -223,9 +244,9 @@
         form.val("create-form", {
           id: rowObj.id || ''
           , title: rowObj.title
-          , category_name: rowObj.category_name || ''
+          , cate_id: rowObj.cate_id || ''
           , from_url: rowObj.from_url || ''
-          , rule_name: rowObj.rule_name || ''
+          , rule_id: rowObj.rule_id || ''
           , page_limit: rowObj.page_limit || ''
           , task_code: rowObj.task_code || ''
           , retries: rowObj.retries || ''

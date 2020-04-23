@@ -152,7 +152,7 @@
             }
             setTimeout(() => {
               layer.close(index);
-            }, 1500);
+            }, 1000);
           };
         } else if (layEvent === 'LAYTABLE_TIPS') {
           layer.alert('Hi，头部工具栏扩展的右侧图标。');

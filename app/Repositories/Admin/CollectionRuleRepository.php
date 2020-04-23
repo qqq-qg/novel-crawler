@@ -27,18 +27,18 @@ class CollectionRuleRepository
   public function store($data)
   {
     if (empty($data['id'])) {
-      $companyModel = CollectionRuleModel::query()->create($data);
-      if (!$companyModel->id) {
+      $model = CollectionRuleModel::query()->create($data);
+      if (!$model->id) {
         throw new \Exception("新增保存失败");
       }
     } else {
-      $companyModel = CollectionRuleModel::query()->where('id', $data['id'])->first();
-      $rst = $companyModel->update($data);
+      $model = CollectionRuleModel::query()->where('id', $data['id'])->first();
+      $rst = $model->update($data);
       if (!$rst) {
         throw new \Exception("更新保存失败");
       }
     }
-    return $companyModel;
+    return $model->id;
   }
 
   public function show($id)
@@ -53,6 +53,12 @@ class CollectionRuleRepository
       throw new \Exception("删除失败");
     }
     return $rst;
+  }
+
+
+  public function all()
+  {
+    return CollectionRuleModel::query()->orderBy('id')->get();
   }
 
   public function getRuleName($ruleId)

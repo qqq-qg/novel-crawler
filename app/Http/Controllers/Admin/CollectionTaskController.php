@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Repositories\Admin\CategoryRepository;
+use App\Repositories\Admin\CollectionRuleRepository;
 use App\Repositories\Admin\CollectionTaskRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
@@ -14,16 +15,20 @@ class CollectionTaskController extends Controller
    * GET /tasks
    *
    * @param Request $request
-   * @param CollectionTaskRepository $repository
+   * @param CollectionRuleRepository $repository
    * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
    */
-  public function index(Request $request, CollectionTaskRepository $repository, CategoryRepository $categoryRepo)
+  public function index(Request $request
+    , CollectionTaskRepository $repository
+    , CategoryRepository $categoryRepo
+    , CollectionRuleRepository $ruleRepo)
   {
     $search = $request->all();
     $paginate = $repository->index($search);
     return view('admin.collection-task.index', [
       'paginate' => $paginate,
       'categories' => $categoryRepo->all(),
+      'rules' => $ruleRepo->all(),
       'search' => $search
     ]);
   }
