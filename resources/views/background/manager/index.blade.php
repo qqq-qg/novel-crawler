@@ -5,11 +5,11 @@
       <div class="layui-card-body">
         <table lay-even id="list-data" lay-filter="list-data" lay-size="sm"></table>
         <div id="lay-page"></div>
-        {{--        <script type="text/html" id="toolbar">--}}
-        {{--          <div class="layui-btn-container">--}}
-        {{--            <button class="layui-btn layui-btn-sm" lay-event="delete">删除</button>--}}
-        {{--          </div>--}}
-        {{--        </script>--}}
+        <script type="text/html" id="toolbar">
+          <div class="layui-btn-container">
+            <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
+          </div>
+        </script>
         <script type="text/html" id="bar">
           <a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
           <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
@@ -24,41 +24,24 @@
     <form class="layui-form" action="" lay-filter="create-form">
       <input type="hidden" name="id">
       <div class="layui-form-item">
-        <label class="layui-form-label">分类</label>
+        <label class="layui-form-label">用户名</label>
         <div class="layui-input-block">
-          <select name="cate_id" lay-filter="cate_id">
-            <option value="">--分类--</option>
-            @foreach($categories??[] as $cate)
-              <option value="{{$cate['id']}}">{{$cate['name']}}</option>
-            @endforeach
-          </select>
-        </div>
-      </div>
-      <div class="layui-form-item">
-        <label class="layui-form-label">标题</label>
-        <div class="layui-input-block">
-          <input type="text" name="title" class="layui-input" autocomplete="off" placeholder="请输入标题 (必填)"
+          <input type="text" name="username" class="layui-input" autocomplete="off" placeholder="请输入标题 (必填)"
                  lay-verify="required">
         </div>
       </div>
-      <div class="layui-form-item layui-form-text">
-        <label class="layui-form-label">简介</label>
+      <div class="layui-form-item">
+        <label class="layui-form-label">真实姓名</label>
         <div class="layui-input-block">
-          <textarea name="introduce" class="layui-textarea" placeholder="请输入简介"></textarea>
+          <input type="text" name="truename" class="layui-input" placeholder="请输入最新章节" autocomplete="off"
+                 lay-verify="">
         </div>
       </div>
       <div class="layui-form-item">
-        <label class="layui-form-label">最新章节</label>
+        <label class="layui-form-label">邮箱号码</label>
         <div class="layui-input-block">
-          <input type="text" name="last_chapter_title" class="layui-input" placeholder="请输入最新章节" autocomplete="off"
-                 lay-verify="last_chapter_title">
-        </div>
-      </div>
-      <div class="layui-form-item">
-        <label class="layui-form-label">作者</label>
-        <div class="layui-input-block">
-          <input type="text" name="author" class="layui-input" autocomplete="off" placeholder="请输入作者"
-                 lay-verify="author">
+          <input type="text" name="email" class="layui-input" autocomplete="off" placeholder="请输入作者"
+                 lay-verify="email">
         </div>
       </div>
       <div class="layui-form-item">
@@ -97,14 +80,11 @@
         , limit: paginate.per_page
         , page: false
         , cols: [[{field: 'id', title: 'ID', width: 60}
-          , {field: 'category_name', title: '分类名称', width: 100}
-          , {field: 'title', title: '标题', width: 150}
-          , {field: 'thumb', title: '图片', width: 100}
-          , {field: 'last_chapter_title', title: '最新', width: 120}
-          , {field: 'author', title: '作者', width: 80}
-          , {field: 'wordcount', title: '字数', width: 72}
-          , {field: 'follow', title: '关注人数', width: 86}
-          , {field: 'hits', title: '浏览量', width: 72}
+          , {field: 'username', title: '用户名', width: 100}
+          , {field: 'truename', title: '真实姓名', width: 150}
+          , {field: 'email', title: '邮箱号码'}
+          , {field: 'lastip', title: '上一次登录ip', width: 120}
+          , {field: 'lasttime', title: '最后登录时间', width: 160}
           , {field: 'created_at', title: '添加时间', width: 160}
           , {field: 'updated_at', title: '更新时间', width: 160}
           , {fixed: 'right', title: '操作', width: 160, align: 'center', toolbar: '#bar'}
@@ -154,7 +134,7 @@
         if (layEvent === 'detail') {
           let url = 'http://www.ql.com/background/rules';
           let title = '测试内部打开父级TAB';
-          parent.layui.index.openIframe(url,title);
+          parent.layui.index.openIframe(url, title);
         } else if (layEvent === 'delete') { //删除
           layer.confirm('我跟你讲，删掉就真的木有了！', function (index) {
             obj.del();
@@ -220,11 +200,9 @@
       var fillCreateForm = function (rowObj) {
         form.val("create-form", {
           id: rowObj.id || ''
-          , cate_id: (rowObj.cate_id || '') + ''
-          , title: rowObj.title || ''
-          , introduce: rowObj.introduce || ''
-          , last_chapter_title: rowObj.last_chapter_title || ''
-          , author: rowObj.author || ''
+          , username: rowObj.username
+          , truename: rowObj.truename || ''
+          , email: rowObj.email || ''
         });
       };
       //打开弹窗
