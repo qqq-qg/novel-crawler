@@ -63,8 +63,8 @@
         , form = layui.form;
 
       var paginate = @json($paginate);
-      var createUrl = '<?php echo route('rules.update', ['rule' => '_id_'])?>';
-      var detailUrl = '<?php echo route('rules.show', ['rule' => '_id_'])?>';
+      var createUrl = '<?php echo route('rules.create')?>';
+      var editUrl = '<?php echo route('rules.edit', ['rule' => '_id_'])?>';
       var deleteUrl = '<?php echo route('rules.destroy', ['rule' => '_id_'])?>';
       var openCallback = () => {
       };
@@ -100,12 +100,10 @@
       });
       //监听表格工具条
       table.on('toolbar(list-data)', function (obj) {
-        var checkStatus = table.checkStatus(obj.config.id);
+        let checkStatus = table.checkStatus(obj.config.id);
         switch (obj.event) {
           case 'add':
-            layer.msg('添加');
-            fillCreateForm({});
-            openCreateDialog('新增分类');
+            parent.layui.index.openIframe(createUrl, '新增采集规则');
             break;
           case 'delete':
             layer.msg('删除');
@@ -142,56 +140,12 @@
               }
             });
           });
-        } else if (layEvent === 'edit') { //编辑
-          fillCreateForm(data);
-          let index = openCreateDialog('编辑分类');
-          openCallback = (param) => {
-            if (typeof param === 'object' && param.id == data.id) {
-              delete param.id;
-              obj.update(param);
-            }
-            setTimeout(() => {
-              layer.close(index);
-            }, 1000);
-          };
-        } else if (layEvent === 'LAYTABLE_TIPS') {
-          layer.alert('Hi，头部工具栏扩展的右侧图标。');
+        } else if (layEvent === 'edit') {
+          let url = editUrl.replace('_id_', data.id);
+          parent.layui.index.openIframe(url, '编采集规则');
         }
       });
-      //监听提交操作
-      form.on('submit(create-submit)', function (data) {
-        if (data.field.id != '') {
-          $.ajax({
-            url: createUrl.replace('_id_', data.field.id),
-            type: 'put',
-            dataType: 'json',
-            data: data.field,
-            success: (res) => {
-              if (res.code !== 0) {
-                layer.msg('更新失败 ' + res.message, {icon: 5});
-                return false;
-              }
 
-              layer.msg('更新成功');
-              openCallback(data.field);
-            },
-            error: (jqXHR, textStatus, errorMessage) => {
-              layer.msg('更新失败 ' + errorMessage, {icon: 5});
-              openCallback();
-            }
-          });
-        }
-        return false;
-      });
-      //填充表单值
-      var fillCreateForm = function (rowObj) {
-        form.val("create-form", {
-          id: rowObj.id || ''
-          , title: rowObj.title
-          , host: rowObj.host || ''
-          , rule_json: rowObj.rule_json || ''
-        });
-      };
       //打开弹窗
       var openCreateDialog = function (title) {
         return layer.open({
