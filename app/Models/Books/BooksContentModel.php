@@ -18,12 +18,12 @@ use App\Models\BaseModel;
  */
 class BooksContentModel extends BaseModel
 {
-  protected $table = 'books_content';
+    protected $table = 'books_content';
 
-  public static function getContent($id)
-  {
-    return self::query()
-      ->where('id', $id)
-      ->first();
-  }
+    public static function getContent($id)
+    {
+        return self::query()
+            ->where('id', $id)
+            ->first();
+    }
 }

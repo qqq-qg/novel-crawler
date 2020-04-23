@@ -3,6 +3,7 @@
 namespace App\Models\Background;
 
 use App\Models\BaseModel;
+
 /**
  * @property integer id
  * @property string content 小说内容
@@ -11,5 +12,5 @@ use App\Models\BaseModel;
  */
 class BooksContentModel extends BaseModel
 {
-  protected $table = 'books_content';
+    protected $table = 'books_content';
 }

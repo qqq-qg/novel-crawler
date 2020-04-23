@@ -3,6 +3,7 @@
 namespace App\Models\Background;
 
 use App\Models\BaseModel;
+
 /**
  * @property integer id
  * @property string key

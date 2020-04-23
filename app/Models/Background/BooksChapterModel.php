@@ -1,6 +1,7 @@
 <?php namespace App\Models\Background;
 
 use App\Models\BaseModel;
+
 /**
  * @property integer id
  * @property integer books_id ID
