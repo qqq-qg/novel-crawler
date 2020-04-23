@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Response;
 class SettingController extends Controller
 {
   /**
-   * GET /setting
+   * GET /settings
    *
    * @param Request $request
    * @param SettingRepository $repository
@@ -27,7 +27,7 @@ class SettingController extends Controller
   }
 
   /**
-   * GET /setting/create
+   * GET /settings/create
    *
    * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
    */
@@ -37,8 +37,11 @@ class SettingController extends Controller
   }
 
   /**
-   * Store a newly created resource in storage.
-   * POST /setting
+   * POST /settings
+   *
+   * @param Request $request
+   * @param SettingRepository $repository
+   * @return \Illuminate\Http\JsonResponse
    */
   public function store(Request $request, SettingRepository $repository)
   {
@@ -51,7 +54,7 @@ class SettingController extends Controller
   }
 
   /**
-   * GET /setting/{id}
+   * GET /settings/{id}
    *
    * @param SettingRepository $repository
    * @param $id
@@ -64,7 +67,7 @@ class SettingController extends Controller
   }
 
   /**
-   * GET /setting/{id}/edit
+   * GET /settings/{id}/edit
    *
    * @param SettingRepository $repository
    * @param $id
@@ -77,7 +80,7 @@ class SettingController extends Controller
   }
 
   /**
-   * PUT /setting/{id}
+   * PUT /settings/{id}
    *
    * @param Request $request
    * @param SettingRepository $repository
@@ -95,7 +98,7 @@ class SettingController extends Controller
   }
 
   /**
-   * DELETE /setting/{id}
+   * DELETE /settings/{id}
    *
    * @param SettingRepository $repository
    * @param $id

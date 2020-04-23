@@ -37,8 +37,11 @@ class CollectionRuleController extends Controller
   }
 
   /**
-   * Store a newly created resource in storage.
    * POST /rules
+   *
+   * @param Request $request
+   * @param CollectionRuleRepository $repository
+   * @return \Illuminate\Http\JsonResponse
    */
   public function store(Request $request, CollectionRuleRepository $repository)
   {

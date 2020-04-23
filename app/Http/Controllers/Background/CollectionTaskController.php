@@ -39,8 +39,11 @@ class CollectionTaskController extends Controller
   }
 
   /**
-   * Store a newly created resource in storage.
    * POST /tasks
+   *
+   * @param Request $request
+   * @param CollectionTaskRepository $repository
+   * @return \Illuminate\Http\JsonResponse
    */
   public function store(Request $request, CollectionTaskRepository $repository)
   {

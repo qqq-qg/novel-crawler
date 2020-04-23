@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Response;
 class LinkController extends Controller
 {
   /**
-   * GET /link
+   * GET /links
    *
    * @param Request $request
    * @param LinkRepository $repository
@@ -27,7 +27,7 @@ class LinkController extends Controller
   }
 
   /**
-   * GET /link/create
+   * GET /links/create
    *
    * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
    */
@@ -37,8 +37,11 @@ class LinkController extends Controller
   }
 
   /**
-   * Store a newly created resource in storage.
-   * POST /link
+   * POST /links
+   *
+   * @param Request $request
+   * @param LinkRepository $repository
+   * @return \Illuminate\Http\JsonResponse
    */
   public function store(Request $request, LinkRepository $repository)
   {
@@ -51,7 +54,7 @@ class LinkController extends Controller
   }
 
   /**
-   * GET /link/{id}
+   * GET /links/{id}
    *
    * @param LinkRepository $repository
    * @param $id
@@ -64,7 +67,7 @@ class LinkController extends Controller
   }
 
   /**
-   * GET /link/{id}/edit
+   * GET /links/{id}/edit
    *
    * @param LinkRepository $repository
    * @param $id
@@ -81,7 +84,7 @@ class LinkController extends Controller
   }
 
   /**
-   * PUT /link/{id}
+   * PUT /links/{id}
    *
    * @param Request $request
    * @param LinkRepository $repository
@@ -99,7 +102,7 @@ class LinkController extends Controller
   }
 
   /**
-   * DELETE /link/{id}
+   * DELETE /links/{id}
    *
    * @param LinkRepository $repository
    * @param $id

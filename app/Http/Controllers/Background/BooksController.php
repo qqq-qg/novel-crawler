@@ -37,8 +37,11 @@ class BooksController extends Controller
   }
 
   /**
-   * Store a newly created resource in storage.
    * POST /books
+   *
+   * @param Request $request
+   * @param BooksRepository $repository
+   * @return \Illuminate\Http\JsonResponse
    */
   public function store(Request $request, BooksRepository $repository)
   {

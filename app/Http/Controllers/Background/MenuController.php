@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Response;
 class MenuController extends Controller
 {
   /**
-   * GET /menu
+   * GET /menus
    *
    * @param Request $request
    * @param MenuRepository $repository
@@ -27,7 +27,7 @@ class MenuController extends Controller
   }
 
   /**
-   * GET /menu/create
+   * GET /menus/create
    *
    * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
    */
@@ -37,8 +37,11 @@ class MenuController extends Controller
   }
 
   /**
-   * Store a newly created resource in storage.
-   * POST /menu
+   * POST /menus
+   *
+   * @param Request $request
+   * @param MenuRepository $repository
+   * @return \Illuminate\Http\JsonResponse
    */
   public function store(Request $request, MenuRepository $repository)
   {
@@ -51,7 +54,7 @@ class MenuController extends Controller
   }
 
   /**
-   * GET /menu/{id}
+   * GET /menus/{id}
    *
    * @param MenuRepository $repository
    * @param $id
@@ -64,7 +67,7 @@ class MenuController extends Controller
   }
 
   /**
-   * GET /menu/{id}/edit
+   * GET /menus/{id}/edit
    *
    * @param MenuRepository $repository
    * @param $id
@@ -77,7 +80,7 @@ class MenuController extends Controller
   }
 
   /**
-   * PUT /menu/{id}
+   * PUT /menus/{id}
    *
    * @param Request $request
    * @param MenuRepository $repository
@@ -95,7 +98,7 @@ class MenuController extends Controller
   }
 
   /**
-   * DELETE /menu/{id}
+   * DELETE /menus/{id}
    *
    * @param MenuRepository $repository
    * @param $id

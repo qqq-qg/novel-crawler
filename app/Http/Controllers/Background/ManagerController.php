@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Response;
 class ManagerController extends Controller
 {
   /**
-   * GET /manager
+   * GET /managers
    *
    * @param Request $request
    * @param ManagerRepository $repository
@@ -27,7 +27,7 @@ class ManagerController extends Controller
   }
 
   /**
-   * GET /manager/create
+   * GET /managers/create
    *
    * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
    */
@@ -37,8 +37,11 @@ class ManagerController extends Controller
   }
 
   /**
-   * Store a newly created resource in storage.
-   * POST /manager
+   * POST /managers
+   *
+   * @param Request $request
+   * @param ManagerRepository $repository
+   * @return \Illuminate\Http\JsonResponse
    */
   public function store(Request $request, ManagerRepository $repository)
   {
@@ -51,7 +54,7 @@ class ManagerController extends Controller
   }
 
   /**
-   * GET /manager/{id}
+   * GET /managers/{id}
    *
    * @param ManagerRepository $repository
    * @param $id
@@ -64,7 +67,7 @@ class ManagerController extends Controller
   }
 
   /**
-   * GET /manager/{id}/edit
+   * GET /managers/{id}/edit
    *
    * @param ManagerRepository $repository
    * @param $id
@@ -77,7 +80,7 @@ class ManagerController extends Controller
   }
 
   /**
-   * PUT /manager/{id}
+   * PUT /managers/{id}
    *
    * @param Request $request
    * @param ManagerRepository $repository
@@ -95,7 +98,7 @@ class ManagerController extends Controller
   }
 
   /**
-   * DELETE /manager/{id}
+   * DELETE /managers/{id}
    *
    * @param ManagerRepository $repository
    * @param $id

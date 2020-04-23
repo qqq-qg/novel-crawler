@@ -37,8 +37,11 @@ class CategoryController extends Controller
   }
 
   /**
-   * Store a newly created resource in storage.
    * POST /categories
+   *
+   * @param Request $request
+   * @param CategoryRepository $repository
+   * @return \Illuminate\Http\JsonResponse
    */
   public function store(Request $request, CategoryRepository $repository)
   {
