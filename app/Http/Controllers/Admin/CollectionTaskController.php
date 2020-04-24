@@ -83,7 +83,7 @@ class CollectionTaskController extends Controller
   public function edit(CollectionTaskRepository $repository, $id)
   {
     $data = $repository->show($id);
-    return view('admin.collection-task.create' . ['data' => $data]);
+    return view('admin.collection-task.create', ['data' => $data]);
   }
 
   /**

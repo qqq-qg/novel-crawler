@@ -3,6 +3,7 @@
 namespace App\Repositories\Admin;
 
 use App\Models\Admin\CollectionRuleModel;
+use App\Repositories\CollectionRule\BookRule;
 use Illuminate\Database\Eloquent\Builder;
 
 class CollectionRuleRepository
@@ -43,7 +44,12 @@ class CollectionRuleRepository
 
   public function show($id)
   {
-    return CollectionRuleModel::query()->find($id);
+    $rule = CollectionRuleModel::query()->find($id);
+    /**
+     * @var BookRule $rule->bookRule
+     */
+    $rule->bookRule = unserialize($rule->rule_json);
+    return $rule;
   }
 
   public function destroy($id)

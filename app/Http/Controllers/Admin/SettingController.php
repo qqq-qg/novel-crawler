@@ -76,7 +76,7 @@ class SettingController extends Controller
   public function edit(SettingRepository $repository, $id)
   {
     $data = $repository->show($id);
-    return view('admin.setting.create' . ['data' => $data]);
+    return view('admin.setting.create',  ['data' => $data]);
   }
 
   /**

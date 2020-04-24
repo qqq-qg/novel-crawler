@@ -76,7 +76,7 @@ class CollectionRuleController extends Controller
   public function edit(CollectionRuleRepository $repository, $id)
   {
     $data = $repository->show($id);
-    return view('admin.collection-rule.create' . ['data' => $data]);
+    return view('admin.collection-rule.edit', ['data' => $data]);
   }
 
   /**

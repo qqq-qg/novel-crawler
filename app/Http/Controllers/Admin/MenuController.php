@@ -76,7 +76,7 @@ class MenuController extends Controller
   public function edit(MenuRepository $repository, $id)
   {
     $data = $repository->show($id);
-    return view('admin.menu.create' . ['data' => $data]);
+    return view('admin.menu.create', ['data' => $data]);
   }
 
   /**

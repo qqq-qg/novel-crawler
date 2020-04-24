@@ -76,7 +76,7 @@ class ManagerController extends Controller
   public function edit(ManagerRepository $repository, $id)
   {
     $data = $repository->show($id);
-    return view('admin.manager.create' . ['data' => $data]);
+    return view('admin.manager.create', ['data' => $data]);
   }
 
   /**

@@ -63,7 +63,7 @@ class CategoryController extends Controller
   public function show(CategoryRepository $repository, $id)
   {
     $data = $repository->show($id);
-    return view('admin.category.create' . ['data' => $data]);
+    return view('admin.category.create',  ['data' => $data]);
   }
 
   /**
