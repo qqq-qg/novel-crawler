@@ -1,9 +1,9 @@
 @extends('admin.layouts.iframe')
 @section('content')
   <div class="layui-fluid">
-    <div class="layui-card lay-ui/">
+    <div class="layui-card lay-ui">
       <div class="layui-card-body">
-        <div class="layui-row">
+        <div class="layui-row" id="rule-card">
           <div id="form-card" class="layui-col-md12">
             <form class="layui-form layui-form-pane" action="" lay-filter="create-form">
               <input type="hidden" name="id">
@@ -71,7 +71,7 @@
                       <div class="layui-input-block">
                         <input type="text" name="chapterList[range]" class="layui-input" autocomplete="off"
                                placeholder="请输入范围选择器 (必填)" lay-verify="required"
-                               value="<?php echo $data['bookRule']->home->range?>">
+                               value="<?php echo $data['bookRule']->chapterList->range?>">
                       </div>
                     </div>
                     <table lay-even id="chapterList-data" lay-filter="chapterList-data" lay-size="sm"></table>
@@ -109,6 +109,7 @@
                 <div class="layui-colla-item">
                   <h2 class="layui-colla-title">替换正则</h2>
                   <div class="layui-colla-content layui-show">
+                    <span data-event="addReplaceTag">添加一行</span>
                     <table lay-even id="replaceTags-data" lay-filter="replaceTags-data" lay-size="sm"></table>
                   </div>
                 </div>
@@ -119,11 +120,15 @@
                   <div class="layui-footer" style="left: 0;">
                     <button class="layui-btn" lay-submit lay-filter="create-submit">立即提交</button>
                     <button type="reset" class="layui-btn layui-btn-primary">重置</button>
-                    <button type="button" class="layui-btn layui-btn-normal" id="test-btn">测试</button>
+                    <button type="button" class="layui-btn layui-btn-normal" data-event="showTestPanel">测试</button>
                   </div>
                 </div>
               </div>
             </form>
+
+            <script type="text/html" id="bar">
+              <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delete">删除</a>
+            </script>
           </div>
           <div id="test-card" class="display-none">
             <form class="layui-form" action="" lay-filter="test-form">
@@ -133,7 +138,7 @@
                   <input type="text" name="category_url" class="layui-input" autocomplete="off"
                          placeholder="http://xxx.com/xxx/{$page}.html">
                   <span style="color:#dbdbdb;">{$page}表示页码</span><br/>
-                  <a href="#" id="test-category">测试</a>
+                  <span data-event="testCategory">测试</span>
                 </div>
               </div>
               <div class="layui-form-item">
@@ -141,7 +146,7 @@
                 <div class="layui-input-block">
                   <input type="text" name="home_url" class="layui-input" autocomplete="off"
                          placeholder="http://xxx.com/xxx">
-                  <a href="#" id="test-home">测试</a>
+                  <span data-event="testHome">测试</span>
                 </div>
               </div>
               <div class="layui-form-item">
@@ -165,6 +170,10 @@
         , table = layui.table
         , form = layui.form;
       var bookRule = @json($data->bookRule);
+
+      var validateRuleUrl = '<?php echo route('rules.validate-rule')?>';
+      var result = $('#result');
+
       //排行表格
       var rankTable = table.render({
         elem: '#rank-data'
@@ -279,36 +288,192 @@
       });
       var replaceArr = [];
       $.each(bookRule.replaceTags, function (k, v) {
-        replaceArr.push({'preg': v[0], 'replace': v[1]});
+        replaceArr.push({preg: v[0], replace: v[1]});
       });
-      //文本替换正则
-      var replaceTable = table.render({
+      if (replaceArr.length === 0) {
+        replaceArr.push({preg: '', replace: ''});
+      }
+      var replaceTableOptions = {
         elem: '#replaceTags-data'
         , data: replaceArr
         , page: false
         , cols: [[{field: 'preg', title: '正则表达式', edit: 'text'}
           , {field: 'replace', title: '替换内容', edit: 'text'}
+          , {fixed: 'right', title: '操作', width: 100, align: 'center', toolbar: '#bar'}
         ]]
-      });
-
-
-      $('#test-btn').click(function (e) {
-        let formCardDom = $('#form-card');
-        let testCardDom = $('#test-card');
-        if (formCardDom.hasClass('layui-col-md12')) {
-          formCardDom.addClass('layui-col-md8').removeClass('layui-col-md12');
-          testCardDom.addClass('layui-col-md4').removeClass('display-none');
-        } else {
-          formCardDom.addClass('layui-col-md12').removeClass('layui-col-md8');
-          testCardDom.addClass('display-none').removeClass('layui-col-md4');
+      };
+      //文本替换正则
+      var replaceTable = table.render(replaceTableOptions);
+      table.on('tool(replaceTags-data)', function (obj) {
+        var layEvent = obj.event;
+        if (layEvent === 'delete') {
+          obj.del();
         }
-        rankTable.reload();
-        categoryTable.reload();
-        chapterTable.reload();
-        homeTable.reload();
-        contentTable.reload();
-        replaceTable.reload();
       });
+
+      $('#rule-card').on('click', "*[data-event]", function () {
+        let el = $(this), i = el.attr("data-event");
+        TE[i] && TE[i].call(this, el);
+      });
+      var TE = {
+        showTestPanel() {
+          let formCardDom = $('#form-card');
+          let testCardDom = $('#test-card');
+          if (formCardDom.hasClass('layui-col-md12')) {
+            formCardDom.addClass('layui-col-md8').removeClass('layui-col-md12');
+            testCardDom.addClass('layui-col-md4').removeClass('display-none');
+          } else {
+            formCardDom.addClass('layui-col-md12').removeClass('layui-col-md8');
+            testCardDom.addClass('display-none').removeClass('layui-col-md4');
+          }
+          rankTable.resize();
+          categoryTable.resize();
+          chapterTable.resize();
+          homeTable.resize();
+          contentTable.resize();
+          replaceTable.resize();
+        },
+
+        testCategory() {
+          let data = TE.formatBookRuleData();
+          data.test_type = 'category';
+          data.test_url = $('input[name="category_url"]').val();
+          TE.request(data, function (data) {
+            result.text(result.text() + "分类/排行采集结果:\n");
+            $.each(data, function (k, v) {
+              result.text(result.text() + "  " + v.url + "\n");
+            });
+          });
+        },
+
+        testHome() {
+          let data = TE.formatBookRuleData();
+          data.test_type = 'home';
+          data.test_url = $('input[name="home_url"]').val();
+          TE.request(data, (_data) => {
+            result.text(result.text() + "主页采集结果:\n");
+            result.text(result.text() + " " + _data.title + ":\n");
+            result.text(result.text() + " " + _data.words_count + ":\n");
+            result.text(result.text() + " " + _data.chapter_list_url + ":\n");
+
+            data.test_type = 'content';
+            data.test_url = _data.chapter_list_url;
+            TE.request(data, function (_data) {
+              result.text(result.text() + "正文采集结果:\n");
+              result.text(result.text() + _data.content + ":\n");
+            });
+          });
+        },
+
+        request(data, callback) {
+          $.ajax({
+            url: validateRuleUrl,
+            type: 'POST',
+            dataType: 'JSON',
+            data: data,
+            success: (res) => {
+              if (res.code !== 0) {
+                layer.msg('请求失败 ' + res.message, {icon: 5});
+                return false;
+              }
+              if (res.data.length === 0) {
+                layer.msg('未采集到数据', {icon: 5});
+                return false;
+              }
+              callback(res.data);
+            },
+            error: (jqXHR, textStatus, errorMessage) => {
+              layer.msg('请求异常 ' + errorMessage, {icon: 5});
+            }
+          });
+        },
+
+        formatBookRuleData() {
+          let _replaceTag = [];
+          if (replaceTable.config.data.length > 0) {
+            $.each(replaceTable.config.data, function (k, v) {
+              _replaceTag.push([v.preg, v.replace]);
+            });
+          }
+          return {
+            title: $('*[name="title"]').val(),
+            host: $('*[name="host"]').val(),
+            charset: $('*[name="charset"]').val(),
+            splitTag: $('*[name="splitTag"]').val(),
+            ranking: {
+              range: $("input[name='ranking[range]']").val(),
+              url: [
+                rankTable.config.data[0].ranking_0 || '',
+                rankTable.config.data[0].ranking_1 || '',
+                rankTable.config.data[0].ranking_2 || '',
+                rankTable.config.data[0].ranking_3 || '',
+              ],
+              page: rankTable.config.data[0].ranking_page || 1
+            },
+            category: {
+              range: $("input[name='category[range]']").val(),
+              url: [
+                categoryTable.config.data[0].category_0 || '',
+                categoryTable.config.data[0].category_1 || '',
+                categoryTable.config.data[0].category_2 || '',
+                categoryTable.config.data[0].category_3 || '',
+              ],
+              page: rankTable.config.data[0].ranking_page || 1
+            },
+            home: {
+              title: [
+                homeTable.config.data[0].home_0 || '',
+                homeTable.config.data[0].home_1 || '',
+                homeTable.config.data[0].home_2 || '',
+                homeTable.config.data[0].home_3 || '',
+              ],
+              words_count: [
+                homeTable.config.data[1].home_0 || '',
+                homeTable.config.data[1].home_1 || '',
+                homeTable.config.data[1].home_2 || '',
+                homeTable.config.data[1].home_3 || '',
+              ],
+              chapter_list_url: [
+                homeTable.config.data[2].home_0 || '',
+                homeTable.config.data[2].home_1 || '',
+                homeTable.config.data[2].home_2 || '',
+                homeTable.config.data[2].home_3 || '',
+              ],
+            },
+            chapterList: {
+              range: $("input[name='chapterList[range]']").val(),
+              title: [
+                chapterTable.config.data[0].chapterList_0 || '',
+                chapterTable.config.data[0].chapterList_1 || '',
+                chapterTable.config.data[0].chapterList_2 || '',
+                chapterTable.config.data[0].chapterList_3 || '',
+              ],
+              from_url: [
+                chapterTable.config.data[1].chapterList_0 || '',
+                chapterTable.config.data[1].chapterList_1 || '',
+                chapterTable.config.data[1].chapterList_2 || '',
+                chapterTable.config.data[1].chapterList_3 || '',
+              ]
+            },
+            content: {
+              content: [
+                contentTable.config.data[0].content_0 || '',
+                contentTable.config.data[0].content_1 || '',
+                contentTable.config.data[0].content_2 || '',
+                contentTable.config.data[0].content_3 || '',
+              ]
+            },
+            replaceTags: _replaceTag,
+          };
+        },
+
+        addReplaceTag() {
+          let _data = replaceTable.config.data;
+          _data.push({preg: '', replace: ''});
+          replaceTableOptions.data = _data;
+          replaceTable = table.render(replaceTableOptions);
+        },
+      };
     });
   </script>
 @endsection

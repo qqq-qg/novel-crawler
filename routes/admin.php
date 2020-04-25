@@ -16,4 +16,5 @@ Route::group(['namespace' => 'Admin'], function () {
     'menus' => 'MenuController',
     'settings' => 'SettingController',
   ]);
+  Route::any('validate-rule', 'CollectionRuleController@validateRule')->name('rules.validate-rule');
 });

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Repositories\Books;
 
 use App\Repositories\CollectionRule\BookRule;
 use App\Repositories\Proxy\KuaiDaiLiProxy;

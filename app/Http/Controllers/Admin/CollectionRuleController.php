@@ -113,4 +113,21 @@ class CollectionRuleController extends Controller
       return Response::json(['code' => 500, 'message' => $e->getMessage(), 'data' => []]);
     }
   }
+
+  /**
+   *
+   * @param Request $request
+   * @param CollectionRuleRepository $repository
+   * @return \Illuminate\Http\JsonResponse
+   * @author Nacrane
+   * @Date: 2020/04/25 20:56
+   */
+  public function validateRule(Request $request,CollectionRuleRepository $repository){
+    try {
+      $data = $repository->testCollectionRule($request->all());
+      return Response::json(['code' => 0, 'data' => $data]);
+    } catch (\Exception $e) {
+      return Response::json(['code' => 500, 'message' => $e->getMessage()]);
+    }
+  }
 }

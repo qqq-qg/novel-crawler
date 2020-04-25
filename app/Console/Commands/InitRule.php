@@ -36,14 +36,14 @@ class InitRule extends Command
     $bookRule = new BookRule();
     $bookRule->host = 'www.zongheng.com';
     $bookRule->bookList = [
-      'category' => new QlRule('ul.main_con>li',
+      'category' => new QlRule('.store_collist>.bookbox',
         [
-          'url' => ['span.bookname>a', 'href']
+          'url' => ['.bookname>a', 'href']
         ], true, 2),
 
-      'ranking' => new QlRule('div.rankpage_box>rank_d_list',
+      'ranking' => new QlRule('.rankpage_box>.rank_d_list',
         [
-          'url' => ['a', 'href']
+          'url' => ['.rank_d_b_name>a', 'href']
         ], true, 2)
     ];
     $bookRule->home = new QlRule('',
@@ -52,7 +52,7 @@ class InitRule extends Command
         'words_count' => ['div.nums>span>i:first', 'text'],
         'chapter_list_url' => ['a.all-catalog', 'href'],
       ]);
-    $bookRule->chapterList = new QlRule('ul.chapter-list>li',
+    $bookRule->chapterList = new QlRule('.chapter-list>li',
       [
         'title' => ['a', 'text'],
         'from_url' => ['a', 'href']
