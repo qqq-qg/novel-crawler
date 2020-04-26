@@ -13,6 +13,16 @@ class IndexController extends Controller
    */
   public function index()
   {
-    return view('admin.index.index');
+    $user = auth()->user();
+    $data = [
+      'username' => $user->username,
+      'user_id' => $user->id,
+    ];
+    return view('admin.index.index', ['data' => $data]);
+  }
+
+  public function home()
+  {
+
   }
 }

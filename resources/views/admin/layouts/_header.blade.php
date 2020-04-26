@@ -45,13 +45,15 @@
     </li>
     <li class="layui-nav-item" lay-unselect="">
       <a href="javascript:;">
-        <cite>Admin</cite>
+        <cite>{{$data['username']}}</cite>
         <span class="layui-nav-more"></span></a>
       <dl class="layui-nav-child layui-anim layui-anim-upbit">
-        <dd><a lay-href="set/user/info.html">基本资料</a></dd>
-        <dd><a lay-href="set/user/password.html">修改密码</a></dd>
+        {{--        <dd><a lay-href="set/user/info.html">基本资料</a></dd>--}}
+        {{--        <dd><a lay-href="set/user/password.html">修改密码</a></dd>--}}
         <hr>
-        <dd data-event="logout" style="text-align: center;"><a>退出</a></dd>
+        <dd data-event="logout" style="text-align: center;"
+            data-url="<?php echo route('admin-login-out');?>"><a>退出</a>
+        </dd>
       </dl>
     </li>
     <li class="layui-nav-item layui-hide-xs" lay-unselect="">
@@ -70,9 +72,9 @@
     <ul class="layui-nav layui-nav-tree" id="LAY-system-side-menu"
         lay-filter="layadmin-system-side-menu" lay-shrink="all">
       <li class="layui-nav-item">
-        <a href="#">
-          <i class="layui-icon layui-icon-home" lay-tips="前台首页"></i>
-          <cite>前台首页</cite>
+        <a href="#" data-event="home">
+          <i class="layui-icon layui-icon-home" lay-tips="首页"></i>
+          <cite>首页</cite>
         </a>
       </li>
       <li class="layui-nav-item">

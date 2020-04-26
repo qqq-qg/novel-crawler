@@ -2,7 +2,7 @@
 
 namespace App\Models\Admin;
 
-use App\Models\BaseModel;
+use Illuminate\Auth\Authenticatable;
 
 /**
  * @property integer id
@@ -17,7 +17,8 @@ use App\Models\BaseModel;
  * @property string created_at
  * @property string updated_at
  */
-class ManagerModel extends BaseModel
+class ManagerModel extends \Illuminate\Foundation\Auth\User
 {
+  use Authenticatable;
   protected $table = 'managers';
 }

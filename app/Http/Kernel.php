@@ -61,8 +61,7 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'admin' => \App\Http\Middleware\AdminAuthenticate::class,//后台中间件 必须登录
-        'admin.guest'   => \App\Http\Middleware\AdminGuest::class,//后台中间件 必须是游客
+        'logged' => \App\Http\Middleware\ValidateLogin::class,
     ];
 
     /**

@@ -1,7 +1,6 @@
 ;layui.define(['layer', 'element'], function (exports) {
   var $ = layui.jquery
     , element = layui.element
-    , l = layui.view
     , o = $('body')
     , r = $(window)
     , u = $("#LAY_app")
@@ -175,6 +174,13 @@
     },
     shade: function () {
       P.sideFlexible()
+    },
+    logout() {
+      window.location.href = $(this).data('url');
+      return false;
+    },
+    home() {
+      obj.focusIframe('HOME');
     },
   };
 
