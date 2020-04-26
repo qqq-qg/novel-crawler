@@ -34,6 +34,8 @@
     $(a).append('<div class="layui-tab-item">\n' +
       '    <iframe src="' + url + '" frameborder="0" class="layadmin-iframe"></iframe>\n' +
       '  </div>');
+  }, R = function (index) {
+    $(a).find(b + ':eq(' + index + ')').find('iframe')[0].contentWindow.location.reload(!0);
   };
   element.on("tab(" + p + ")", function (e) {
     P.tabsPage.index = e.index;
@@ -117,12 +119,7 @@
       P.sideFlexible(i ? "spread" : null)
     },
     refresh: function () {
-      var e = ".layadmin-iframe", i = $(b).length;
-      P.tabsPage.index >= i && (P.tabsPage.index = i - 1);
-      var t = P.tabsBody(P.tabsPage.index).find(e);
-      if (t.length) {
-        t[0].contentWindow.location.reload(!0)
-      }
+      R($(z).find('li' + y).index());
     },
     serach: function (e) {
       e.off("keypress").on("keypress", function (a) {
@@ -208,6 +205,10 @@
     screen: function () {
       var e = r.width();
       return e > 1200 ? 3 : e > 992 ? 2 : e > 768 ? 1 : 0
+    },
+
+    refresh: function (url) {
+      R($(z).find("li[lay-id='" + url + "']").index());
     },
   };
   exports('index', obj);

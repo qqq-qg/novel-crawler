@@ -31,9 +31,10 @@ class CollectionRuleController extends Controller
    *
    * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
    */
-  public function create()
+  public function create(CollectionRuleRepository $repository)
   {
-    return view('admin.collection-rule.create');
+    $data = $repository->getEmptyData();
+    return view('admin.collection-rule.edit', ['data' => $data]);
   }
 
   /**
@@ -115,6 +116,7 @@ class CollectionRuleController extends Controller
   }
 
   /**
+   * POST /rules/validate-rule
    *
    * @param Request $request
    * @param CollectionRuleRepository $repository
@@ -122,7 +124,8 @@ class CollectionRuleController extends Controller
    * @author Nacrane
    * @Date: 2020/04/25 20:56
    */
-  public function validateRule(Request $request,CollectionRuleRepository $repository){
+  public function validateRule(Request $request, CollectionRuleRepository $repository)
+  {
     try {
       $data = $repository->testCollectionRule($request->all());
       return Response::json(['code' => 0, 'data' => $data]);

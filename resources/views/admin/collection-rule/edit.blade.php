@@ -6,7 +6,7 @@
         <div class="layui-row" id="rule-card">
           <div id="form-card" class="layui-col-md12">
             <form class="layui-form layui-form-pane" action="" lay-filter="create-form">
-              <input type="hidden" name="id">
+              <input type="hidden" name="id" value="<?php echo $data['id'] ?? ''?>">
               <div class="layui-form-item">
                 <label class="layui-form-label">规则标题</label>
                 <div class="layui-input-block">
@@ -172,6 +172,10 @@
       var bookRule = @json($data->bookRule);
 
       var validateRuleUrl = '<?php echo route('rules.validate-rule')?>';
+      var indexUrl = '<?php echo route('rules.index')?>';
+      var storeUrl = '<?php echo route('rules.store')?>';
+      var editUrl = '<?php echo route('rules.edit', ['rule' => '_id_'])?>';
+      var updateUrl = '<?php echo route('rules.update', ['rule' => '_id_'])?>';
       var result = $('#result');
 
       //排行表格
@@ -311,6 +315,53 @@
         }
       });
 
+      //监听提交操作
+      form.on('submit(create-submit)', function () {
+        let data = TE.formatBookRuleData();
+        if (data.id !== '') {
+
+          $.ajax({
+            url: updateUrl.replace('_id_', data.id),
+            type: 'put',
+            dataType: 'json',
+            data: data,
+            success: (res) => {
+              if (res.code !== 0) {
+                layer.msg('更新失败 ' + res.message, {icon: 5});
+                return false;
+              }
+
+              layer.msg('更新成功');
+              parent.layui.index.refresh(indexUrl);
+              window.location.reload();
+            },
+            error: (jqXHR, textStatus, errorMessage) => {
+              layer.msg('更新失败 ' + errorMessage, {icon: 5});
+            }
+          });
+          return false;
+        }
+        $.ajax({
+          url: storeUrl,
+          type: 'POST',
+          dataType: 'json',
+          data: data,
+          success: (res) => {
+            if (res.code !== 0) {
+              layer.msg('新增失败 ' + res.message, {icon: 5});
+              return false;
+            }
+            layer.msg('新增成功');
+            parent.layui.index.refresh(indexUrl);
+            parent.layui.index.focusIframe(indexUrl);
+            parent.layui.index.closeIframe(window.location.href);
+          },
+          error: (jqXHR, textStatus, errorMessage) => {
+            layer.msg('新增失败 ' + errorMessage, {icon: 5});
+          }
+        });
+        return false;
+      });
       $('#rule-card').on('click', "*[data-event]", function () {
         let el = $(this), i = el.attr("data-event");
         TE[i] && TE[i].call(this, el);
@@ -396,8 +447,9 @@
             });
           }
           return {
-            title: $('*[name="title"]').val(),
-            host: $('*[name="host"]').val(),
+            id: $('input[name="id"]').val(),
+            title: $('input[name="title"]').val(),
+            host: $('input[name="host"]').val(),
             charset: $('*[name="charset"]').val(),
             splitTag: $('*[name="splitTag"]').val(),
             ranking: {

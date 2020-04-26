@@ -29,14 +29,20 @@ class CollectionRuleRepository
 
   public function store($data)
   {
+    $ruleData = [
+      'title' => $data['title'] ?? '',
+      'host' => $data['host'] ?? '',
+    ];
+    $bookRule = $this->getBookRule($data);
+    $ruleData['rule_json'] = serialize($bookRule);
     if (empty($data['id'])) {
-      $model = CollectionRuleModel::query()->create($data);
+      $model = CollectionRuleModel::query()->create($ruleData);
       if (!$model->id) {
         throw new \Exception("新增保存失败");
       }
     } else {
       $model = CollectionRuleModel::query()->where('id', $data['id'])->first();
-      $rst = $model->update($data);
+      $rst = $model->update($ruleData);
       if (!$rst) {
         throw new \Exception("更新保存失败");
       }
@@ -44,12 +50,16 @@ class CollectionRuleRepository
     return $model->id;
   }
 
+  public function getEmptyData()
+  {
+    $rule = new CollectionRuleModel();
+    $rule->bookRule = $this->getBookRule([]);
+    return $rule;
+  }
+
   public function show($id)
   {
     $rule = CollectionRuleModel::query()->find($id);
-    /**
-     * @var BookRule $rule ->bookRule
-     */
     $rule->bookRule = unserialize($rule->rule_json);
     return $rule;
   }
@@ -62,7 +72,6 @@ class CollectionRuleRepository
     }
     return $rst;
   }
-
 
   public function all()
   {
@@ -105,18 +114,25 @@ class CollectionRuleRepository
 
     $cPage = empty($data['category']['page']) ? 1 : intval($data['category']['page']);
     $rPage = empty($data['ranking']['page']) ? 1 : intval($data['ranking']['page']);
+    $nullRule = ['', '', null, null];
     $bookRule->bookList = [
       'category' => new QlRule($data['category']['range'] ?? '',
-        ['url' => $data['category']['url']], $cPage > 1, $cPage),
+        ['url' => $data['category']['url'] ?? $nullRule], $cPage > 1, $cPage),
       'ranking' => new QlRule($data['ranking']['range'] ?? '',
-        ['url' => $data['ranking']['url']], $rPage > 1, $rPage)
+        ['url' => $data['ranking']['url'] ?? $nullRule], $rPage > 1, $rPage)
     ];
-    $bookRule->home = new QlRule('', $data['home'] ?? []);
+    $bookRule->home = new QlRule('', $data['home'] ?? [
+        'title' => $nullRule,
+        'words_count' => $nullRule,
+        'chapter_list_url' => $nullRule,
+      ]);
     $bookRule->chapterList = new QlRule($data['chapterList']['range'] ?? '', [
-      'title' => $data['chapterList']['title'] ?? [],
-      'from_url' => $data['chapterList']['from_url'] ?? []
+      'title' => $data['chapterList']['title'] ?? $nullRule,
+      'from_url' => $data['chapterList']['from_url'] ?? $nullRule
     ]);
-    $bookRule->content = new QlRule('', $data['content'] ?? []);
+    $bookRule->content = new QlRule('', $data['content'] ?? [
+        'content' => $nullRule,
+      ]);
     $bookRule->splitTag = $data['splitTag'] ?? '';
     $replaceTags = [];
     foreach ($data['replaceTags'] ?? [] as $item) {
