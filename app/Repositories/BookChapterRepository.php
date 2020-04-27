@@ -72,32 +72,6 @@ class BookChapterRepository extends BaseRepository
   }
 
   /**
-   * 删除内容文本
-   * @param $pid
-   * @param $id
-   * @return bool
-   */
-  function deleteContent($pid, $id)
-  {
-    $bookDir = $this->getContentPath($pid);
-    $path = $bookDir . "{$id}.txt";
-
-    if (\File::exists($path)) {
-      return \File::delete($path);
-    }
-    return false;
-  }
-
-  public function updateDetail($data)
-  {
-    $item = $this->find($data['id']);
-    if (!$item) return false;
-    $item->title = $data['title'];
-    $item->status = $data['status'];
-    return $item->save();
-  }
-
-  /**
    * @param $pid
    * @param $aid
    * @return mixed|static
@@ -135,14 +109,5 @@ class BookChapterRepository extends BaseRepository
       ->where('books_id', $pid)
       ->orderBy('chapter_index', 'DESC')
       ->first();
-  }
-
-  /**
-   * 今日新增
-   * @return int
-   */
-  public function dailyInsertCount()
-  {
-    return $this->model::query()->where('created_at', '>', date('Y-m-d 00:00:00'))->count();
   }
 }

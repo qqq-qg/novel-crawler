@@ -3,19 +3,19 @@
 namespace App\Http\Controllers\Home;
 
 use App\Http\Controllers\Controller;
-use App\Repositories\BookRepository;
-use App\Repositories\SettingRepository;
+use App\Repositories\Admin\CategoryRepository;
+use App\Repositories\Admin\SettingRepository;
 use Illuminate\Http\Request;
 
 class BaseController extends Controller
 {
-  public function __construct(Request $request, SettingRepository $settingRepository, BookRepository $bookRepository)
+  public function __construct(Request $request)
   {
     //通用数据
     if (!\Request::ajax() && \Request::isMethod('get')) {
       //System Setting
-      $settings = \Cache::remember('settings', 600, function () use ($settingRepository) {
-        $settings = $settingRepository->lists();
+      $settings = \Cache::remember('settings', 600, function () {
+        $settings = SettingRepository::lists();
         return array_column($settings, 'value', 'key');
       });
       view()->share('SET', $settings);
@@ -29,7 +29,7 @@ class BaseController extends Controller
       view()->share('aid', $aid);
 
       //categories
-      $categories = $bookRepository->getCategories();
+      $categories = CategoryRepository::getCategories();
       view()->share('categories', $categories);
       view()->share('CAT', $catid ? $categories[$catid] : []);
     }

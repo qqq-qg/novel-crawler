@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories\Auth;
+namespace App\Repositories\Admin;
 
 use App\Models\Admin\ManagerModel;
 use Hash;

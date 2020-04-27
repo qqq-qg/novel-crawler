@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Admin;
 
-use App\Models\Admin\CollectionTaskModel;
+use App\Models\Books\CollectionTaskModel;
 use Illuminate\Database\Eloquent\Builder;
 
 class CollectionTaskRepository

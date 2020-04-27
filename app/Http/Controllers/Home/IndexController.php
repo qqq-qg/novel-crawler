@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers\Home;
 
+use App\Repositories\Admin\CategoryRepository;
+use App\Repositories\Admin\LinkRepository;
 use App\Repositories\BookRepository;
-use App\Repositories\LinkRepository;
 
 
 class IndexController extends BaseController
 {
 
-  public function getIndex(BookRepository $bookRepository, LinkRepository $linkRepository)
+  public function getIndex(BookRepository $bookRepository )
   {
-    $categories = $bookRepository->getCategories();
+    $categories = CategoryRepository::getCategories();
 
     //最近更新
     $newLists = \Cache::remember('newLists', 60, function () use ($bookRepository, $categories) {
@@ -50,17 +51,12 @@ class IndexController extends BaseController
       return $bookRepository->ftlists([], 'hits DESC', 6)->toArray();
     });
 
-    //firendLinks
-    $firendLinks = \Cache::remember('firendLinks', 600, function () use ($linkRepository) {
-      return $linkRepository->lists();
-    });
-
     $data = [
       'newLists' => $newLists,
       'newInserts' => $newInserts,
       'tjLists' => $tjLists,
       'ftLists' => $ftLists,
-      'firendLinks' => $firendLinks
+      'firendLinks' => []
     ];
     return home_view('index.index', $data);
   }

@@ -2,6 +2,7 @@
 
 namespace App\Models\Books;
 
+use App\Models\Admin\CategoryModel;
 use App\Models\BaseModel;
 
 /**

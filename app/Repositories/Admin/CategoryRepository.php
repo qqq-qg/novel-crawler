@@ -60,6 +60,7 @@ class CategoryRepository
     return CategoryModel::query()->orderBy('listorder', 'asc')->get();
   }
 
+
   public function getCategoryName($categoryId)
   {
     static $category = null;
@@ -68,5 +69,10 @@ class CategoryRepository
       $category = array_column($res, 'name', 'id');
     }
     return $category[$categoryId] ?? '';
+  }
+
+  public static function getCategories()
+  {
+    return CategoryModel::query()->orderBy('listorder', 'asc')->get()->keyBy('id')->toArray();
   }
 }

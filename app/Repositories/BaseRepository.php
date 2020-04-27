@@ -10,6 +10,7 @@ class BaseRepository
    * @var Model $model
    */
   protected $model;
+  
   protected static $pageSize = 15;
 
   /**
@@ -21,12 +22,6 @@ class BaseRepository
     $this->model = $model;
   }
 
-  public function listBy($where, $page = true)
-  {
-    return $page ? $this->model::query()->where($where)
-      ->paginate(self::$pageSize) : $this->model::query()->where($where)->get();
-  }
-
   /**
    * @param $id
    * @return mixed
@@ -34,16 +29,6 @@ class BaseRepository
   public function find($id)
   {
     return $this->model::query()->find($id);
-  }
-
-  /**
-   * @param $field
-   * @param $value
-   * @return mixed
-   */
-  public function findBy($field, $value)
-  {
-    return $this->model::query()->where($field, $value)->first();
   }
 
   /**

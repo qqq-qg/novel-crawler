@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Admin;
 
-use App\Models\Admin\CollectionRuleModel;
+use App\Models\Books\CollectionRuleModel;
 use App\Repositories\Books\BookRequestRepository;
 use App\Repositories\CollectionRule\BookRule;
 use App\Repositories\CollectionRule\QlRule;

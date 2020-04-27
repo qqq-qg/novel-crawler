@@ -2,6 +2,7 @@
 
 namespace App\Models\Books;
 
+use App\Models\Admin\CategoryModel;
 use App\Models\BaseModel;
 
 /**
@@ -36,17 +37,6 @@ class BooksModel extends BaseModel
 
   const UPT_STATUS_LOADING = 'LOADING';
   const UPT_STATUS_FINISHED = 'FINISHED';
-
-  /**
-   * @param $id
-   * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|null|BooksModel
-   * @author Nacrane
-   * @Date: 2020/03/01 19:33
-   */
-  public static function getBookById($id)
-  {
-    return BooksModel::query()->find($id);
-  }
 
   public function category()
   {

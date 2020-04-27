@@ -2,23 +2,20 @@
 
 use Illuminate\Support\Facades\Route;
 
-// Wap 路由
-Route::group([
-  'prefix' => '/s',
-  'namespace' => 'Wap'
-], function () {
-  Route::get('/', 'IndexController@index')->name('Index.index');
-  Route::get('/r', 'IndexController@readBook')->name('Index.readBook');
-  Route::get('/c', 'IndexController@getBookContent')->name('Index.getBookContent');
-  Route::get('/l', 'IndexController@getChapterGroup')->name('Index.getChapterGroup');
-});
-
 //Test
 Route::group([], function () {
   Route::get('test', 'TestController@index')->name('Test.index');
 
   Route::get('bqg', 'TryBookRuleController@bqg')->name('TryBookRule.bqg');
   Route::get('xbequge', 'TryBookRuleController@xbequge')->name('TryBookRule.xbequge');
+});
+
+// Wap 路由
+Route::group(['prefix' => '/s', 'namespace' => 'Wap'], function () {
+  Route::get('/', 'IndexController@index')->name('Index.index');
+  Route::get('/r', 'IndexController@readBook')->name('Index.readBook');
+  Route::get('/c', 'IndexController@getBookContent')->name('Index.getBookContent');
+  Route::get('/l', 'IndexController@getChapterGroup')->name('Index.getChapterGroup');
 });
 
 // 后台路由
@@ -129,10 +126,7 @@ Route::group([], function () {
 //});
 
 //前台模块路由
-Route::group([
-  'prefix' => '/',
-  'namespace' => 'Home',
-], function () {
+Route::group(['prefix' => '/', 'namespace' => 'Home'], function () {
   Route::get('/', 'IndexController@getIndex')->name('getHomeIndex');
 
   Route::get('category/{catid}.html', 'BooksController@getIndex')

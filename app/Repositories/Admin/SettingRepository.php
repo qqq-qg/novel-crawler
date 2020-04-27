@@ -54,4 +54,9 @@ class SettingRepository
     }
     return $rst;
   }
+
+  public static function lists()
+  {
+    return SettingModel::query()->select(['key', 'value'])->get()->toArray();
+  }
 }

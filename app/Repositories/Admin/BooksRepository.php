@@ -1,6 +1,6 @@
 <?php namespace App\Repositories\Admin;
 
-use App\Models\Admin\BooksModel;
+use App\Models\Books\BooksModel;
 use Illuminate\Database\Eloquent\Builder;
 
 class BooksRepository

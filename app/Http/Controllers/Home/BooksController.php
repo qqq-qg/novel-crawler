@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\DB;
 
 class BooksController extends BaseController
 {
-
   /**
    * 栏目列表
    * @param BookRepository $repository
@@ -60,7 +59,6 @@ class BooksController extends BaseController
    */
   public function getContent(BookRepository $bookRepository, BookChapterRepository $bookChapterRepository, $catid, $id, $aid)
   {
-
     $book = $bookRepository->find($id);
     $detail = $bookChapterRepository->find($aid);
 
