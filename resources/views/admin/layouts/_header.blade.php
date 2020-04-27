@@ -154,5 +154,7 @@
 </div>
 
 <div class="layui-tab-content layui-layout-admin layui-body" id="LAY_app_body">
-  <div class="layui-tab-item layui-show">HOME</div>
+  <div class="layui-tab-item layui-show">
+    @include('admin.index.index')
+  </div>
 </div>

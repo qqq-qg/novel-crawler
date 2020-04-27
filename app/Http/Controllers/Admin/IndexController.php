@@ -18,11 +18,6 @@ class IndexController extends Controller
       'username' => $user->username,
       'user_id' => $user->id,
     ];
-    return view('admin.index.index', ['data' => $data]);
-  }
-
-  public function home()
-  {
-
+    return view('admin.layouts.app', ['data' => $data]);
   }
 }

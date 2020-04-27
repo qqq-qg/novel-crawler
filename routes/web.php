@@ -161,7 +161,6 @@ Route::group(['prefix' => '/admin'], function () {
   //管理
   Route::group(['namespace' => 'Admin', 'middleware' => ['logged']], function () {
     Route::get('/', 'IndexController@index')->name('admin.Index.index');
-    Route::get('home', 'IndexController@home')->name('rules.Index.home');
     Route::any('validate-rule', 'CollectionRuleController@validateRule')->name('rules.validate-rule');
 
     Route::resources([
