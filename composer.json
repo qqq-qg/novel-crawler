@@ -7,12 +7,6 @@
     "laravel"
   ],
   "license": "MIT",
-  "repositories": [
-    {
-      "type": "composer",
-      "url": "http://106.12.127.29:7000"
-    }
-  ],
   "require": {
     "php": "^7.2",
     "ares333/php-curl": "^4.6",
